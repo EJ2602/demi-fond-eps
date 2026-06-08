@@ -1,0 +1,3533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#06080d">
+  <title>Demi-fond EPS</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2306080d'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='24' font-weight='bold' fill='%2338bdf8' text-anchor='middle'%3EDF%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06080d;
+      --bg-elevated: #0c1018;
+      --surface: #131922;
+      --surface-hover: #1a2230;
+      --surface-active: #212b3c;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #f1f5f9;
+      --text-muted: #8b9cb3;
+      --text-dim: #5c6b82;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+      --accent-cyan: #22d3ee;
+      --accent-violet: #8b5cf6;
+      --success: #34d399;
+      --success-hover: #10b981;
+      --danger: #f87171;
+      --danger-hover: #ef4444;
+      --warning: #fbbf24;
+      --radius-xs: 6px;
+      --radius-sm: 10px;
+      --radius: 14px;
+      --radius-lg: 18px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.45), 0 1px 4px rgba(0,0,0,.25);
+      --shadow: 0 4px 20px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.35);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,.6), 0 4px 16px rgba(0,0,0,.4);
+      --shadow-glow: 0 0 24px rgba(56, 189, 248, 0.12);
+      --shadow-inset: inset 0 1px 0 rgba(255,255,255,.07);
+      --nav-h: 76px;
+      --header-h: 60px;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-t: env(safe-area-inset-top, 0px);
+      --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 320ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font);
+      background:
+        radial-gradient(ellipse 90% 55% at 50% -15%, rgba(56, 189, 248, 0.07), transparent 55%),
+        radial-gradient(ellipse 55% 45% at 100% 100%, rgba(52, 211, 153, 0.04), transparent 50%),
+        radial-gradient(ellipse 40% 35% at 0% 80%, rgba(139, 92, 246, 0.04), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      max-height: 100dvh;
+      line-height: 1.55;
+      overflow: hidden;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    button, input, select, textarea { font-family: inherit; font-size: inherit; }
+    button { cursor: pointer; border: none; background: none; color: inherit; }
+    button:disabled { opacity: .4; cursor: not-allowed; filter: grayscale(.2); }
+    input, select, textarea {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      padding: .7rem .9rem;
+      width: 100%;
+      box-shadow: var(--shadow-inset);
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+    input:hover, select:hover, textarea:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: var(--surface-hover);
+    }
+    input:focus, select:focus, textarea:focus, button:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--primary) 65%, transparent);
+      outline-offset: 2px;
+      border-color: color-mix(in srgb, var(--primary) 50%, var(--border-strong));
+      box-shadow: var(--shadow-inset), 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
+    }
+    input[type="number"] { -moz-appearance: textfield; font-variant-numeric: tabular-nums; }
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 99px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--primary) 35%, var(--border-strong)); }
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b9cb3' d='M3 4.5L6 7.5L9 4.5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .85rem center;
+      padding-right: 2.25rem;
+    }
+
+    .app-header {
+      flex-shrink: 0;
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12, 16, 24, 0.82);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      padding: calc(.85rem + var(--safe-t)) clamp(1rem, 3vw, 1.5rem) .85rem;
+      display: flex; align-items: center; justify-content: center;
+      min-height: var(--header-h);
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .app-header > div { width: 100%; }
+    .app-header h1 {
+      font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--text) 0%, color-mix(in srgb, var(--primary) 40%, var(--text)) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .app-header .subtitle {
+      font-size: clamp(.78rem, 1.8vw, .88rem);
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: .15rem;
+      letter-spacing: 0.01em;
+    }
+
+    .main-content {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: clamp(.85rem, 2.5vw, 1.35rem);
+      padding-bottom: clamp(.85rem, 2.5vw, 1.35rem);
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      animation: fadeSlideIn var(--transition-slow) ease-out;
+    }
+    body.view-home .main-content {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      padding: clamp(.75rem, 2vw, 1.25rem);
+    }
+    body.view-home .app-header {
+      padding: calc(.9rem + var(--safe-t)) clamp(1rem, 3vw, 1.5rem) .9rem;
+      min-height: auto;
+      flex-shrink: 0;
+    }
+    body.view-home .app-header h1 {
+      font-size: clamp(1.35rem, 4vw, 1.9rem);
+      font-weight: 800;
+    }
+    .home-class-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-shrink: 0;
+      margin-bottom: clamp(.4rem, 1.2vh, .75rem);
+      padding-bottom: clamp(.3rem, 1vh, .55rem);
+      border-bottom: 1px solid var(--border);
+    }
+    .home-class-header .home-class-prompt {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+      flex: 1;
+      min-width: 0;
+    }
+    body.view-home .home-class-prompt {
+      font-size: clamp(1.2rem, 3.5vw, 1.85rem);
+    }
+    .btn-settings {
+      flex-shrink: 0;
+      width: clamp(46px, 8.5vh, 56px);
+      height: clamp(46px, 8.5vh, 56px);
+      min-height: 0;
+      padding: 0;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text-muted);
+      font-size: clamp(1.25rem, 3vh, 1.5rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+      transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition-fast);
+    }
+    .btn-settings:hover {
+      background: var(--surface-hover);
+      border-color: color-mix(in srgb, var(--primary) 40%, var(--border-strong));
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+    body.view-app-settings .main-content {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .settings-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1rem, 2.5vh, 1.35rem);
+      padding: 2rem 1rem;
+      min-height: 0;
+    }
+    .settings-page .settings-btn {
+      width: min(440px, 100%);
+      min-height: clamp(54px, 9vh, 64px);
+      font-size: clamp(.9rem, 2vh, 1.05rem);
+      text-align: center;
+      line-height: 1.35;
+    }
+    body.view-home .grid-classes,
+    body.view-config-classes .grid-classes {
+      flex: 1;
+      min-height: 0;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: clamp(.35rem, 1vh, .7rem);
+      margin-bottom: 0;
+    }
+    body.view-home .grid-item-btn,
+    body.view-config-classes .grid-item-btn {
+      min-height: 0;
+      height: 100%;
+      width: 100%;
+      aspect-ratio: unset;
+      font-size: clamp(.72rem, 2.2vh, 1.15rem);
+      padding: clamp(.3rem, .8vh, .65rem);
+      border-radius: var(--radius);
+    }
+    body.view-config-classes .grid-item-btn.add-btn {
+      font-size: clamp(1.2rem, 3.5vh, 2rem);
+    }
+    body.view-home .config-actions {
+      flex-shrink: 0;
+      gap: clamp(.75rem, 1.8vh, 1.15rem);
+      padding: clamp(.85rem, 2vh, 1.25rem) 0 clamp(.5rem, 1.2vh, .75rem);
+      margin-top: 0;
+      border-top: 1px solid var(--border);
+    }
+    body.view-home .config-actions .btn {
+      min-height: clamp(54px, 9.5vh, 68px);
+      font-size: clamp(.92rem, 2.2vh, 1.12rem);
+      padding: clamp(.65rem, 1.4vh, .9rem) 1rem;
+      border-radius: var(--radius);
+    }
+    body.view-config-classes .main-content,
+    body.view-config-situations .main-content {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      padding: clamp(.75rem, 2vw, 1.25rem);
+    }
+    body.view-config-classes .app-header,
+    body.view-config-situations .app-header {
+      padding: calc(.9rem + var(--safe-t)) clamp(1rem, 3vw, 1.5rem) .9rem;
+      min-height: auto;
+      flex-shrink: 0;
+    }
+    body.view-config-classes .app-header h1,
+    body.view-config-situations .app-header h1 {
+      font-size: clamp(1.35rem, 4vw, 1.9rem);
+      font-weight: 800;
+    }
+    body.view-config-classes .section-subtitle,
+    body.view-config-situations .section-subtitle {
+      font-size: clamp(1.2rem, 3.5vw, 1.85rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: clamp(.4rem, 1.2vh, .75rem);
+      padding-bottom: clamp(.3rem, 1vh, .55rem);
+      border-bottom: 1px solid var(--border);
+      letter-spacing: -0.025em;
+      line-height: 1.35;
+      flex-shrink: 0;
+    }
+    body.view-config-situations .grid-classes {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(.35rem, 1vh, .7rem);
+      margin-bottom: 0;
+    }
+    body.view-config-situations .grid-classes.situations-fit {
+      grid-template-rows: repeat(4, 1fr);
+    }
+    body.view-config-situations .grid-classes.situations-scroll {
+      grid-auto-rows: var(--situation-cell-h, auto);
+      overflow-y: auto;
+      overflow-x: hidden;
+      align-content: start;
+      scrollbar-width: thin;
+    }
+    body.view-config-situations .grid-classes.situations-fit .grid-item-btn {
+      min-height: 0;
+      height: 100%;
+    }
+    body.view-config-situations .grid-classes.situations-scroll .grid-item-btn {
+      min-height: var(--situation-cell-h, 0);
+      height: var(--situation-cell-h, auto);
+    }
+    body.view-config-situations .grid-item-btn {
+      width: 100%;
+      aspect-ratio: unset;
+      font-size: clamp(.72rem, 2.2vh, 1.15rem);
+      padding: clamp(.3rem, .8vh, .65rem);
+      border-radius: var(--radius);
+    }
+    body.view-config-situations .grid-item-btn.add-btn {
+      font-size: clamp(1.2rem, 3.5vh, 2rem);
+    }
+    body.view-config-classes .bottom-nav .btn-nav,
+    body.view-config-situations .bottom-nav .btn-nav {
+      min-height: clamp(44px, 7vh, 56px);
+      font-size: clamp(.88rem, 2vh, 1.05rem);
+    }
+
+    .bottom-nav {
+      flex-shrink: 0;
+      position: relative;
+      z-index: 200;
+      background: rgba(12, 16, 24, 0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-top: 1px solid var(--border);
+      padding: .7rem clamp(1rem, 3vw, 1.5rem) calc(.7rem + var(--safe-b));
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .85rem;
+      box-shadow: 0 -8px 32px rgba(0,0,0,.45);
+    }
+    body.view-home .bottom-nav { display: none; }
+
+    body.view-live .main-content {
+      overflow: hidden;
+      padding: .35rem .5rem;
+      max-width: none;
+      display: flex;
+      flex-direction: column;
+      animation: none;
+    }
+    body.view-live .app-header {
+      padding: .4rem 1rem;
+      min-height: auto;
+      background: rgba(12, 16, 24, 0.92);
+    }
+    body.view-live .app-header h1 {
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      -webkit-text-fill-color: var(--text);
+      background: none;
+    }
+    body.view-live .app-header .subtitle { font-size: .78rem; }
+    .bottom-nav .btn-nav {
+      min-height: 52px;
+      font-size: clamp(.9rem, 2vw, 1rem);
+      font-weight: 600;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+      transition: background var(--transition), transform var(--transition-fast), border-color var(--transition), box-shadow var(--transition);
+      letter-spacing: 0.01em;
+    }
+    .bottom-nav .btn-nav:hover:not(:disabled) {
+      background: var(--surface-hover);
+      border-color: color-mix(in srgb, var(--primary) 35%, var(--border-strong));
+      box-shadow: var(--shadow-sm), var(--shadow-glow);
+    }
+    .bottom-nav .btn-nav:active:not(:disabled) { transform: scale(.98); }
+    .bottom-nav .btn-nav.btn-nav-validate {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--success) 85%, white) 0%, var(--success) 100%);
+      border-color: color-mix(in srgb, var(--success) 50%, transparent);
+      color: #041810;
+      font-weight: 700;
+    }
+    .bottom-nav .btn-nav.btn-nav-validate:hover:not(:disabled) {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--success-hover) 85%, white) 0%, var(--success-hover) 100%);
+      border-color: var(--success);
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      min-height: 48px; padding: .7rem 1.35rem;
+      border-radius: var(--radius-sm); font-weight: 600; font-size: clamp(.9rem, 2vw, 1rem);
+      border: 1px solid transparent;
+      transition: background var(--transition), transform var(--transition-fast), box-shadow var(--transition), border-color var(--transition), filter var(--transition);
+      box-shadow: var(--shadow-sm);
+      letter-spacing: 0.01em;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, transparent 50%);
+      pointer-events: none;
+      opacity: .6;
+    }
+    .btn-primary {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--primary) 90%, white) 0%, var(--primary) 100%);
+      color: #041018;
+      border-color: color-mix(in srgb, var(--primary) 60%, transparent);
+      box-shadow: var(--shadow-sm), 0 0 20px color-mix(in srgb, var(--primary) 25%, transparent);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--primary-hover) 85%, white) 0%, var(--primary-hover) 100%);
+      box-shadow: var(--shadow), 0 0 28px color-mix(in srgb, var(--primary) 30%, transparent);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      border-color: var(--border-strong);
+      color: var(--text);
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-hover);
+      border-color: rgba(255,255,255,.2);
+      transform: translateY(-1px);
+    }
+    .btn-success {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--success) 85%, white) 0%, var(--success) 100%);
+      color: #041810;
+      border-color: color-mix(in srgb, var(--success) 50%, transparent);
+      box-shadow: var(--shadow-sm), 0 0 18px rgba(52, 211, 153, 0.2);
+    }
+    .btn-success:hover:not(:disabled) {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--success-hover) 85%, white) 0%, var(--success-hover) 100%);
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--danger) 85%, white) 0%, var(--danger) 100%);
+      color: #1a0505;
+      border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+    }
+    .btn-danger:hover:not(:disabled) {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--danger-hover) 85%, white) 0%, var(--danger-hover) 100%);
+      transform: translateY(-1px);
+    }
+    .btn-sm { min-height: 42px; padding: .45rem .95rem; font-size: clamp(.82rem, 1.8vw, .9rem); }
+    .btn-icon {
+      width: 44px; height: 44px; min-height: 44px; padding: 0;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      font-size: 1.05rem;
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+      transition: background var(--transition), border-color var(--transition), transform var(--transition-fast);
+    }
+    .btn-icon::after { display: none; }
+    .btn-icon:hover:not(:disabled) {
+      background: var(--surface-hover);
+      border-color: color-mix(in srgb, var(--primary) 40%, var(--border-strong));
+      transform: translateY(-1px);
+    }
+
+    .card {
+      background: linear-gradient(165deg, color-mix(in srgb, var(--surface) 95%, white) 0%, var(--surface) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.1rem, 2.5vw, 1.5rem);
+      box-shadow: var(--shadow), var(--shadow-inset);
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 12%; right: 12%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      pointer-events: none;
+    }
+    .section-title {
+      font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .section-subtitle {
+      font-size: clamp(.84rem, 1.8vw, .92rem);
+      color: var(--text-muted);
+      margin-bottom: .85rem;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .home-class-prompt {
+      font-size: clamp(1.2rem, 3vw, 1.55rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.15rem;
+      letter-spacing: -0.025em;
+      padding-bottom: .65rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .grid-classes {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: clamp(.6rem, 1.8vw, 1.1rem);
+      margin-bottom: 1.75rem;
+    }
+    .grid-item-btn {
+      aspect-ratio: 1.4;
+      min-height: 76px;
+      background: linear-gradient(160deg, var(--surface-hover) 0%, var(--surface) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      font-size: clamp(.88rem, 2vw, 1.02rem);
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: .65rem;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+      word-break: break-word;
+      letter-spacing: -0.01em;
+      position: relative;
+      overflow: hidden;
+    }
+    .grid-item-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 60%, transparent), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .grid-item-btn:hover {
+      background: linear-gradient(160deg, color-mix(in srgb, var(--primary) 25%, var(--surface-hover)) 0%, color-mix(in srgb, var(--primary) 12%, var(--surface)) 100%);
+      border-color: color-mix(in srgb, var(--primary) 45%, var(--border-strong));
+      transform: translateY(-3px);
+      box-shadow: var(--shadow), var(--shadow-glow);
+      color: var(--text);
+    }
+    .grid-item-btn:hover::before { opacity: 1; }
+    .grid-item-btn.add-btn {
+      font-size: 2rem;
+      color: var(--primary);
+      border-style: dashed;
+      border-color: color-mix(in srgb, var(--primary) 35%, var(--border-strong));
+      background: color-mix(in srgb, var(--primary) 5%, var(--surface));
+    }
+    .grid-item-btn.add-btn:hover {
+      background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+      border-color: var(--primary);
+    }
+    body.view-home .grid-item-btn.class-colored:not(.add-btn),
+    body.view-config-classes .grid-item-btn.class-colored:not(.add-btn),
+    body.view-config-situations .grid-item-btn.class-colored:not(.add-btn) {
+      background: linear-gradient(160deg, color-mix(in srgb, var(--class-color) 40%, var(--surface-hover)) 0%, color-mix(in srgb, var(--class-color) 22%, var(--surface)) 100%);
+      border-color: color-mix(in srgb, var(--class-color) 52%, var(--border-strong));
+    }
+    body.view-home .grid-item-btn.class-colored:not(.add-btn)::before,
+    body.view-config-classes .grid-item-btn.class-colored:not(.add-btn)::before,
+    body.view-config-situations .grid-item-btn.class-colored:not(.add-btn)::before {
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--class-color) 70%, transparent), transparent);
+    }
+    body.view-home .grid-item-btn.class-colored:not(.add-btn):hover,
+    body.view-config-classes .grid-item-btn.class-colored:not(.add-btn):hover,
+    body.view-config-situations .grid-item-btn.class-colored:not(.add-btn):hover {
+      background: linear-gradient(160deg, color-mix(in srgb, var(--class-color) 50%, var(--surface-hover)) 0%, color-mix(in srgb, var(--class-color) 30%, var(--surface)) 100%);
+      border-color: var(--class-color);
+      box-shadow: var(--shadow), 0 0 22px color-mix(in srgb, var(--class-color) 28%, transparent);
+      color: var(--text);
+    }
+    body.view-home .grid-item-btn.class-colored:not(.add-btn):hover::before,
+    body.view-config-classes .grid-item-btn.class-colored:not(.add-btn):hover::before,
+    body.view-config-situations .grid-item-btn.class-colored:not(.add-btn):hover::before {
+      opacity: 1;
+    }
+
+    .config-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin-top: auto; padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .config-actions .btn { width: 100%; }
+
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block;
+      font-size: clamp(.78rem, 1.6vw, .85rem);
+      font-weight: 600;
+      margin-bottom: .45rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .form-row { display: flex; gap: .85rem; flex-wrap: wrap; }
+    .form-row .form-group { flex: 1; min-width: 120px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-elevated);
+      box-shadow: var(--shadow);
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: clamp(.88rem, 1.8vw, .95rem);
+      font-variant-numeric: tabular-nums;
+    }
+    table.data-table th, table.data-table td {
+      padding: clamp(.7rem, 1.5vw, .9rem) clamp(.85rem, 2vw, 1.15rem);
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    table.data-table th {
+      background: rgba(0, 0, 0, 0.25);
+      font-weight: 700;
+      font-size: clamp(.72rem, 1.5vw, .78rem);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      transition: background var(--transition), color var(--transition);
+    }
+    table.data-table th:hover {
+      background: var(--surface-hover);
+      color: var(--text);
+    }
+    table.data-table th .sort-icon { opacity: .45; margin-left: .3rem; font-size: .85em; }
+    table.data-table tbody tr { transition: background var(--transition-fast); }
+    table.data-table tbody tr:nth-child(even) td { background: rgba(255,255,255,.015); }
+    table.data-table tr:last-child td { border-bottom: none; }
+    table.data-table tbody tr:hover td { background: color-mix(in srgb, var(--primary) 6%, var(--surface)); }
+    .actions-cell { display: flex; gap: .4rem; flex-wrap: nowrap; align-items: center; }
+
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 80%, white), var(--primary));
+      color: #041018;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .78rem; font-weight: 800; overflow: hidden; flex-shrink: 0;
+      border: 2px solid color-mix(in srgb, var(--primary) 40%, transparent);
+      box-shadow: 0 2px 8px rgba(0,0,0,.35);
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-lg { width: 80px; height: 80px; font-size: 1.15rem; }
+    .avatar-xl { width: 100px; height: 100px; font-size: 1.35rem; }
+    .avatar-live {
+      width: var(--live-avatar, clamp(108px, 20vw, 128px));
+      height: var(--live-avatar, clamp(108px, 20vw, 128px));
+      font-size: var(--live-avatar-font, clamp(1.5rem, 4.5vw, 2rem));
+      margin: 0 auto .2rem;
+    }
+
+    .toolbar {
+      display: flex; flex-wrap: wrap; gap: .8rem;
+      margin-bottom: 1.15rem; align-items: center;
+      padding: .85rem 1rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .toolbar .btn { flex-shrink: 0; }
+
+    .situation-block {
+      background: linear-gradient(165deg, var(--surface-hover) 0%, var(--surface) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: clamp(1rem, 2vw, 1.25rem);
+      margin-bottom: 1.1rem;
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+      transition: border-color var(--transition), box-shadow var(--transition), opacity var(--transition);
+    }
+    .situation-header {
+      display: flex; flex-wrap: wrap; gap: .85rem; align-items: center;
+      margin-bottom: .85rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .situation-header h3 {
+      flex: 1; min-width: 150px;
+      font-size: clamp(.95rem, 2vw, 1.05rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .situation-controls { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+    .situation-block.dragging { opacity: .55; border-color: var(--primary); transform: scale(.99); }
+    .situation-block.drag-over {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 40%, transparent), var(--shadow-glow);
+    }
+
+    .session-header-bar {
+      display: flex; flex-wrap: wrap; gap: .85rem; align-items: center;
+      margin-bottom: 1.15rem;
+      padding: 1rem 1.15rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .session-header-bar h2 {
+      flex: 1; min-width: 200px;
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .live-page {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .live-header {
+      background: linear-gradient(180deg, rgba(19, 25, 34, 0.95) 0%, var(--bg-elevated) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+      flex-shrink: 0;
+      box-shadow: var(--shadow), var(--shadow-inset);
+    }
+    body.view-live .live-header {
+      padding: .5rem .75rem;
+      margin-bottom: 0;
+      align-items: center;
+      border-radius: var(--radius);
+    }
+    .live-info { display: flex; flex-wrap: wrap; gap: 1.25rem 2.25rem; }
+    body.view-live .live-info { flex-wrap: nowrap; gap: .5rem 1.15rem; align-items: center; }
+    .live-info-item label {
+      display: block;
+      font-size: .72rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-bottom: .2rem;
+    }
+    body.view-live .live-info-item label { font-size: .58rem; margin-bottom: 0; }
+    .live-info-item span {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    body.view-live .live-info-item span { font-size: .88rem; }
+    .timer-display {
+      font-size: clamp(2.2rem, 7vw, 3.75rem);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: var(--primary);
+      text-align: center;
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 40px color-mix(in srgb, var(--primary) 35%, transparent);
+      line-height: 1;
+    }
+    body.view-live .timer-display {
+      font-size: clamp(1.5rem, 3.8vw, 2.1rem);
+      line-height: 1.1;
+    }
+    .timer-display.warning {
+      color: var(--warning);
+      text-shadow: 0 0 30px rgba(251, 191, 36, 0.35);
+    }
+    .timer-display.ended {
+      color: var(--danger);
+      text-shadow: 0 0 30px rgba(248, 113, 113, 0.35);
+    }
+    body.view-live .live-header .btn-danger { min-height: 38px; padding: .35rem .75rem; font-size: .82rem; }
+
+    .students-live-split {
+      display: grid;
+      grid-template-columns: var(--live-split-cols, 1fr 1fr);
+      gap: 1.25rem;
+      align-items: stretch;
+      flex: 1;
+      min-height: 0;
+    }
+    body.view-live .students-live-split { gap: .75rem; }
+    .students-live-split.single { --live-split-cols: 1fr; }
+    .live-gender-section {
+      background: linear-gradient(180deg, rgba(19, 25, 34, 0.6) 0%, var(--bg-elevated) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+    }
+    body.view-live .live-gender-section { padding: .55rem .6rem .6rem; border-radius: var(--radius); }
+    .live-gender-section.girls {
+      border-top: 3px solid var(--success);
+      box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(52, 211, 153, 0.08);
+    }
+    .live-gender-section.boys {
+      border-top: 3px solid var(--primary);
+      box-shadow: var(--shadow-sm), inset 0 1px 0 color-mix(in srgb, var(--primary) 10%, transparent);
+    }
+    .live-group-title {
+      font-size: .88rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: .9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    body.view-live .live-group-title { font-size: .72rem; margin-bottom: .35rem; }
+    .live-group-title.girls { color: var(--success); }
+    .live-group-title.boys { color: color-mix(in srgb, var(--primary) 75%, white); }
+    .students-live-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--live-cols, 3), var(--live-card-w, 1fr));
+      grid-template-rows: repeat(var(--live-rows, 2), var(--live-card-h, 1fr));
+      gap: var(--live-gap, 10px);
+      flex: 1;
+      min-height: 0;
+      height: 100%;
+      justify-content: center;
+      align-content: center;
+    }
+    .student-live-card {
+      position: relative;
+      width: var(--live-card-w, 100%);
+      height: var(--live-card-h, auto);
+      aspect-ratio: 3 / 4;
+      background: linear-gradient(160deg, color-mix(in srgb, var(--primary) 85%, white) 0%, var(--primary) 100%);
+      border: 2px solid color-mix(in srgb, var(--primary) 30%, var(--border-strong));
+      border-radius: var(--radius);
+      padding: 0;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 0;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,.4);
+      justify-self: center;
+      align-self: center;
+    }
+    .student-live-card:active {
+      transform: scale(.97);
+      border-color: color-mix(in srgb, var(--primary) 70%, white);
+      box-shadow: 0 2px 6px rgba(0,0,0,.5);
+    }
+    .live-card-media {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+    }
+    .live-card-media .avatar,
+    .live-card-media .avatar-live {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border-radius: 0;
+      font-size: var(--live-avatar-font, 1.5rem);
+    }
+    .live-card-media .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .live-card-media .avatar-live:not(:has(img)) {
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: var(--live-init-top, 28%);
+    }
+    .live-card-media .avatar-live:not(:has(img)) span {
+      line-height: 1;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+    }
+    .live-card-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding: var(--live-overlay-pad, 4px);
+      gap: var(--live-overlay-gap, 3px);
+      pointer-events: none;
+    }
+    .student-live-card .distance {
+      font-size: var(--live-dist, clamp(1.1rem, 3vw, 1.6rem));
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+      line-height: 1.1;
+      background: rgba(0, 0, 0, .78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: .22em .6em;
+      border-radius: var(--radius-xs);
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .45);
+      pointer-events: none;
+      letter-spacing: -0.02em;
+    }
+    .student-live-card .distance::after { content: ' m'; font-size: .65em; font-weight: 600; opacity: .85; }
+    .student-live-card .plot-controls {
+      display: flex;
+      justify-content: center;
+      gap: var(--live-plot-gap, 6px);
+      pointer-events: auto;
+      width: 100%;
+    }
+    .student-live-card .plot-btn {
+      width: var(--live-plot, 48px);
+      height: var(--live-plot, 48px);
+      border-radius: 50%;
+      font-size: var(--live-plot-font, 1.5rem);
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255,255,255,.2);
+      border: 2px solid rgba(255, 255, 255, .22);
+      transition: transform var(--transition-fast), filter var(--transition-fast);
+    }
+    .plot-btn.plus { background: linear-gradient(180deg, color-mix(in srgb, var(--success) 90%, white), var(--success)); }
+    .plot-btn.minus { background: linear-gradient(180deg, color-mix(in srgb, var(--danger) 90%, white), var(--danger)); }
+    .plot-btn:hover:not(:disabled) { filter: brightness(1.12); transform: scale(1.05); }
+
+    .student-select-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: .8rem;
+      max-height: 50vh;
+      overflow-y: auto;
+      padding: .6rem .15rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-strong) transparent;
+    }
+    .student-select-card {
+      position: relative;
+      background: var(--surface);
+      border: 2px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: .8rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), transform var(--transition-fast), box-shadow var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .student-select-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.18); }
+    .student-select-card.selected {
+      border-color: var(--primary);
+      background: color-mix(in srgb, var(--primary) 14%, var(--surface));
+      box-shadow: var(--shadow-sm), 0 0 20px color-mix(in srgb, var(--primary) 15%, transparent);
+    }
+    .student-select-card.participated { opacity: .88; }
+    .student-select-card.attendance-absent,
+    .student-select-card.attendance-dispensed { opacity: .72; }
+    .student-select-card .select-badge {
+      position: absolute; top: 6px; right: 6px;
+      font-size: .72rem; font-weight: 800; line-height: 1;
+      padding: 3px 6px; border-radius: var(--radius-xs);
+      border: 1px solid transparent;
+    }
+    .student-select-card .select-badge.status-d {
+      background: color-mix(in srgb, var(--success) 18%, transparent);
+      color: var(--success);
+      border-color: color-mix(in srgb, var(--success) 35%, transparent);
+    }
+    .student-select-card .select-badge.status-a {
+      background: color-mix(in srgb, var(--danger) 15%, transparent);
+      color: var(--danger);
+      border-color: color-mix(in srgb, var(--danger) 30%, transparent);
+    }
+    .student-select-card .name { font-size: .82rem; margin-top: .45rem; word-break: break-word; font-weight: 600; }
+
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(4, 6, 10, 0.78);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      padding: clamp(.85rem, 3vw, 1.25rem);
+      animation: fadeSlideIn var(--transition) ease-out;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: linear-gradient(180deg, #141a24 0%, var(--bg-elevated) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.25rem, 3vw, 1.75rem);
+      max-width: min(580px, 100%); width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: var(--shadow-lg), var(--shadow-inset);
+    }
+    .modal h3 {
+      margin-bottom: 1rem;
+      font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .modal-select-header { text-align: center; margin-bottom: 1.15rem; }
+    .modal-select-header h3 { margin-bottom: .55rem; font-weight: 800; font-size: clamp(1.1rem, 2.5vw, 1.3rem); }
+    .modal-select-header .section-subtitle { margin-bottom: 0; }
+    .select-quick-actions {
+      display: flex; gap: .7rem; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 1.1rem;
+    }
+    .select-quick-actions .btn { flex: 1; min-width: min(200px, 100%); }
+    .modal-actions {
+      display: flex; gap: .8rem;
+      margin-top: 1.35rem;
+      flex-wrap: wrap;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .modal-actions .btn { flex: 1; min-width: 120px; }
+
+    .alert {
+      padding: .85rem 1.1rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1rem;
+      font-size: clamp(.85rem, 1.8vw, .92rem);
+      font-weight: 500;
+      line-height: 1.45;
+    }
+    .alert-error {
+      background: color-mix(in srgb, var(--danger) 12%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
+      color: #fecaca;
+    }
+    .alert-info {
+      background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+      color: #bae6fd;
+    }
+    .alert-warning {
+      background: color-mix(in srgb, var(--warning) 12%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent);
+      color: #fde68a;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem 1.25rem;
+      color: var(--text-muted);
+      font-size: clamp(.92rem, 2vw, 1rem);
+      font-weight: 500;
+      line-height: 1.55;
+    }
+
+    .bilan-table th:first-child,
+    .bilan-table td:first-child { text-align: left; }
+    .bilan-table th:not(:first-child),
+    .bilan-table td:not(:first-child) {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .bilan-table input {
+      width: 76px; min-width: 58px; text-align: center;
+      padding: .45rem .5rem; font-size: clamp(.85rem, 1.8vw, .92rem);
+      display: block;
+      margin: 0 auto;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .bilan-table .total-cell {
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(.95rem, 2vw, 1.05rem);
+    }
+    .bilan-cell { min-width: 108px; }
+    .bilan-cell .cell-speed {
+      display: block;
+      font-size: clamp(.72rem, 1.5vw, .8rem);
+      color: var(--text-dim);
+      margin-top: .25rem;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+    .bilan-table .avg-row td {
+      background: rgba(0, 0, 0, 0.3);
+      font-weight: 700;
+      border-top: 2px solid var(--border-strong);
+      font-variant-numeric: tabular-nums;
+    }
+    .bilan-table .totaux-row td {
+      background: color-mix(in srgb, var(--success) 10%, var(--surface));
+      font-weight: 800;
+      border-top: 2px solid color-mix(in srgb, var(--success) 35%, transparent);
+      font-variant-numeric: tabular-nums;
+    }
+    .bilan-table .grand-total-cell {
+      font-weight: 800;
+      color: var(--success);
+      font-size: clamp(1rem, 2.2vw, 1.12rem);
+      text-shadow: 0 0 20px color-mix(in srgb, var(--success) 25%, transparent);
+    }
+    .bilan-table .session-grand-total {
+      display: block;
+      font-size: clamp(.8rem, 1.6vw, .88rem);
+      color: var(--success);
+      margin-top: .3rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .bilan-table .student-status { margin-left: .45rem; }
+    .status-d { color: var(--success); font-weight: 800; font-size: 1.1rem; }
+    .status-a { color: var(--danger); font-weight: 800; font-size: 1.1rem; }
+    .row-absent td, .row-dispensed td { opacity: .82; }
+
+    .session-stats {
+      display: flex; flex-wrap: wrap; gap: clamp(1rem, 3vw, 2rem);
+      background: linear-gradient(165deg, var(--surface-hover) 0%, var(--surface) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: clamp(1rem, 2.5vw, 1.35rem) clamp(1.15rem, 3vw, 1.5rem);
+      margin-bottom: 1.15rem;
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+    }
+    .session-stats .stat-item {
+      position: relative;
+      padding-right: clamp(1rem, 3vw, 2rem);
+    }
+    .session-stats .stat-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 10%; bottom: 10%;
+      width: 1px;
+      background: var(--border);
+    }
+    .session-stats .stat-item label {
+      display: block;
+      font-size: clamp(.68rem, 1.4vw, .74rem);
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-bottom: .25rem;
+    }
+    .session-stats .stat-item span {
+      font-size: clamp(1.25rem, 3.5vw, 1.55rem);
+      font-weight: 800;
+      color: var(--success);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .attendance-list {
+      display: flex; flex-direction: column; gap: .55rem;
+      max-height: 55vh; overflow-y: auto;
+      scrollbar-width: thin;
+    }
+    .attendance-row {
+      display: grid; grid-template-columns: 1fr auto auto; gap: .65rem; align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: .7rem .85rem;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .attendance-row:hover { background: var(--surface-hover); border-color: rgba(255,255,255,.14); }
+    .attendance-student { display: flex; align-items: center; gap: .7rem; min-width: 0; }
+    .attendance-student .name { font-size: clamp(.88rem, 1.8vw, .92rem); font-weight: 600; }
+    .status-btn {
+      width: 48px; height: 48px; border-radius: var(--radius-sm);
+      font-size: 1.2rem; font-weight: 800; border: 2px solid transparent;
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+    .status-btn.dispensed-btn {
+      background: color-mix(in srgb, var(--success) 15%, var(--surface));
+      border-color: color-mix(in srgb, var(--success) 50%, transparent);
+      color: var(--success);
+    }
+    .status-btn.dispensed-btn.active {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--success) 90%, white), var(--success));
+      color: #041810;
+      border-color: var(--success);
+    }
+    .status-btn.absent-btn {
+      background: color-mix(in srgb, var(--danger) 12%, var(--surface));
+      border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+      color: var(--danger);
+    }
+    .status-btn.absent-btn.active {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--danger) 90%, white), var(--danger));
+      color: #1a0505;
+      border-color: var(--danger);
+    }
+    .status-btn:hover:not(:disabled) { transform: scale(1.04); }
+
+    .hidden-input { position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none; }
+
+    .export-actions {
+      display: flex; flex-wrap: wrap; gap: .8rem;
+      margin-top: 1.15rem;
+      padding-top: 1.15rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 1100px) {
+      .grid-classes { grid-template-columns: repeat(4, 1fr); }
+      .session-stats .stat-item:not(:last-child)::after { display: none; }
+    }
+    @media (max-width: 768px) {
+      .grid-classes { grid-template-columns: repeat(3, 1fr); }
+      .config-actions { grid-template-columns: 1fr; }
+      .live-header { grid-template-columns: 1fr; }
+      .students-live-split { --live-split-cols: 1fr; }
+      .session-stats { gap: 1rem 1.5rem; }
+      .toolbar { padding: .75rem; }
+    }
+    @media (max-width: 480px) {
+      .grid-classes { grid-template-columns: repeat(2, 1fr); }
+      body.view-home .app-header h1,
+      body.view-config-classes .app-header h1,
+      body.view-config-situations .app-header h1 { font-size: clamp(1.45rem, 6vw, 1.85rem); }
+      body.view-home .home-class-prompt,
+      body.view-config-classes .section-subtitle,
+      body.view-config-situations .section-subtitle { font-size: clamp(1.3rem, 5vw, 1.65rem); }
+      .main-content { padding: .75rem; }
+      .session-header-bar { padding: .85rem; }
+      .modal { border-radius: var(--radius); }
+    }
+    @media (orientation: portrait) and (max-height: 500px) {
+      .bottom-nav { padding: .45rem .75rem calc(.45rem + var(--safe-b)); }
+      .bottom-nav .btn-nav { min-height: 44px; font-size: .88rem; }
+    }
+    @media (max-height: 700px) {
+      body.view-home .app-header,
+      body.view-config-classes .app-header,
+      body.view-config-situations .app-header {
+        padding: calc(.55rem + var(--safe-t)) 1rem .55rem;
+      }
+      body.view-home .app-header h1,
+      body.view-config-classes .app-header h1,
+      body.view-config-situations .app-header h1 { font-size: clamp(1.1rem, 3.5vh, 1.45rem); }
+      body.view-home .home-class-prompt,
+      body.view-config-classes .section-subtitle,
+      body.view-config-situations .section-subtitle { font-size: clamp(1rem, 2.8vh, 1.3rem); }
+      body.view-home .config-actions .btn,
+      body.view-config-classes .bottom-nav .btn-nav,
+      body.view-config-situations .bottom-nav .btn-nav { min-height: 40px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #print-area, #print-area * { visibility: visible; }
+      #print-area {
+        position: absolute; left: 0; top: 0; width: 100%;
+        background: #fff; color: #000; padding: 1cm;
+      }
+      @page { size: A4 landscape; margin: 1cm; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header" id="app-header">
+    <div>
+      <h1 id="header-title">Demi-fond EPS</h1>
+      <div class="subtitle" id="header-subtitle"></div>
+    </div>
+  </header>
+
+  <main class="main-content" id="app" role="main"></main>
+
+  <nav class="bottom-nav" aria-label="Navigation principale">
+    <button class="btn-nav" id="btn-menu" type="button">Menu principal</button>
+    <button class="btn-nav" id="btn-back" type="button">Retour</button>
+  </nav>
+
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" id="modal-content"></div>
+  </div>
+
+  <input type="file" id="csv-import-input" class="hidden-input" accept=".csv,text/csv">
+  <input type="file" id="backup-import-input" class="hidden-input" accept=".json,application/json">
+  <input type="file" id="photo-input" class="hidden-input" accept="image/*" capture="environment">
+
+  <div id="print-area" style="display:none"></div>
+
+  <script>
+  /* ========== CONSTANTES & ÉTAT ========== */
+  const STORAGE_KEY = 'demi-fond-eps-data';
+  const PHOTO_DB_NAME = 'demi-fond-photos';
+  const PHOTO_STORE = 'photos';
+  const MAX_CLASSES_HOME = 16;
+  const CLASS_COLORS = [
+    '#38bdf8', '#34d399', '#a78bfa', '#f472b6', '#fbbf24', '#fb923c',
+    '#60a5fa', '#2dd4bf', '#c084fc', '#f87171', '#4ade80', '#818cf8',
+    '#22d3ee', '#10b981', '#e879f9', '#facc15'
+  ];
+  const SEED_TEST_STUDENT_COUNT = 20;
+  const BACKUP_VERSION = 1;
+
+  let appData = { classes: [], situations: [], sessions: [], settings: { primaryColor: '#3b82f6' } };
+  let photoDB = null;
+  let navStack = [{ view: 'home' }];
+  let currentPhotoStudentId = null;
+  let sortState = { column: 'lastName', asc: true };
+  let liveTimerInterval = null;
+  let liveState = null;
+  let liveLayoutHandler = null;
+  let configLayoutHandler = null;
+
+  /* ========== UTILITAIRES ========== */
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str ?? '';
+    return d.innerHTML;
+  }
+
+  function getInitials(first, last) {
+    return ((first?.[0] || '') + (last?.[0] || '')).toUpperCase() || '?';
+  }
+
+  function applyPrimaryColor() {
+    document.documentElement.style.setProperty('--primary', appData.settings.primaryColor || '#3b82f6');
+    const c = appData.settings.primaryColor || '#3b82f6';
+    const darker = adjustColor(c, -30);
+    document.documentElement.style.setProperty('--primary-hover', darker);
+  }
+
+  function adjustColor(hex, amount) {
+    let c = hex.replace('#', '');
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    const num = parseInt(c, 16);
+    let r = Math.max(0, Math.min(255, (num >> 16) + amount));
+    let g = Math.max(0, Math.min(255, ((num >> 8) & 0xff) + amount));
+    let b = Math.max(0, Math.min(255, (num & 0xff) + amount));
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  function calcDistance(laps, extraPlots, lapSize, plotInterval) {
+    const d = laps * lapSize + extraPlots * plotInterval;
+    return Math.max(0, d);
+  }
+
+  function formatDuration(min, sec) {
+    const m = min || 0, s = sec || 0;
+    return `${m} min ${s < 10 ? '0' : ''}${s} s`;
+  }
+
+  function formatTimerDisplay(totalSec) {
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  /* ========== DONNÉES DE DÉMONSTRATION ========== */
+  function getSeedTestStudentGender(num) {
+    return num % 2 === 1 ? 'F' : 'M';
+  }
+
+  function createSeedTestStudent(num) {
+    return {
+      id: `seed-student-${num}`,
+      lastName: 'TEST',
+      firstName: String(num),
+      gender: getSeedTestStudentGender(num)
+    };
+  }
+
+  function getSeedData() {
+    const classId = 'seed-class-test';
+    const situationId6 = 'seed-situation-test-6min';
+    const situationId3 = 'seed-situation-test-3min';
+    const sessionId = 'seed-session-test';
+    const students = Array.from({ length: SEED_TEST_STUDENT_COUNT }, (_, i) =>
+      createSeedTestStudent(i + 1)
+    );
+    const situationBase = { lapSize: 200, durationSeconds: 0, plotInterval: 50 };
+    return {
+      classes: [{
+        id: classId,
+        name: 'Test',
+        colorIndex: 0,
+        students
+      }],
+      situations: [
+        { id: situationId6, name: 'Test 6min', colorIndex: 0, durationMinutes: 6, ...situationBase },
+        { id: situationId3, name: 'Test 3min', colorIndex: 1, durationMinutes: 3, ...situationBase }
+      ],
+      sessions: [{
+        id: sessionId,
+        classId,
+        name: 'SÉANCE TEST',
+        attendance: {},
+        situations: [{
+          templateId: situationId6,
+          seriesCount: 1,
+          series: []
+        }]
+      }],
+      settings: { primaryColor: '#3b82f6' }
+    };
+  }
+
+  /* ========== SAUVEGARDE / CHARGEMENT ========== */
+  function saveData() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    } catch (e) {
+      console.error('Erreur sauvegarde:', e);
+      showAlert('Erreur de sauvegarde locale. Espace peut-être insuffisant.');
+    }
+  }
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        appData = { classes: [], situations: [], sessions: [], settings: { primaryColor: '#3b82f6' }, ...parsed };
+        migrateSessionData();
+        ensureSeedUpdates();
+        ensureClassColors();
+        ensureSituationColors();
+      } else {
+        appData = getSeedData();
+        saveData();
+      }
+    } catch (e) {
+      console.error('Erreur chargement:', e);
+      appData = getSeedData();
+    }
+    applyPrimaryColor();
+  }
+
+  function migrateSessionData() {
+    (appData.sessions || []).forEach(session => {
+      if (!session.attendance) session.attendance = {};
+      if (session.absences?.length) {
+        session.absences.forEach(id => { session.attendance[id] = 'absent'; });
+        delete session.absences;
+      }
+    });
+  }
+
+  function ensureSeedUpdates() {
+    const situationBase = { lapSize: 200, durationSeconds: 0, plotInterval: 50 };
+    const legacy = appData.situations?.find(s => s.id === 'seed-situation-test');
+    const sit6 = appData.situations?.find(s => s.id === 'seed-situation-test-6min');
+    if (legacy && !sit6) {
+      legacy.id = 'seed-situation-test-6min';
+      legacy.name = 'Test 6min';
+      appData.sessions?.forEach(session => {
+        (session.situations || []).forEach(ss => {
+          if (ss.templateId === 'seed-situation-test') ss.templateId = 'seed-situation-test-6min';
+        });
+      });
+    } else if (sit6) {
+      sit6.name = 'Test 6min';
+      Object.assign(sit6, situationBase, { durationMinutes: 6 });
+    }
+    if (!appData.situations?.find(s => s.id === 'seed-situation-test-3min')) {
+      if (!appData.situations) appData.situations = [];
+      appData.situations.push({
+        id: 'seed-situation-test-3min',
+        name: 'Test 3min',
+        durationMinutes: 3,
+        ...situationBase
+      });
+    }
+    const testClass = appData.classes?.find(c => c.id === 'seed-class-test');
+    if (testClass) {
+      if (!testClass.students) testClass.students = [];
+      for (let num = 1; num <= SEED_TEST_STUDENT_COUNT; num++) {
+        const id = `seed-student-${num}`;
+        let st = testClass.students.find(s => s.id === id);
+        if (!st) {
+          testClass.students.push(createSeedTestStudent(num));
+        } else {
+          st.lastName = 'TEST';
+          st.firstName = String(num);
+          st.gender = getSeedTestStudentGender(num);
+        }
+      }
+    }
+    saveData();
+  }
+
+  /* ========== INDEXEDDB PHOTOS ========== */
+  function openPhotoDB() {
+    return new Promise((resolve, reject) => {
+      if (photoDB) return resolve(photoDB);
+      const req = indexedDB.open(PHOTO_DB_NAME, 1);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(PHOTO_STORE)) db.createObjectStore(PHOTO_STORE);
+      };
+      req.onsuccess = (e) => { photoDB = e.target.result; resolve(photoDB); };
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function savePhoto(studentId, dataUrl) {
+    const db = await openPhotoDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(PHOTO_STORE, 'readwrite');
+      tx.objectStore(PHOTO_STORE).put(dataUrl, studentId);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async function getPhoto(studentId) {
+    const db = await openPhotoDB();
+    return new Promise((resolve) => {
+      const tx = db.transaction(PHOTO_STORE, 'readonly');
+      const req = tx.objectStore(PHOTO_STORE).get(studentId);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    });
+  }
+
+  async function deletePhoto(studentId) {
+    const db = await openPhotoDB();
+    return new Promise((resolve) => {
+      const tx = db.transaction(PHOTO_STORE, 'readwrite');
+      tx.objectStore(PHOTO_STORE).delete(studentId);
+      tx.oncomplete = () => resolve();
+    });
+  }
+
+  async function getAllPhotos() {
+    const db = await openPhotoDB();
+    return new Promise((resolve) => {
+      const photos = {};
+      const tx = db.transaction(PHOTO_STORE, 'readonly');
+      const req = tx.objectStore(PHOTO_STORE).openCursor();
+      req.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (cursor) {
+          photos[cursor.key] = cursor.value;
+          cursor.continue();
+        } else resolve(photos);
+      };
+      req.onerror = () => resolve(photos);
+    });
+  }
+
+  async function clearAllPhotos() {
+    const db = await openPhotoDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(PHOTO_STORE, 'readwrite');
+      tx.objectStore(PHOTO_STORE).clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  function clearPhotoCache() {
+    Object.keys(photoCache).forEach(k => delete photoCache[k]);
+  }
+
+  async function exportAppBackup() {
+    const photos = await getAllPhotos();
+    const backup = {
+      version: BACKUP_VERSION,
+      exportedAt: new Date().toISOString(),
+      app: appData,
+      photos
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    const date = new Date().toISOString().slice(0, 10);
+    a.href = URL.createObjectURL(blob);
+    a.download = `demi-fond-eps-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showAlert('Les données de l\'application ont été enregistrées dans un fichier.');
+  }
+
+  function parseAppBackup(raw) {
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== 'object' || !data.app) throw new Error('Fichier invalide.');
+    if (!Array.isArray(data.app.classes) || !Array.isArray(data.app.situations) || !Array.isArray(data.app.sessions)) {
+      throw new Error('Structure de données non reconnue.');
+    }
+    return data;
+  }
+
+  async function importAppBackup(backup) {
+    appData = {
+      classes: [],
+      situations: [],
+      sessions: [],
+      settings: { primaryColor: '#3b82f6' },
+      ...backup.app
+    };
+    migrateSessionData();
+    ensureClassColors();
+    ensureSituationColors();
+    saveData();
+    applyPrimaryColor();
+    await clearAllPhotos();
+    clearPhotoCache();
+    const photos = backup.photos && typeof backup.photos === 'object' ? backup.photos : {};
+    for (const [studentId, dataUrl] of Object.entries(photos)) {
+      if (dataUrl) await savePhoto(studentId, dataUrl);
+    }
+    liveState = null;
+    if (liveTimerInterval) { clearInterval(liveTimerInterval); liveTimerInterval = null; }
+    navStack = [{ view: 'home' }];
+    render();
+    showAlert('Données importées avec succès.');
+  }
+
+  async function factoryResetApp() {
+    localStorage.removeItem(STORAGE_KEY);
+    await clearAllPhotos();
+    clearPhotoCache();
+    appData = getSeedData();
+    saveData();
+    applyPrimaryColor();
+    liveState = null;
+    if (liveTimerInterval) { clearInterval(liveTimerInterval); liveTimerInterval = null; }
+    navStack = [{ view: 'home' }];
+    render();
+    showAlert('L\'application a été remise à zéro.');
+  }
+
+  const photoCache = {};
+  async function getPhotoCached(studentId) {
+    if (photoCache[studentId] !== undefined) return photoCache[studentId];
+    const p = await getPhoto(studentId);
+    photoCache[studentId] = p;
+    return p;
+  }
+
+  /* ========== NAVIGATION ========== */
+  function getCurrentNav() { return navStack[navStack.length - 1]; }
+
+  function navigate(view, params = {}, replace = false) {
+    if (replace) navStack[navStack.length - 1] = { view, params };
+    else navStack.push({ view, params });
+    if (liveTimerInterval) { clearInterval(liveTimerInterval); liveTimerInterval = null; }
+    render();
+  }
+
+  function isOnLivePage() {
+    return getCurrentNav().view === 'live';
+  }
+
+  function confirmLeaveLive(onConfirm) {
+    confirmAction(
+      'Quitter le suivi en cours ? Les résultats ne seront validés qu\'après avoir cliqué sur « Terminer ».',
+      onConfirm
+    );
+  }
+
+  function goBack() {
+    const leave = () => {
+      if (navStack.length <= 1) return;
+      navStack.pop();
+      liveState = null;
+      if (liveTimerInterval) { clearInterval(liveTimerInterval); liveTimerInterval = null; }
+      render();
+    };
+    if (isOnLivePage()) confirmLeaveLive(leave);
+    else leave();
+  }
+
+  function goHome() {
+    const leave = () => {
+      navStack = [{ view: 'home' }];
+      liveState = null;
+      if (liveTimerInterval) { clearInterval(liveTimerInterval); liveTimerInterval = null; }
+      render();
+    };
+    if (isOnLivePage()) confirmLeaveLive(leave);
+    else leave();
+  }
+
+  function isCreatingClass() {
+    const { view, params } = getCurrentNav();
+    return view === 'class-edit' && !!params.isNew;
+  }
+
+  function isCreatingSituation() {
+    const { view, params } = getCurrentNav();
+    return view === 'situation-edit' && !!params.isNew;
+  }
+
+  function cancelNewClass() {
+    confirmAction('Annuler la création de cette classe ?', () => {
+      const classId = getCurrentNav().params.classId;
+      appData.classes = appData.classes.filter(c => c.id !== classId);
+      appData.sessions = appData.sessions.filter(s => s.classId !== classId);
+      saveData();
+      if (navStack.length > 1) navStack.pop();
+      render();
+    });
+  }
+
+  function validateNewClass() {
+    const classId = getCurrentNav().params.classId;
+    const cls = getClass(classId);
+    if (!cls) { goBack(); return; }
+    const nameInput = document.getElementById('class-name-input');
+    if (nameInput) cls.name = nameInput.value.trim() || cls.name;
+    if (!cls.name.trim()) {
+      showAlert('Indiquez un nom pour la classe.');
+      return;
+    }
+    saveData();
+    if (navStack.length > 1) navStack.pop();
+    render();
+  }
+
+  function cancelNewSituation() {
+    confirmAction('Annuler la création de cette situation ?', () => {
+      const situationId = getCurrentNav().params.situationId;
+      appData.situations = appData.situations.filter(s => s.id !== situationId);
+      saveData();
+      if (navStack.length > 1) navStack.pop();
+      render();
+    });
+  }
+
+  function saveSituationFromForm(situationId) {
+    const sit = getSituation(situationId);
+    if (!sit) return false;
+    const nameEl = document.getElementById('sit-name');
+    if (nameEl) sit.name = nameEl.value.trim() || sit.name;
+    sit.lapSize = parseInt(document.getElementById('sit-lap')?.value.replace(/\s/g, '')) || 0;
+    sit.durationMinutes = parseInt(document.getElementById('sit-min')?.value.replace(/\s/g, '')) || 0;
+    sit.durationSeconds = parseInt(document.getElementById('sit-sec')?.value.replace(/\s/g, '')) || 0;
+    sit.plotInterval = parseInt(document.getElementById('sit-plot')?.value.replace(/\s/g, '')) || 0;
+    return !!sit.name.trim();
+  }
+
+  function validateNewSituation() {
+    const situationId = getCurrentNav().params.situationId;
+    if (!saveSituationFromForm(situationId)) {
+      showAlert('Indiquez un nom pour la situation.');
+      return;
+    }
+    saveData();
+    if (navStack.length > 1) navStack.pop();
+    render();
+  }
+
+  function updateBottomNav() {
+    const { view, params } = getCurrentNav();
+    const btnMenu = document.getElementById('btn-menu');
+    const btnBack = document.getElementById('btn-back');
+    if (view === 'class-edit' && params.isNew) {
+      btnMenu.textContent = 'Retour';
+      btnBack.textContent = 'Valider la classe';
+      btnMenu.disabled = false;
+      btnBack.disabled = false;
+      btnMenu.classList.remove('btn-nav-validate');
+      btnBack.classList.add('btn-nav-validate');
+    } else if (view === 'situation-edit' && params.isNew) {
+      btnMenu.textContent = 'Retour';
+      btnBack.textContent = 'Valider la situation';
+      btnMenu.disabled = false;
+      btnBack.disabled = false;
+      btnMenu.classList.remove('btn-nav-validate');
+      btnBack.classList.add('btn-nav-validate');
+    } else {
+      btnMenu.textContent = 'Menu principal';
+      btnBack.textContent = 'Retour';
+      btnBack.disabled = navStack.length <= 1;
+      btnMenu.classList.remove('btn-nav-validate');
+      btnBack.classList.remove('btn-nav-validate');
+    }
+  }
+
+  /* ========== MODALES ========== */
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+    document.getElementById('modal-content').innerHTML = '';
+  }
+
+  function showModal(html, onMount) {
+    document.getElementById('modal-content').innerHTML = html;
+    document.getElementById('modal-overlay').classList.add('active');
+    if (onMount) onMount();
+  }
+
+  function confirmAction(message, onConfirm) {
+    showModal(`
+      <h3>Confirmation</h3>
+      <p>${escapeHtml(message)}</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel">Annuler</button>
+        <button class="btn btn-danger" id="modal-confirm">Confirmer</button>
+      </div>
+    `, () => {
+      document.getElementById('modal-cancel').onclick = closeModal;
+      document.getElementById('modal-confirm').onclick = () => { closeModal(); onConfirm(); };
+    });
+  }
+
+  function promptInput(title, defaultVal, onSubmit) {
+    showModal(`
+      <h3>${escapeHtml(title)}</h3>
+      <div class="form-group">
+        <input type="text" id="prompt-input" value="${escapeHtml(defaultVal || '')}" autofocus>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="modal-confirm">Valider</button>
+      </div>
+    `, () => {
+      const input = document.getElementById('prompt-input');
+      input.focus();
+      input.select();
+      document.getElementById('modal-cancel').onclick = closeModal;
+      document.getElementById('modal-confirm').onclick = () => {
+        const val = input.value.trim();
+        if (!val) return;
+        closeModal();
+        onSubmit(val);
+      };
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') document.getElementById('modal-confirm').click();
+      };
+    });
+  }
+
+  function showAlert(msg) {
+    showModal(`<h3>Information</h3><p>${escapeHtml(msg)}</p>
+      <div class="modal-actions"><button class="btn btn-primary" id="modal-ok">OK</button></div>`, () => {
+      document.getElementById('modal-ok').onclick = closeModal;
+    });
+  }
+
+  /* ========== ACCÈS DONNÉES ========== */
+  function getClassColor(cls) {
+    const idx = typeof cls.colorIndex === 'number' ? cls.colorIndex : 0;
+    return CLASS_COLORS[((idx % CLASS_COLORS.length) + CLASS_COLORS.length) % CLASS_COLORS.length];
+  }
+
+  function nextClassColorIndex() {
+    const used = new Set(appData.classes.map(c => c.colorIndex).filter(n => typeof n === 'number'));
+    for (let i = 0; i < CLASS_COLORS.length; i++) {
+      if (!used.has(i)) return i;
+    }
+    return appData.classes.length % CLASS_COLORS.length;
+  }
+
+  function ensureClassColors() {
+    let changed = false;
+    const used = new Set();
+    appData.classes.forEach(c => {
+      if (typeof c.colorIndex === 'number') used.add(c.colorIndex);
+    });
+    let nextFree = 0;
+    appData.classes.forEach(c => {
+      if (typeof c.colorIndex !== 'number') {
+        while (used.has(nextFree % CLASS_COLORS.length)) nextFree++;
+        c.colorIndex = nextFree % CLASS_COLORS.length;
+        used.add(c.colorIndex);
+        nextFree++;
+        changed = true;
+      }
+    });
+    if (changed) saveData();
+  }
+
+  function classColorStyle(cls) {
+    return `--class-color:${getClassColor(cls)}`;
+  }
+
+  function getSituationColor(sit) {
+    const idx = typeof sit.colorIndex === 'number' ? sit.colorIndex : 0;
+    return CLASS_COLORS[((idx % CLASS_COLORS.length) + CLASS_COLORS.length) % CLASS_COLORS.length];
+  }
+
+  function nextSituationColorIndex() {
+    const used = new Set(appData.situations.map(s => s.colorIndex).filter(n => typeof n === 'number'));
+    for (let i = 0; i < CLASS_COLORS.length; i++) {
+      if (!used.has(i)) return i;
+    }
+    return appData.situations.length % CLASS_COLORS.length;
+  }
+
+  function ensureSituationColors() {
+    let changed = false;
+    const used = new Set();
+    appData.situations.forEach(s => {
+      if (typeof s.colorIndex === 'number') used.add(s.colorIndex);
+    });
+    let nextFree = 0;
+    appData.situations.forEach(s => {
+      if (typeof s.colorIndex !== 'number') {
+        while (used.has(nextFree % CLASS_COLORS.length)) nextFree++;
+        s.colorIndex = nextFree % CLASS_COLORS.length;
+        used.add(s.colorIndex);
+        nextFree++;
+        changed = true;
+      }
+    });
+    if (changed) saveData();
+  }
+
+  function situationColorStyle(sit) {
+    return `--class-color:${getSituationColor(sit)}`;
+  }
+
+  function getClass(id) { return appData.classes.find(c => c.id === id); }
+  function getSituation(id) { return appData.situations.find(s => s.id === id); }
+  function getSession(id) { return appData.sessions.find(s => s.id === id); }
+
+  function getClassSessions(classId) {
+    return appData.sessions.filter(s => s.classId === classId);
+  }
+
+  function getStudentAttendance(session, studentId) {
+    return session.attendance?.[studentId] || null;
+  }
+
+  function getAvailableStudents(session, classObj) {
+    return (classObj.students || []).filter(st => !getStudentAttendance(session, st.id));
+  }
+
+  function getSeriesCount(ss) {
+    return Math.max(1, parseInt(ss.seriesCount, 10) || 1);
+  }
+
+  function getSituationDurationSec(tpl) {
+    if (!tpl) return 0;
+    return (tpl.durationMinutes || 0) * 60 + (tpl.durationSeconds || 0);
+  }
+
+  function calcSpeedKmh(distance, durationSec) {
+    if (!durationSec || distance <= 0) return '—';
+    return ((distance / durationSec) * 3.6).toFixed(1) + ' km/h';
+  }
+
+  function getStudentDistInSituation(session, studentId, sitIdx) {
+    const ss = session.situations?.[sitIdx];
+    if (!ss?.series) return 0;
+    const tpl = getSituation(ss.templateId);
+    let total = 0;
+    for (const serie of ss.series) {
+      if (!serie.completed) continue;
+      const r = serie.results?.[studentId];
+      if (!r) continue;
+      if (r.manualDistance != null) total = Math.max(total, r.manualDistance);
+      else total = Math.max(total, calcDistance(r.laps, r.extraPlots, tpl?.lapSize || 0, tpl?.plotInterval || 0));
+    }
+    return total;
+  }
+
+  function getSessionStudentTotal(session, studentId) {
+    if (getStudentAttendance(session, studentId)) return 0;
+    return (session.situations || []).reduce((sum, _, i) => sum + getStudentDistInSituation(session, studentId, i), 0);
+  }
+
+  function getSessionGrandTotal(session, cls) {
+    return (cls.students || []).reduce((sum, st) => {
+      if (getStudentAttendance(session, st.id)) return sum;
+      return sum + getSessionStudentTotal(session, st.id);
+    }, 0);
+  }
+
+  function formatAttendanceStatus(status) {
+    if (status === 'dispensed') return '<span class="status-d" title="Dispensé">D</span>';
+    if (status === 'absent') return '<span class="status-a" title="Absent">A</span>';
+    return '';
+  }
+
+  /* ========== RENDU AVATAR ========== */
+  function avatarHtml(student, size = '') {
+    const cls = 'avatar' + (size ? ' ' + size : '');
+    const initials = getInitials(student.firstName, student.lastName);
+    return `<div class="${cls}" data-student-id="${student.id}" data-photo-placeholder="${initials}">
+      <span>${escapeHtml(initials)}</span></div>`;
+  }
+
+  async function loadAvatarsInContainer(container) {
+    const els = container.querySelectorAll('[data-photo-placeholder]');
+    for (const el of els) {
+      const sid = el.closest('[data-student-id]')?.dataset.studentId || el.dataset.studentId;
+      if (!sid) continue;
+      const photo = await getPhotoCached(sid);
+      if (photo) {
+        el.innerHTML = `<img src="${photo}" alt="">`;
+      }
+    }
+  }
+
+  /* ========== RENDU PRINCIPAL ========== */
+  function setHeader(title, subtitle = '') {
+    document.getElementById('header-title').textContent = title;
+    document.getElementById('header-subtitle').textContent = subtitle;
+  }
+
+  function render() {
+    const { view, params } = getCurrentNav();
+    const app = document.getElementById('app');
+    document.body.classList.toggle('view-home', view === 'home');
+    document.body.classList.toggle('view-config-classes', view === 'config-classes');
+    document.body.classList.toggle('view-config-situations', view === 'config-situations');
+    document.body.classList.toggle('view-live', view === 'live');
+    document.body.classList.toggle('view-app-settings', view === 'app-settings');
+    if (view !== 'live' && liveLayoutHandler) {
+      window.removeEventListener('resize', liveLayoutHandler);
+      liveLayoutHandler = null;
+    }
+    if (view !== 'config-situations' && configLayoutHandler) {
+      window.removeEventListener('resize', configLayoutHandler);
+      configLayoutHandler = null;
+    }
+    document.body.classList.toggle('view-class-new', view === 'class-edit' && !!params.isNew);
+
+    switch (view) {
+      case 'home': renderHome(app); break;
+      case 'config-classes': renderConfigClasses(app); break;
+      case 'class-edit': renderClassEdit(app, params.classId); break;
+      case 'config-situations': renderConfigSituations(app); break;
+      case 'situation-edit': renderSituationEdit(app, params.situationId); break;
+      case 'class-sessions': renderClassSessions(app, params.classId); break;
+      case 'session': renderSession(app, params.sessionId); break;
+      case 'live': renderLive(app, params); break;
+      case 'bilan': renderBilan(app, params.sessionId); break;
+      case 'class-bilan': renderClassBilan(app, params.classId); break;
+      case 'app-settings': renderAppSettings(app); break;
+      default: renderHome(app);
+    }
+    updateBottomNav();
+  }
+
+  /* ----- ACCUEIL ----- */
+  function renderHome(app) {
+    setHeader('Demi-fond EPS');
+    const classes = appData.classes.slice(0, MAX_CLASSES_HOME);
+    let grid = classes.map(c =>
+      `<button class="grid-item-btn class-colored" style="${classColorStyle(c)}" data-action="open-class" data-id="${c.id}">${escapeHtml(c.name)}</button>`
+    ).join('');
+    const emptySlots = Math.max(0, MAX_CLASSES_HOME - classes.length);
+    for (let i = 0; i < emptySlots; i++) {
+      grid += `<div class="grid-item-btn" style="visibility:hidden;pointer-events:none" aria-hidden="true"></div>`;
+    }
+    if (!classes.length) {
+      grid = '<div class="empty-state" style="grid-column:1/-1">Aucune classe configurée — utilisez « Paramétrer les classes »</div>';
+    }
+    app.innerHTML = `
+      <div class="home-class-header">
+        <p class="home-class-prompt">Choisissez une classe :</p>
+        <button type="button" class="btn-settings" data-action="app-settings" title="Paramètres" aria-label="Paramètres">⚙</button>
+      </div>
+      <div class="grid-classes">${grid}</div>
+      <div class="config-actions">
+        <button class="btn btn-secondary" data-action="config-classes">Paramétrer les classes</button>
+        <button class="btn btn-secondary" data-action="config-situations">Paramétrer les situations</button>
+      </div>`;
+    bindActions(app);
+  }
+
+  /* ----- PARAMÈTRES APPLICATION ----- */
+  function renderAppSettings(app) {
+    setHeader('Paramètres');
+    app.innerHTML = `
+      <div class="settings-page">
+        <button class="btn btn-secondary settings-btn" data-action="export-app-data">Enregistrer les données de l'application</button>
+        <button class="btn btn-secondary settings-btn" data-action="import-app-data">Importer des données</button>
+        <button class="btn btn-danger settings-btn" data-action="factory-reset">Remettre l'application à zéro</button>
+      </div>`;
+    bindActions(app);
+  }
+
+  /* ----- CONFIG CLASSES ----- */
+  function renderConfigClasses(app) {
+    setHeader('Paramétrage des classes');
+    const classes = appData.classes.slice(0, MAX_CLASSES_HOME - 1);
+    let grid = classes.map(c =>
+      `<button class="grid-item-btn class-colored" style="${classColorStyle(c)}" data-action="edit-class" data-id="${c.id}">${escapeHtml(c.name)}</button>`
+    ).join('');
+    grid += `<button class="grid-item-btn add-btn" data-action="add-class">+</button>`;
+    const emptySlots = Math.max(0, MAX_CLASSES_HOME - classes.length - 1);
+    for (let i = 0; i < emptySlots; i++) {
+      grid += `<div class="grid-item-btn" style="visibility:hidden;pointer-events:none" aria-hidden="true"></div>`;
+    }
+    app.innerHTML = `
+      <p class="section-subtitle">Cliquez sur une classe pour la modifier, ou créez-en une nouvelle.</p>
+      <div class="grid-classes">${grid}</div>`;
+    bindActions(app);
+  }
+
+  /* ----- ÉDITION CLASSE ----- */
+  function renderClassEdit(app, classId) {
+    const cls = getClass(classId);
+    if (!cls) { goHome(); return; }
+    setHeader('Classe : ' + cls.name);
+
+    const students = [...(cls.students || [])];
+    students.sort((a, b) => {
+      const col = sortState.column;
+      const va = (a[col] || '').toString().toLowerCase();
+      const vb = (b[col] || '').toString().toLowerCase();
+      return sortState.asc ? va.localeCompare(vb, 'fr') : vb.localeCompare(va, 'fr');
+    });
+
+    const sortIcon = (col) => sortState.column === col ? (sortState.asc ? '▲' : '▼') : '⇅';
+
+    const rows = students.map(st => `
+      <tr>
+        <td>${escapeHtml(st.lastName)}</td>
+        <td>${escapeHtml(st.firstName)}</td>
+        <td>${escapeHtml(st.gender || '')}</td>
+        <td class="actions-cell">
+          ${avatarHtml(st)}
+          <button class="btn-icon" data-action="edit-student" data-id="${st.id}" title="Modifier">✏️</button>
+          <button class="btn-icon" data-action="photo-student" data-id="${st.id}" title="Photo">📷</button>
+          <button class="btn-icon" data-action="delete-student" data-id="${st.id}" title="Supprimer">✕</button>
+        </td>
+      </tr>`).join('');
+
+    app.innerHTML = `
+      <div class="card" style="margin-bottom:1rem">
+        <div class="form-group">
+          <label>Nom de la classe</label>
+          <input type="text" id="class-name-input" value="${escapeHtml(cls.name)}">
+        </div>
+        <button class="btn btn-danger btn-sm" data-action="delete-class">Supprimer la classe</button>
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-primary btn-sm" data-action="add-student">+ Ajouter un élève</button>
+        <button class="btn btn-secondary btn-sm" data-action="import-csv">📄 Importer CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr>
+            <th data-sort="lastName">Nom <span class="sort-icon">${sortIcon('lastName')}</span></th>
+            <th data-sort="firstName">Prénom <span class="sort-icon">${sortIcon('firstName')}</span></th>
+            <th data-sort="gender">Sexe <span class="sort-icon">${sortIcon('gender')}</span></th>
+            <th>Actions</th>
+          </tr></thead>
+          <tbody>${rows || '<tr><td colspan="4" class="empty-state">Aucun élève</td></tr>'}</tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-top:1rem" id="add-student-form" hidden>
+        <h3 class="section-title">Nouvel élève</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Nom</label><input id="st-last" type="text"></div>
+          <div class="form-group"><label>Prénom</label><input id="st-first" type="text"></div>
+          <div class="form-group"><label>Sexe</label>
+            <select id="st-gender"><option value="">—</option><option value="M">M</option><option value="F">F</option></select>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" data-action="save-new-student">Enregistrer</button>
+      </div>`;
+
+    document.getElementById('class-name-input').onchange = (e) => {
+      cls.name = e.target.value.trim() || cls.name;
+      saveData();
+      setHeader('Classe : ' + cls.name);
+    };
+
+    app.querySelectorAll('[data-sort]').forEach(th => {
+      th.onclick = () => {
+        const col = th.dataset.sort;
+        if (sortState.column === col) sortState.asc = !sortState.asc;
+        else { sortState.column = col; sortState.asc = true; }
+        render();
+      };
+    });
+
+    bindActions(app, { classId });
+    loadAvatarsInContainer(app);
+  }
+
+  /* ----- CONFIG SITUATIONS ----- */
+  function renderConfigSituations(app) {
+    setHeader('Paramétrage des situations');
+    const situations = appData.situations;
+    let grid = situations.map(s =>
+      `<button class="grid-item-btn class-colored" style="${situationColorStyle(s)}" data-action="edit-situation" data-id="${s.id}">${escapeHtml(s.name)}</button>`
+    ).join('');
+    grid += `<button class="grid-item-btn add-btn" data-action="add-situation">+</button>`;
+    const totalItems = situations.length + 1;
+    const needsScroll = totalItems > MAX_CLASSES_HOME;
+    if (!needsScroll) {
+      const emptySlots = MAX_CLASSES_HOME - totalItems;
+      for (let i = 0; i < emptySlots; i++) {
+        grid += `<div class="grid-item-btn" style="visibility:hidden;pointer-events:none" aria-hidden="true"></div>`;
+      }
+    }
+    const gridClass = needsScroll ? 'situations-scroll' : 'situations-fit';
+    app.innerHTML = `
+      <p class="section-subtitle">Définissez les situations de course réutilisables.</p>
+      <div class="grid-classes ${gridClass}">${grid}</div>`;
+    bindActions(app);
+    setupSituationsLayout();
+  }
+
+  function renderSituationEdit(app, situationId) {
+    const sit = getSituation(situationId);
+    if (!sit) { goBack(); return; }
+    const isNew = !!getCurrentNav().params.isNew;
+    setHeader('Situation : ' + sit.name);
+    const actionsHtml = isNew ? '' : `
+        <div class="toolbar" style="margin-top:1rem;margin-bottom:0;padding:.75rem 0 0;border:none;background:none">
+          <button class="btn btn-danger" data-action="delete-situation">Supprimer la situation</button>
+          <button class="btn btn-primary" id="btn-save-situation" type="button" style="margin-left:auto">Valider</button>
+        </div>`;
+    app.innerHTML = `
+      <div class="card">
+        <div class="form-group"><label>Nom de la situation</label>
+          <input type="text" id="sit-name" value="${escapeHtml(sit.name)}"></div>
+        <div class="form-group"><label>Taille du tour (m)</label>
+          <input type="text" id="sit-lap" inputmode="numeric" pattern="[0-9]*" value="${sit.lapSize || ''}"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Durée — minutes</label>
+            <input type="text" id="sit-min" inputmode="numeric" pattern="[0-9]*" value="${sit.durationMinutes ?? ''}"></div>
+          <div class="form-group"><label>Durée — secondes</label>
+            <input type="text" id="sit-sec" inputmode="numeric" pattern="[0-9]*" value="${sit.durationSeconds ?? ''}"></div>
+        </div>
+        <div class="form-group"><label>Intervalle de plots (m)</label>
+          <input type="text" id="sit-plot" inputmode="numeric" pattern="[0-9]*" value="${sit.plotInterval || ''}"></div>
+        ${actionsHtml}
+      </div>`;
+
+    document.getElementById('sit-name').oninput = (e) => {
+      setHeader('Situation : ' + (e.target.value.trim() || '…'));
+    };
+    ['sit-lap','sit-min','sit-sec','sit-plot'].forEach(id => {
+      document.getElementById(id).oninput = (e) => {
+        e.target.value = e.target.value.replace(/[^\d]/g, '');
+      };
+    });
+    const saveBtn = document.getElementById('btn-save-situation');
+    if (saveBtn) {
+      saveBtn.onclick = () => {
+        if (!saveSituationFromForm(situationId)) {
+          showAlert('Indiquez un nom pour la situation.');
+          return;
+        }
+        saveData();
+        goBack();
+      };
+    }
+    bindActions(app, { situationId });
+  }
+
+  /* ----- SÉANCES CLASSE ----- */
+  function renderClassSessions(app, classId) {
+    const cls = getClass(classId);
+    if (!cls) { goHome(); return; }
+    setHeader(cls.name, 'Séances');
+    const sessions = getClassSessions(classId);
+    const items = sessions.map(s =>
+      `<button class="grid-item-btn" data-action="open-session" data-id="${s.id}">${escapeHtml(s.name)}</button>`
+    ).join('');
+    app.innerHTML = `
+      <div class="toolbar" style="margin-bottom:1rem">
+        <button class="btn btn-primary" data-action="open-class-bilan">Bilan de la classe</button>
+      </div>
+      <div class="grid-classes" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))">
+        ${items}
+        <button class="grid-item-btn add-btn" data-action="add-session" data-class-id="${classId}">+</button>
+      </div>`;
+    bindActions(app, { classId });
+  }
+
+  /* ----- PAGE SÉANCE ----- */
+  function renderSession(app, sessionId) {
+    const session = getSession(sessionId);
+    if (!session) { goBack(); return; }
+    const cls = getClass(session.classId);
+    setHeader(session.name, cls?.name || '');
+
+    const sitBlocks = (session.situations || []).map((ss, idx) => {
+      const tpl = getSituation(ss.templateId);
+      const completed = (ss.series || []).filter(s => s.completed);
+      const seriesCount = getSeriesCount(ss);
+      const completedCount = completed.length;
+      const allDone = completedCount >= seriesCount;
+      const isNextSeries = seriesCount > 1 && completedCount > 0 && !allDone;
+      const launchLabel = isNextSeries ? 'Lancer la série suivante' : 'Lancer la situation';
+      const launchBtn = allDone ? '' : `<button class="btn btn-success btn-sm" data-action="launch-situation" data-idx="${idx}">${launchLabel}</button>`;
+      const statusBtns = allDone
+        ? `<button class="btn btn-secondary btn-sm" data-action="reset-situation" data-idx="${idx}">Remettre à zéro</button>`
+        : '';
+      return `
+        <div class="situation-block" draggable="true" data-drag-idx="${idx}">
+          <div class="situation-header">
+            <h3>Situation ${idx + 1} — ${escapeHtml(tpl?.name || 'Inconnue')}</h3>
+            <div class="situation-controls">
+              <button class="btn-icon" data-action="move-up" data-idx="${idx}" title="Monter">▲</button>
+              <button class="btn-icon" data-action="move-down" data-idx="${idx}" title="Descendre">▼</button>
+              <label style="font-size:.85rem;color:var(--text-muted)">Séries :
+                <input type="text" inputmode="numeric" style="width:50px;display:inline" data-action="series-count" data-idx="${idx}" value="${ss.seriesCount || 1}">
+              </label>
+              ${launchBtn}
+              <button class="btn-icon" data-action="remove-situation" data-idx="${idx}" title="Supprimer">✕</button>
+            </div>
+          </div>
+          ${completedCount ? `<p class="section-subtitle">${completedCount} série(s) terminée(s) sur ${seriesCount}</p>` : ''}
+          ${statusBtns}
+        </div>`;
+    }).join('');
+
+    const sitOptions = appData.situations.map(s =>
+      `<option value="${s.id}">${escapeHtml(s.name)}</option>`
+    ).join('');
+
+    const grandTotal = getSessionGrandTotal(session, cls);
+
+    app.innerHTML = `
+      <div class="session-header-bar">
+        <h2>${escapeHtml(session.name)}</h2>
+        <button class="btn btn-secondary btn-sm" data-action="rename-session">Renommer</button>
+        <button class="btn btn-danger btn-sm" data-action="delete-session">Supprimer</button>
+        <button class="btn btn-secondary btn-sm" data-action="manage-absences">Gérer absences / dispenses</button>
+      </div>
+      <div class="session-stats">
+        <div class="stat-item">
+          <label>Distance totale parcourue</label>
+          <span>${grandTotal} m</span>
+        </div>
+      </div>
+      <div class="toolbar">
+        ${appData.situations.length ? `
+          <select id="add-situation-select" style="max-width:280px">
+            <option value="">— Choisir une situation —</option>${sitOptions}
+          </select>
+          <button class="btn btn-primary btn-sm" data-action="add-situation-to-session">Ajouter une situation</button>
+        ` : `<div class="alert alert-error">Aucune situation paramétrée. Allez dans « Paramétrer les situations ».</div>`}
+        <button class="btn btn-secondary btn-sm" data-action="open-bilan">Bilan de la séance</button>
+        <button class="btn btn-secondary btn-sm" data-action="export-csv">Export CSV</button>
+        <button class="btn btn-secondary btn-sm" data-action="export-pdf">Export PDF</button>
+      </div>
+      ${sitBlocks || '<div class="empty-state">Ajoutez une situation pour commencer.</div>'}`;
+
+    setupDragDrop(app, session);
+    bindActions(app, { sessionId });
+  }
+
+  /* ----- MISE EN PAGE SITUATIONS (même taille que classes, scroll si > 16) ----- */
+  function layoutSituationsGrid() {
+    if (!document.body.classList.contains('view-config-situations')) return;
+    const main = document.getElementById('app');
+    const grid = main?.querySelector('.grid-classes');
+    const subtitle = main?.querySelector('.section-subtitle');
+    if (!grid) return;
+
+    if (!grid.classList.contains('situations-scroll')) {
+      grid.style.removeProperty('--situation-cell-h');
+      grid.style.overflowY = 'hidden';
+      return;
+    }
+
+    const gap = Math.max(4, Math.min(10, Math.round(window.innerHeight * 0.007)));
+    const availH = main.clientHeight - (subtitle?.offsetHeight || 0);
+    const refRows = 4;
+    const cellH = (availH - gap * (refRows - 1)) / refRows;
+
+    grid.style.setProperty('--situation-cell-h', Math.floor(cellH) + 'px');
+    grid.style.gap = gap + 'px';
+    grid.style.overflowY = grid.scrollHeight > grid.clientHeight + 1 ? 'auto' : 'hidden';
+  }
+
+  function setupSituationsLayout() {
+    if (configLayoutHandler) window.removeEventListener('resize', configLayoutHandler);
+    configLayoutHandler = () => requestAnimationFrame(layoutSituationsGrid);
+    requestAnimationFrame(() => {
+      layoutSituationsGrid();
+      setTimeout(layoutSituationsGrid, 50);
+    });
+    window.addEventListener('resize', configLayoutHandler);
+  }
+
+  /* ----- MISE EN PAGE LIVE (tout visible sans scroll) ----- */
+  function layoutLivePage() {
+    const page = document.querySelector('.live-page');
+    if (!page) return;
+    const gap = 10;
+    const portraitRatio = 4 / 3; // hauteur / largeur (format portrait 3:4)
+
+    page.querySelectorAll('.students-live-grid').forEach(grid => {
+      const count = grid.children.length;
+      if (!count) return;
+
+      const section = grid.closest('.live-gender-section');
+      const title = section?.querySelector('.live-group-title');
+      const sectionH = section?.clientHeight || 200;
+      const sectionW = section?.clientWidth || 200;
+      const titleH = title?.offsetHeight || 20;
+      const pad = 16;
+      const availW = sectionW - pad * 2;
+      const availH = sectionH - titleH - pad * 2;
+
+      let bestCols = 1;
+      let bestCardW = 0;
+      for (let cols = 1; cols <= count; cols++) {
+        const rows = Math.ceil(count / cols);
+        const maxW = (availW - gap * (cols - 1)) / cols;
+        const maxH = (availH - gap * (rows - 1)) / rows;
+        const cardW = Math.min(maxW, maxH / portraitRatio);
+        if (cardW > bestCardW) {
+          bestCardW = cardW;
+          bestCols = cols;
+        }
+      }
+
+      const rows = Math.ceil(count / bestCols);
+      const cardH = bestCardW * portraitRatio;
+      const dist = Math.max(.65, Math.min(bestCardW * 0.18, 1.25));
+      const plot = Math.max(28, Math.min(Math.round(bestCardW * 0.34), 52));
+      const avatarFont = Math.max(14, Math.min(Math.round(bestCardW * 0.24), 34));
+
+      grid.style.setProperty('--live-cols', bestCols);
+      grid.style.setProperty('--live-rows', rows);
+      grid.style.setProperty('--live-gap', gap + 'px');
+      grid.style.setProperty('--live-card-w', Math.floor(bestCardW) + 'px');
+      grid.style.setProperty('--live-card-h', Math.floor(cardH) + 'px');
+      grid.style.setProperty('--live-avatar-font', avatarFont + 'px');
+      grid.style.setProperty('--live-dist', dist + 'rem');
+      grid.style.setProperty('--live-plot', plot + 'px');
+      grid.style.setProperty('--live-plot-font', Math.round(plot * 0.52) + 'px');
+      grid.style.setProperty('--live-plot-gap', Math.max(6, Math.round(bestCardW * 0.07)) + 'px');
+      grid.style.setProperty('--live-overlay-pad', Math.max(4, Math.round(bestCardW * 0.05)) + 'px');
+      grid.style.setProperty('--live-overlay-gap', Math.max(3, Math.round(bestCardW * 0.03)) + 'px');
+      grid.style.setProperty('--live-init-top', Math.max(18, Math.min(32, Math.round(bestCardW * 0.14))) + '%');
+    });
+  }
+
+  function setupLiveLayout() {
+    if (liveLayoutHandler) window.removeEventListener('resize', liveLayoutHandler);
+    liveLayoutHandler = () => requestAnimationFrame(layoutLivePage);
+    requestAnimationFrame(() => {
+      layoutLivePage();
+      setTimeout(layoutLivePage, 50);
+    });
+    window.addEventListener('resize', liveLayoutHandler);
+  }
+
+  /* ----- SUIVI LIVE ----- */
+  function renderLive(app, params) {
+    const session = getSession(params.sessionId);
+    const cls = getClass(session?.classId);
+    const ss = session?.situations?.[params.sitIdx];
+    const tpl = getSituation(ss?.templateId);
+    if (!session || !ss || !tpl) { goBack(); return; }
+
+    const series = ss.series?.[params.seriesIdx];
+    if (!series) { goBack(); return; }
+
+    setHeader(tpl.name, `Série ${params.seriesIdx + 1}`);
+
+    const totalSec = (tpl.durationMinutes || 0) * 60 + (tpl.durationSeconds || 0);
+    if (!liveState || liveState.key !== `${params.sessionId}-${params.sitIdx}-${params.seriesIdx}`) {
+      liveState = {
+        key: `${params.sessionId}-${params.sitIdx}-${params.seriesIdx}`,
+        remaining: totalSec,
+        startedAt: Date.now(),
+        totalSec
+      };
+    }
+
+    const sortStudents = (a, b) =>
+      a.lastName.localeCompare(b.lastName, 'fr') || a.firstName.localeCompare(b.firstName, 'fr');
+
+    const buildLiveCard = (st) => {
+      const sid = st.id;
+      const r = series.results[sid] || { laps: 0, extraPlots: 0 };
+      const dist = calcDistance(r.laps, r.extraPlots, tpl.lapSize, tpl.plotInterval);
+      return `
+        <div class="student-live-card" data-student-id="${sid}">
+          <div class="live-card-media">${avatarHtml(st, 'avatar-live')}</div>
+          <div class="live-card-overlay">
+            <div class="distance" data-dist="${sid}">${dist}</div>
+            <div class="plot-controls">
+              <button class="plot-btn minus" data-action="plot-minus" data-sid="${sid}">−</button>
+              <button class="plot-btn plus" data-action="plot-plus" data-sid="${sid}">+</button>
+            </div>
+          </div>
+        </div>`;
+    };
+
+    const activeStudents = (series.studentIds || [])
+      .map(sid => cls.students.find(s => s.id === sid))
+      .filter(Boolean)
+      .sort(sortStudents);
+
+    const girls = activeStudents.filter(st => st.gender === 'F');
+    const boys = activeStudents.filter(st => st.gender === 'M');
+    const others = activeStudents.filter(st => st.gender !== 'F' && st.gender !== 'M');
+
+    const renderGenderSection = (title, titleClass, sectionClass, list) => {
+      if (!list.length) return '';
+      return `
+        <section class="live-gender-section ${sectionClass}">
+          <h2 class="live-group-title ${titleClass}">${escapeHtml(title)}</h2>
+          <div class="students-live-grid">${list.map(buildLiveCard).join('')}</div>
+        </section>`;
+    };
+
+    const liveSections = [
+      renderGenderSection('Filles', 'girls', 'girls', girls),
+      renderGenderSection('Garçons', 'boys', 'boys', boys),
+      others.length ? `
+        <section class="live-gender-section" style="grid-column:1/-1">
+          <h2 class="live-group-title">Autres</h2>
+          <div class="students-live-grid">${others.map(buildLiveCard).join('')}</div>
+        </section>` : ''
+    ].filter(Boolean).join('');
+
+    const hasBothGenders = girls.length > 0 && boys.length > 0;
+    const splitClass = hasBothGenders ? 'students-live-split' : 'students-live-split single';
+    const splitCols = hasBothGenders
+      ? `${girls.length}fr ${boys.length}fr`
+      : '1fr';
+
+    app.innerHTML = `
+      <div class="live-page">
+        <div class="live-header">
+          <div class="live-info">
+            <div class="live-info-item"><label>Durée</label><span>${formatDuration(tpl.durationMinutes, tpl.durationSeconds)}</span></div>
+            <div class="live-info-item"><label>Tour</label><span>${tpl.lapSize} m</span></div>
+            <div class="live-info-item"><label>Plots</label><span>${tpl.plotInterval} m</span></div>
+            <div class="live-info-item"><label>Temps</label>
+              <div class="timer-display" id="live-timer">${formatTimerDisplay(liveState.remaining)}</div>
+            </div>
+          </div>
+          <button class="btn btn-danger" data-action="finish-live">Terminer</button>
+        </div>
+        <div class="${splitClass}" style="--live-split-cols:${splitCols}">${liveSections}</div>
+      </div>`;
+
+    loadAvatarsInContainer(app);
+    setupLiveLayout();
+    startLiveTimer(session, params, tpl);
+    bindActions(app, params);
+
+    app.querySelectorAll('.student-live-card').forEach(card => {
+      card.onclick = (e) => {
+        if (e.target.closest('.plot-btn') || e.target.closest('.plot-controls')) return;
+        const sid = card.dataset.studentId;
+        const r = series.results[sid] || { laps: 0, extraPlots: 0 };
+        r.laps = (r.laps || 0) + 1;
+        series.results[sid] = r;
+        const dist = calcDistance(r.laps, r.extraPlots, tpl.lapSize, tpl.plotInterval);
+        card.querySelector(`[data-dist="${sid}"]`).textContent = dist;
+        saveData();
+      };
+    });
+  }
+
+  function startLiveTimer(session, params, tpl) {
+    if (liveTimerInterval) clearInterval(liveTimerInterval);
+    const timerEl = document.getElementById('live-timer');
+    if (!timerEl) return;
+    liveTimerInterval = setInterval(() => {
+      if (!liveState) return;
+      const elapsed = Math.floor((Date.now() - liveState.startedAt) / 1000);
+      liveState.remaining = Math.max(0, liveState.totalSec - elapsed);
+      timerEl.textContent = formatTimerDisplay(liveState.remaining);
+      timerEl.classList.toggle('warning', liveState.remaining <= 30 && liveState.remaining > 0);
+      timerEl.classList.toggle('ended', liveState.remaining === 0);
+    }, 250);
+  }
+
+  /* ----- BILAN SÉANCE ----- */
+  function renderBilanTableBody(session, cls, editable) {
+    const situations = session.situations || [];
+    const presentStudents = [];
+
+    const rows = (cls.students || []).map(st => {
+      const att = getStudentAttendance(session, st.id);
+      const rowClass = att === 'absent' ? 'row-absent' : att === 'dispensed' ? 'row-dispensed' : '';
+
+      if (att) {
+        const emptyCells = situations.map(() => '<td class="bilan-cell">—</td>').join('');
+        return `<tr class="${rowClass}">
+          <td>${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}</td>
+          ${emptyCells}
+          <td class="total-cell">${formatAttendanceStatus(att)}</td>
+        </tr>`;
+      }
+
+      const dists = situations.map((_, i) => getStudentDistInSituation(session, st.id, i));
+      const total = dists.reduce((a, b) => a + b, 0);
+      presentStudents.push({ id: st.id, dists, total });
+
+      const cells = dists.map((d, i) => {
+        const tpl = getSituation(situations[i].templateId);
+        const dur = getSituationDurationSec(tpl);
+        const speed = calcSpeedKmh(d, dur);
+        if (editable) {
+          return `<td class="bilan-cell">
+            <input type="number" min="0" class="bilan-input" data-student="${st.id}" data-sit="${i}" value="${d}">
+            <span class="cell-speed" data-speed="${st.id}-${i}">${speed}</span>
+          </td>`;
+        }
+        return `<td class="bilan-cell">${d} m<span class="cell-speed">${speed}</span></td>`;
+      }).join('');
+
+      return `<tr>
+        <td>${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}</td>
+        ${cells}
+        <td class="total-cell" data-total="${st.id}">${total} m</td>
+      </tr>`;
+    }).join('');
+
+    const sitCount = situations.length;
+    const sitAvgs = [];
+    const sitTotals = [];
+    for (let i = 0; i < sitCount; i++) {
+      const vals = presentStudents.map(p => p.dists[i]).filter(v => v > 0);
+      sitAvgs.push(vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0);
+      sitTotals.push(presentStudents.reduce((s, p) => s + p.dists[i], 0));
+    }
+    const grandTotal = sitTotals.reduce((a, b) => a + b, 0);
+    const totalVals = presentStudents.map(p => p.total).filter(v => v > 0);
+    const avgTotal = totalVals.length ? Math.round(totalVals.reduce((a, b) => a + b, 0) / totalVals.length) : 0;
+
+    const avgCells = sitAvgs.map((avg, i) => {
+      const tpl = getSituation(situations[i]?.templateId);
+      const speed = calcSpeedKmh(avg, getSituationDurationSec(tpl));
+      return `<td class="bilan-cell">${avg} m<span class="cell-speed">${speed}</span></td>`;
+    }).join('');
+
+    const totauxCells = sitTotals.map(t => `<td class="bilan-cell grand-total-cell">${t} m</td>`).join('');
+
+    const avgRow = `<tr class="avg-row">
+      <td><strong>Moyenne</strong></td>
+      ${avgCells}
+      <td class="total-cell">${avgTotal} m</td>
+    </tr>`;
+
+    const totauxRow = `<tr class="totaux-row">
+      <td><strong>Totaux</strong></td>
+      ${totauxCells}
+      <td class="grand-total-cell">Séance : ${grandTotal} m</td>
+    </tr>`;
+
+    return { rows: rows + avgRow + totauxRow, presentStudents, grandTotal, sitAvgs, sitTotals, avgTotal };
+  }
+
+  function renderBilan(app, sessionId) {
+    const session = getSession(sessionId);
+    const cls = getClass(session?.classId);
+    if (!session || !cls) { goBack(); return; }
+    setHeader('Bilan — ' + session.name, cls.name);
+
+    const situations = session.situations || [];
+    const headers = situations.map((ss, i) => {
+      const tpl = getSituation(ss.templateId);
+      return `<th>${escapeHtml(tpl?.name || 'Sit. ' + (i+1))}<br><small>${tpl ? formatDuration(tpl.durationMinutes, tpl.durationSeconds) : ''}</small></th>`;
+    }).join('');
+
+    const { rows } = renderBilanTableBody(session, cls, true);
+
+    app.innerHTML = `
+      <div class="toolbar">
+        <button class="btn btn-secondary btn-sm" data-action="export-csv">Export CSV</button>
+        <button class="btn btn-secondary btn-sm" data-action="export-pdf">Export PDF</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table bilan-table">
+          <thead><tr>
+            <th>Élève</th>${headers}<th>Total parcouru</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+
+    app.querySelectorAll('.bilan-input').forEach(input => {
+      input.onchange = () => {
+        const val = Math.max(0, parseInt(input.value) || 0);
+        input.value = val;
+        const sid = input.dataset.student;
+        const sitIdx = parseInt(input.dataset.sit);
+        overrideBilanValue(session, sid, sitIdx, val);
+        recalcBilanRow(app, session, cls, sid);
+        saveData();
+      };
+    });
+
+    bindActions(app, { sessionId });
+  }
+
+  /* ----- BILAN CLASSE ----- */
+  function renderClassBilan(app, classId) {
+    const cls = getClass(classId);
+    if (!cls) { goBack(); return; }
+    setHeader('Bilan — ' + cls.name, 'Toutes les séances');
+
+    const sessions = getClassSessions(classId);
+    const sessionHeaders = sessions.map(s =>
+      `<th>${escapeHtml(s.name)}</th>`
+    ).join('');
+
+    let classGrandTotal = 0;
+    const rows = (cls.students || []).map(st => {
+      const cells = sessions.map(session => {
+        const att = getStudentAttendance(session, st.id);
+        if (att === 'dispensed') return '<td class="bilan-cell"><span class="status-d">D</span></td>';
+        if (att === 'absent') return '<td class="bilan-cell"><span class="status-a">A</span></td>';
+        const total = getSessionStudentTotal(session, st.id);
+        classGrandTotal += total;
+        return `<td class="bilan-cell">${total > 0 ? total + ' m' : '—'}</td>`;
+      }).join('');
+      const studentTotal = sessions.reduce((sum, session) => {
+        if (getStudentAttendance(session, st.id)) return sum;
+        return sum + getSessionStudentTotal(session, st.id);
+      }, 0);
+      return `<tr>
+        <td>${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}</td>
+        ${cells}
+        <td class="total-cell">${studentTotal > 0 ? studentTotal + ' m' : '—'}</td>
+      </tr>`;
+    }).join('');
+
+    app.innerHTML = `
+      <div class="session-stats" style="margin-bottom:1rem">
+        <div class="stat-item">
+          <label>Distance totale (toutes séances)</label>
+          <span>${classGrandTotal} m</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table bilan-table">
+          <thead><tr>
+            <th>Élève</th>${sessionHeaders}<th>Total</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+    bindActions(app, { classId });
+  }
+
+  function overrideBilanValue(session, studentId, sitIdx, distance) {
+    const ss = session.situations[sitIdx];
+    if (!ss) return;
+    const tpl = getSituation(ss.templateId);
+    if (!ss.series) ss.series = [];
+    let serie = ss.series.find(s => s.completed);
+    if (!serie) {
+      serie = { studentIds: [studentId], results: {}, completed: true };
+      ss.series.push(serie);
+    }
+    if (!serie.studentIds.includes(studentId)) serie.studentIds.push(studentId);
+    serie.results[studentId] = { laps: 0, extraPlots: 0, manualDistance: distance };
+    if (tpl && tpl.lapSize > 0) {
+      serie.results[studentId].laps = Math.floor(distance / tpl.lapSize);
+      const rest = distance - serie.results[studentId].laps * tpl.lapSize;
+      if (tpl.plotInterval > 0) serie.results[studentId].extraPlots = Math.round(rest / tpl.plotInterval);
+    }
+  }
+
+  function recalcBilanRow(app, session, cls, studentId) {
+    const situations = session.situations || [];
+    let total = 0;
+    situations.forEach((ss, i) => {
+      const inp = app.querySelector(`[data-student="${studentId}"][data-sit="${i}"]`);
+      if (!inp) return;
+      const val = parseInt(inp.value) || 0;
+      total += val;
+      const tpl = getSituation(ss.templateId);
+      const speedEl = app.querySelector(`[data-speed="${studentId}-${i}"]`);
+      if (speedEl) speedEl.textContent = calcSpeedKmh(val, getSituationDurationSec(tpl));
+    });
+    const cell = app.querySelector(`[data-total="${studentId}"]`);
+    if (cell) cell.textContent = total + ' m';
+    refreshBilanFooter(app, session, cls);
+  }
+
+  function refreshBilanFooter(app, session, cls) {
+    const tbody = app.querySelector('.bilan-table tbody');
+    if (!tbody) return;
+    tbody.querySelectorAll('.avg-row, .totaux-row').forEach(r => r.remove());
+    const { rows } = renderBilanTableBody(session, cls, true);
+    const tmp = document.createElement('tbody');
+    tmp.innerHTML = rows;
+    tmp.querySelectorAll('.avg-row, .totaux-row').forEach(r => tbody.appendChild(r));
+  }
+
+  /* ----- SÉLECTION ÉLÈVES SÉRIE ----- */
+  function showStudentSelection(session, classObj, sitIdx, seriesIdx, onConfirm) {
+    const ss = session.situations[sitIdx];
+    const tpl = getSituation(ss.templateId);
+    const allStudents = classObj.students || [];
+    const available = getAvailableStudents(session, classObj);
+    const participated = new Set();
+    (ss.series || []).forEach((s, i) => {
+      if (i < seriesIdx && s.completed) (s.studentIds || []).forEach(id => participated.add(id));
+    });
+
+    const sortRank = (st) => {
+      const att = getStudentAttendance(session, st.id);
+      if (att) return 2;
+      if (participated.has(st.id)) return 1;
+      return 0;
+    };
+
+    const sorted = [...allStudents].sort((a, b) => {
+      const ra = sortRank(a), rb = sortRank(b);
+      return ra - rb || a.lastName.localeCompare(b.lastName, 'fr') || a.firstName.localeCompare(b.firstName, 'fr');
+    });
+
+    const selected = new Set(
+      seriesIdx === 0
+        ? available.map(st => st.id)
+        : available.filter(st => !participated.has(st.id)).map(st => st.id)
+    );
+
+    const cards = sorted.map(st => {
+      const att = getStudentAttendance(session, st.id);
+      const attClass = att === 'absent' ? ' attendance-absent' : att === 'dispensed' ? ' attendance-dispensed' : '';
+      const badge = att === 'dispensed'
+        ? '<span class="select-badge status-d">D</span>'
+        : att === 'absent'
+          ? '<span class="select-badge status-a">A</span>'
+          : '';
+      return `
+      <div class="student-select-card${participated.has(st.id) ? ' participated' : ''}${attClass}${selected.has(st.id) ? ' selected' : ''}" data-sid="${st.id}">
+        ${badge}
+        ${avatarHtml(st, 'avatar-lg')}
+        <div class="name">${escapeHtml(st.firstName)}<br>${escapeHtml(st.lastName)}</div>
+      </div>`;
+    }).join('');
+
+    const situationTitle = `Situation ${sitIdx + 1} - ${tpl?.name || 'Sans nom'}`;
+
+    showModal(`
+      <div class="modal-select-header">
+        <h3>${escapeHtml(situationTitle)}</h3>
+        <p class="section-subtitle">Cochez ou décochez les élèves concernés</p>
+      </div>
+      <div class="select-quick-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="select-all-girls">Cocher toutes les filles</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="select-all-boys">Cocher tous les garçons</button>
+      </div>
+      <div class="student-select-grid" id="select-grid">${cards}</div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="modal-confirm">Valider</button>
+      </div>
+    `, () => {
+      const grid = document.getElementById('select-grid');
+
+      const updateCardSelection = (sid, isSelected) => {
+        const card = grid.querySelector(`[data-sid="${sid}"]`);
+        if (!card) return;
+        card.classList.toggle('selected', isSelected);
+      };
+
+      const selectByGender = (gender) => {
+        const genderStudents = available.filter(st => st.gender === gender);
+        if (!genderStudents.length) return;
+        const allSelected = genderStudents.every(st => selected.has(st.id));
+        genderStudents.forEach(st => {
+          if (allSelected) {
+            selected.delete(st.id);
+            updateCardSelection(st.id, false);
+          } else {
+            selected.add(st.id);
+            updateCardSelection(st.id, true);
+          }
+        });
+      };
+
+      loadAvatarsInContainer(grid);
+      grid.querySelectorAll('.student-select-card').forEach(card => {
+        card.onclick = () => {
+          const sid = card.dataset.sid;
+          if (selected.has(sid)) { selected.delete(sid); card.classList.remove('selected'); }
+          else { selected.add(sid); card.classList.add('selected'); }
+        };
+      });
+      document.getElementById('select-all-girls').onclick = () => selectByGender('F');
+      document.getElementById('select-all-boys').onclick = () => selectByGender('M');
+      document.getElementById('modal-cancel').onclick = closeModal;
+      document.getElementById('modal-confirm').onclick = () => {
+        if (!selected.size) { showAlert('Sélectionnez au moins un élève.'); return; }
+        const reselected = [...selected].filter(id => participated.has(id));
+        if (reselected.length) {
+          const names = reselected.map(id => {
+            const st = classObj.students.find(s => s.id === id);
+            return st ? `${st.firstName} ${st.lastName}` : id;
+          }).join(', ');
+          confirmAction(
+            `${names} ont déjà participé à une série précédente. Leurs résultats seront remplacés. Continuer ?`,
+            () => { closeModal(); onConfirm([...selected]); }
+          );
+        } else {
+          closeModal();
+          onConfirm([...selected]);
+        }
+      };
+    });
+  }
+
+  function launchSituation(sessionId, sitIdx, seriesIdx, studentIds) {
+    const session = getSession(sessionId);
+    const ss = session.situations[sitIdx];
+    if (!ss.series) ss.series = [];
+    while (ss.series.length <= seriesIdx) ss.series.push({ studentIds: [], results: {}, completed: false });
+    const serie = ss.series[seriesIdx];
+    serie.studentIds = studentIds;
+    serie.results = {};
+    studentIds.forEach(id => { serie.results[id] = { laps: 0, extraPlots: 0 }; });
+    serie.completed = false;
+    saveData();
+    liveState = null;
+    navigate('live', { sessionId, sitIdx, seriesIdx });
+  }
+
+  /* ----- DRAG & DROP ----- */
+  function setupDragDrop(app, session) {
+    let dragIdx = null;
+    app.querySelectorAll('[draggable="true"]').forEach(el => {
+      el.ondragstart = (e) => { dragIdx = parseInt(el.dataset.dragIdx); el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; };
+      el.ondragend = () => { el.classList.remove('dragging'); dragIdx = null; };
+      el.ondragover = (e) => { e.preventDefault(); el.classList.add('drag-over'); };
+      el.ondragleave = () => el.classList.remove('drag-over');
+      el.ondrop = (e) => {
+        e.preventDefault();
+        el.classList.remove('drag-over');
+        const dropIdx = parseInt(el.dataset.dragIdx);
+        if (dragIdx === null || dragIdx === dropIdx) return;
+        const arr = session.situations;
+        const [item] = arr.splice(dragIdx, 1);
+        arr.splice(dropIdx, 0, item);
+        saveData();
+        render();
+      };
+    });
+  }
+
+  /* ----- CSV IMPORT ----- */
+  function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
+    if (!lines.length) return { error: 'Fichier vide.' };
+    const sep = lines[0].includes(';') ? ';' : ',';
+    const header = lines[0].split(sep).map(h => h.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+    const nomIdx = header.findIndex(h => h === 'nom');
+    const prenomIdx = header.findIndex(h => h === 'prenom');
+    const sexeIdx = header.findIndex(h => h === 'sexe');
+    if (nomIdx < 0 || prenomIdx < 0) return { error: 'Colonnes Nom et Prénom requises.' };
+    const students = [];
+    const errors = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(sep).map(c => c.trim().replace(/^"|"$/g, ''));
+      const lastName = cols[nomIdx];
+      const firstName = cols[prenomIdx];
+      if (!lastName && !firstName) continue;
+      if (!lastName || !firstName) { errors.push(`Ligne ${i + 1}: nom ou prénom manquant`); continue; }
+      students.push({
+        id: uid(), lastName, firstName,
+        gender: sexeIdx >= 0 ? (cols[sexeIdx] || '') : ''
+      });
+    }
+    return { students, errors };
+  }
+
+  /* ----- EXPORT ----- */
+  function buildBilanData(session) {
+    const cls = getClass(session.classId);
+    const situations = session.situations || [];
+    const headers = situations.map((ss, i) => {
+      const tpl = getSituation(ss.templateId);
+      return {
+        name: tpl?.name || `Situation ${i + 1}`,
+        duration: tpl ? formatDuration(tpl.durationMinutes, tpl.durationSeconds) : '',
+        durationSec: getSituationDurationSec(tpl)
+      };
+    });
+
+    const rows = (cls?.students || []).map(st => {
+      const att = getStudentAttendance(session, st.id);
+      if (att) {
+        return { name: `${st.lastName} ${st.firstName}`, dists: situations.map(() => ''), total: att === 'dispensed' ? 'D' : 'A', status: att };
+      }
+      const dists = situations.map((_, i) => getStudentDistInSituation(session, st.id, i));
+      const distLabels = dists.map((d, i) => {
+        const speed = calcSpeedKmh(d, headers[i].durationSec);
+        return d > 0 ? `${d} m (${speed})` : '0';
+      });
+      const total = dists.reduce((a, b) => a + b, 0);
+      return { name: `${st.lastName} ${st.firstName}`, dists, distLabels, total, status: null };
+    });
+
+    const present = rows.filter(r => !r.status);
+    const sitAvgs = headers.map((_, i) => {
+      const vals = present.map(r => r.dists[i]).filter(v => v > 0);
+      return vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
+    });
+    const sitTotals = headers.map((_, i) => present.reduce((s, r) => s + r.dists[i], 0));
+    const grandTotal = sitTotals.reduce((a, b) => a + b, 0);
+    const withTotals = present.filter(r => r.total > 0);
+    const avgTotal = withTotals.length ? Math.round(withTotals.reduce((s, r) => s + r.total, 0) / withTotals.length) : 0;
+
+    return { cls, headers, rows, sitAvgs, sitTotals, avgTotal, grandTotal, date: new Date().toLocaleDateString('fr-FR') };
+  }
+
+  function exportCSV(sessionId) {
+    const session = getSession(sessionId);
+    if (!session) return;
+    const { cls, headers, rows, sitAvgs, sitTotals, avgTotal, grandTotal, date } = buildBilanData(session);
+    const sitHeaders = headers.map(h => `"${h.name} (${h.duration})"`);
+    const lines = [
+      `Classe;${cls.name}`,
+      `Séance;${session.name}`,
+      `Date;${date}`,
+      '',
+      `Élève;${sitHeaders.join(';')};Total parcouru`
+    ];
+    rows.forEach(r => {
+      const cols = r.status ? headers.map(() => '') : (r.distLabels || r.dists);
+      lines.push(`"${r.name}";${cols.join(';')};${r.status ? r.total : r.total + ' m'}`);
+    });
+    const avgCols = sitAvgs.map((a, i) => {
+      const speed = calcSpeedKmh(a, headers[i].durationSec);
+      return a > 0 ? `${a} m (${speed})` : '0';
+    });
+    lines.push(`"Moyenne";${avgCols.join(';')};${avgTotal} m`);
+    lines.push(`"Totaux";${sitTotals.map(t => t + ' m').join(';')};Séance : ${grandTotal} m`);
+    const blob = new Blob(['\ufeff' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `bilan_${cls.name}_${session.name}_${date.replace(/\//g, '-')}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function exportPDF(sessionId) {
+    const session = getSession(sessionId);
+    if (!session) return;
+    const { cls, headers, rows, sitAvgs, sitTotals, avgTotal, grandTotal, date } = buildBilanData(session);
+    const printArea = document.getElementById('print-area');
+    const sitCols = headers.map(h => `<th>${escapeHtml(h.name)}<br><small>${escapeHtml(h.duration)}</small></th>`).join('');
+    const bodyRows = rows.map(r => {
+      if (r.status) {
+        return `<tr><td>${escapeHtml(r.name)}</td>${headers.map(() => '<td>—</td>').join('')}<td><strong>${r.total}</strong></td></tr>`;
+      }
+      const cells = r.dists.map((d, i) => {
+        const speed = calcSpeedKmh(d, headers[i].durationSec);
+        return `<td>${d} m<br><small>${speed}</small></td>`;
+      }).join('');
+      return `<tr><td>${escapeHtml(r.name)}</td>${cells}<td><strong>${r.total} m</strong></td></tr>`;
+    }).join('');
+    const avgCells = sitAvgs.map((a, i) => {
+      const speed = calcSpeedKmh(a, headers[i].durationSec);
+      return `<td>${a} m<br><small>${speed}</small></td>`;
+    }).join('');
+    const totauxCells = sitTotals.map(t => `<td><strong>${t} m</strong></td>`).join('');
+    const avgRow = `<tr style="background:#eee;font-weight:bold"><td>Moyenne</td>${avgCells}<td>${avgTotal} m</td></tr>`;
+    const totauxRow = `<tr style="background:#e8f5e9;font-weight:bold"><td>Totaux</td>${totauxCells}<td>Séance : ${grandTotal} m</td></tr>`;
+    printArea.innerHTML = `
+      <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { font-size: 18pt; margin-bottom: 4px; }
+        .meta { font-size: 11pt; color: #333; margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+        th, td { border: 1px solid #333; padding: 6px 8px; text-align: center; }
+        th { background: #eee; }
+        td:first-child { text-align: left; }
+      </style>
+      <h1>Bilan de séance — Demi-fond EPS</h1>
+      <div class="meta">
+        <div><strong>Classe :</strong> ${escapeHtml(cls.name)}</div>
+        <div><strong>Séance :</strong> ${escapeHtml(session.name)}</div>
+        <div><strong>Date :</strong> ${escapeHtml(date)}</div>
+      </div>
+      <table>
+        <thead><tr><th>Élève</th>${sitCols}<th>Total parcouru</th></tr></thead>
+        <tbody>${bodyRows}${avgRow}${totauxRow}</tbody>
+      </table>`;
+    printArea.style.display = 'block';
+    window.print();
+    printArea.style.display = 'none';
+  }
+
+  /* ----- GESTION ABSENCES / DISPENSES ----- */
+  function showAbsencesModal(session, classObj) {
+    if (!session.attendance) session.attendance = {};
+    const rows = (classObj.students || []).map(st => {
+      const att = session.attendance[st.id];
+      return `
+        <div class="attendance-row" data-sid="${st.id}">
+          <div class="attendance-student">
+            ${avatarHtml(st)}
+            <span class="name">${escapeHtml(st.firstName)} ${escapeHtml(st.lastName)}</span>
+          </div>
+          <button type="button" class="status-btn dispensed-btn${att === 'dispensed' ? ' active' : ''}" data-type="dispensed" title="Dispensé">✚</button>
+          <button type="button" class="status-btn absent-btn${att === 'absent' ? ' active' : ''}" data-type="absent" title="Absent">A</button>
+        </div>`;
+    }).join('');
+
+    showModal(`
+      <h3>Absences / dispenses</h3>
+      <p class="section-subtitle">Croix verte = dispensé · A rouge = absent · Recliquez pour annuler.</p>
+      <div class="attendance-list" id="attendance-list">${rows}</div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="modal-ok">Enregistrer</button>
+      </div>
+    `, () => {
+      const list = document.getElementById('attendance-list');
+      loadAvatarsInContainer(list);
+      list.querySelectorAll('.attendance-row').forEach(row => {
+        const sid = row.dataset.sid;
+        row.querySelector('.dispensed-btn').onclick = (e) => {
+          e.stopPropagation();
+          const btn = row.querySelector('.dispensed-btn');
+          const absBtn = row.querySelector('.absent-btn');
+          if (btn.classList.contains('active')) {
+            btn.classList.remove('active');
+            delete session.attendance[sid];
+          } else {
+            btn.classList.add('active');
+            absBtn.classList.remove('active');
+            session.attendance[sid] = 'dispensed';
+          }
+        };
+        row.querySelector('.absent-btn').onclick = (e) => {
+          e.stopPropagation();
+          const btn = row.querySelector('.absent-btn');
+          const dispBtn = row.querySelector('.dispensed-btn');
+          if (btn.classList.contains('active')) {
+            btn.classList.remove('active');
+            delete session.attendance[sid];
+          } else {
+            btn.classList.add('active');
+            dispBtn.classList.remove('active');
+            session.attendance[sid] = 'absent';
+          }
+        };
+      });
+      document.getElementById('modal-ok').onclick = () => {
+        saveData();
+        closeModal();
+        render();
+      };
+    });
+  }
+
+  /* ----- ÉDITION ÉLÈVE ----- */
+  function showEditStudentModal(cls, student) {
+    showModal(`
+      <h3>Modifier l'élève</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Nom</label><input id="edit-last" value="${escapeHtml(student.lastName)}"></div>
+        <div class="form-group"><label>Prénom</label><input id="edit-first" value="${escapeHtml(student.firstName)}"></div>
+        <div class="form-group"><label>Sexe</label>
+          <select id="edit-gender"><option value="">—</option>
+            <option value="M" ${student.gender==='M'?'selected':''}>M</option>
+            <option value="F" ${student.gender==='F'?'selected':''}>F</option>
+          </select></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="modal-confirm">Enregistrer</button>
+      </div>
+    `, () => {
+      document.getElementById('modal-cancel').onclick = closeModal;
+      document.getElementById('modal-confirm').onclick = () => {
+        student.lastName = document.getElementById('edit-last').value.trim() || student.lastName;
+        student.firstName = document.getElementById('edit-first').value.trim() || student.firstName;
+        student.gender = document.getElementById('edit-gender').value;
+        saveData();
+        closeModal();
+        render();
+      };
+    });
+  }
+
+  /* ----- ACTIONS ----- */
+  function bindActions(app, ctx = {}) {
+    app.querySelectorAll('[data-action]').forEach(el => {
+      el.onclick = (e) => {
+        e.stopPropagation();
+        handleAction(el.dataset.action, el, ctx);
+      };
+    });
+    app.querySelectorAll('[data-action="series-count"]').forEach(inp => {
+      inp.onchange = () => {
+        const session = getSession(ctx.sessionId);
+        const idx = parseInt(inp.dataset.idx);
+        session.situations[idx].seriesCount = Math.max(1, parseInt(inp.value.replace(/\D/g, '')) || 1);
+        inp.value = session.situations[idx].seriesCount;
+        saveData();
+      };
+      inp.oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, ''); };
+    });
+  }
+
+  function handleAction(action, el, ctx) {
+    switch (action) {
+      case 'open-class':
+        navigate('class-sessions', { classId: el.dataset.id }); break;
+      case 'config-classes':
+        navigate('config-classes'); break;
+      case 'config-situations':
+        navigate('config-situations'); break;
+      case 'app-settings':
+        navigate('app-settings'); break;
+      case 'export-app-data':
+        exportAppBackup(); break;
+      case 'import-app-data':
+        document.getElementById('backup-import-input').click(); break;
+      case 'factory-reset':
+        confirmAction(
+          'Remettre l\'application à zéro ? Toutes les classes, situations, séances, bilans et photos seront supprimés.',
+          () => { factoryResetApp(); }
+        ); break;
+      case 'add-class':
+        promptInput('Nom de la nouvelle classe', '', (name) => {
+          const id = uid();
+          appData.classes.push({ id, name, students: [], colorIndex: nextClassColorIndex() });
+          saveData();
+          navigate('class-edit', { classId: id, isNew: true });
+        }); break;
+      case 'edit-class':
+        navigate('class-edit', { classId: el.dataset.id }); break;
+      case 'delete-class':
+        confirmAction('Supprimer définitivement cette classe et toutes ses séances ?', () => {
+          const id = ctx.classId;
+          appData.classes = appData.classes.filter(c => c.id !== id);
+          appData.sessions = appData.sessions.filter(s => s.classId !== id);
+          saveData();
+          navigate('config-classes');
+        }); break;
+      case 'add-student':
+        document.getElementById('add-student-form').hidden = false; break;
+      case 'save-new-student': {
+        const cls = getClass(ctx.classId);
+        const last = document.getElementById('st-last').value.trim();
+        const first = document.getElementById('st-first').value.trim();
+        if (!last || !first) { showAlert('Nom et prénom requis.'); return; }
+        cls.students.push({ id: uid(), lastName: last, firstName: first, gender: document.getElementById('st-gender').value });
+        saveData();
+        render();
+      } break;
+      case 'edit-student': {
+        const cls = getClass(ctx.classId);
+        const st = cls.students.find(s => s.id === el.dataset.id);
+        if (st) showEditStudentModal(cls, st);
+      } break;
+      case 'delete-student':
+        confirmAction('Supprimer cet élève ?', async () => {
+          const cls = getClass(ctx.classId);
+          const id = el.dataset.id;
+          cls.students = cls.students.filter(s => s.id !== id);
+          await deletePhoto(id);
+          delete photoCache[id];
+          saveData();
+          render();
+        }); break;
+      case 'photo-student':
+        currentPhotoStudentId = el.dataset.id;
+        document.getElementById('photo-input').click(); break;
+      case 'import-csv':
+        document.getElementById('csv-import-input').dataset.classId = ctx.classId;
+        document.getElementById('csv-import-input').click(); break;
+      case 'add-situation':
+        promptInput('Nom de la nouvelle situation', '', (name) => {
+          const id = uid();
+          appData.situations.push({ id, name, lapSize: 200, plotInterval: 50, colorIndex: nextSituationColorIndex() });
+          saveData();
+          navigate('situation-edit', { situationId: id, isNew: true });
+        }); break;
+      case 'edit-situation':
+        navigate('situation-edit', { situationId: el.dataset.id }); break;
+      case 'delete-situation':
+        confirmAction('Supprimer cette situation ?', () => {
+          appData.situations = appData.situations.filter(s => s.id !== ctx.situationId);
+          saveData();
+          navigate('config-situations');
+        }); break;
+      case 'add-session':
+        promptInput('Nom de la séance', new Date().toLocaleDateString('fr-FR'), (name) => {
+          const id = uid();
+          appData.sessions.push({ id, classId: el.dataset.classId || ctx.classId, name, attendance: {}, situations: [] });
+          saveData();
+          navigate('session', { sessionId: id });
+        }); break;
+      case 'open-session':
+        navigate('session', { sessionId: el.dataset.id }); break;
+      case 'rename-session':
+        promptInput('Nouveau nom de séance', getSession(ctx.sessionId)?.name, (name) => {
+          getSession(ctx.sessionId).name = name;
+          saveData();
+          render();
+        }); break;
+      case 'delete-session':
+        confirmAction('Supprimer cette séance et tous ses résultats ?', () => {
+          appData.sessions = appData.sessions.filter(s => s.id !== ctx.sessionId);
+          saveData();
+          goBack();
+        }); break;
+      case 'manage-absences': {
+        const session = getSession(ctx.sessionId);
+        showAbsencesModal(session, getClass(session.classId));
+      } break;
+      case 'add-situation-to-session': {
+        const sel = document.getElementById('add-situation-select');
+        if (!sel?.value) { showAlert('Choisissez une situation.'); return; }
+        const session = getSession(ctx.sessionId);
+        session.situations.push({ templateId: sel.value, seriesCount: 1, series: [] });
+        saveData();
+        render();
+      } break;
+      case 'remove-situation':
+        confirmAction('Supprimer cette situation de la séance ?', () => {
+          const session = getSession(ctx.sessionId);
+          session.situations.splice(parseInt(el.dataset.idx), 1);
+          saveData();
+          render();
+        }); break;
+      case 'move-up': {
+        const session = getSession(ctx.sessionId);
+        const idx = parseInt(el.dataset.idx);
+        if (idx > 0) {
+          [session.situations[idx - 1], session.situations[idx]] = [session.situations[idx], session.situations[idx - 1]];
+          saveData(); render();
+        }
+      } break;
+      case 'move-down': {
+        const session = getSession(ctx.sessionId);
+        const idx = parseInt(el.dataset.idx);
+        if (idx < session.situations.length - 1) {
+          [session.situations[idx], session.situations[idx + 1]] = [session.situations[idx + 1], session.situations[idx]];
+          saveData(); render();
+        }
+      } break;
+      case 'launch-situation': {
+        const session = getSession(ctx.sessionId);
+        const cls = getClass(session.classId);
+        const sitIdx = parseInt(el.dataset.idx);
+        const ss = session.situations[sitIdx];
+        const seriesCount = getSeriesCount(ss);
+        const completed = (ss.series || []).filter(s => s.completed).length;
+        const seriesIdx = completed;
+        if (seriesIdx >= seriesCount) {
+          showAlert('Toutes les séries ont été réalisées. Remettez à zéro ou augmentez le nombre de séries.');
+          return;
+        }
+        if (!(cls.students || []).length) { showAlert('Aucun élève dans cette classe.'); return; }
+        showStudentSelection(session, cls, sitIdx, seriesIdx, (ids) => {
+          launchSituation(ctx.sessionId, sitIdx, seriesIdx, ids);
+        });
+      } break;
+      case 'reset-situation':
+        confirmAction('Remettre cette situation à zéro ?', () => {
+          const session = getSession(ctx.sessionId);
+          session.situations[parseInt(el.dataset.idx)].series = [];
+          saveData(); render();
+        }); break;
+      case 'plot-plus': {
+        const session = getSession(ctx.sessionId);
+        const ss = session.situations[ctx.sitIdx];
+        const serie = ss.series[ctx.seriesIdx];
+        const sid = el.dataset.sid;
+        const tpl = getSituation(ss.templateId);
+        const r = serie.results[sid] || { laps: 0, extraPlots: 0 };
+        r.extraPlots = (r.extraPlots || 0) + 1;
+        serie.results[sid] = r;
+        const dist = calcDistance(r.laps, r.extraPlots, tpl.lapSize, tpl.plotInterval);
+        document.querySelector(`[data-dist="${sid}"]`).textContent = dist;
+        saveData();
+      } break;
+      case 'plot-minus': {
+        const session = getSession(ctx.sessionId);
+        const ss = session.situations[ctx.sitIdx];
+        const serie = ss.series[ctx.seriesIdx];
+        const sid = el.dataset.sid;
+        const tpl = getSituation(ss.templateId);
+        const r = serie.results[sid] || { laps: 0, extraPlots: 0 };
+        r.extraPlots = Math.max(0, (r.extraPlots || 0) - 1);
+        serie.results[sid] = r;
+        const dist = calcDistance(r.laps, r.extraPlots, tpl.lapSize, tpl.plotInterval);
+        document.querySelector(`[data-dist="${sid}"]`).textContent = dist;
+        saveData();
+      } break;
+      case 'finish-live':
+        confirmAction('Terminer et enregistrer les résultats de cette situation ?', () => {
+          const session = getSession(ctx.sessionId);
+          const serie = session.situations[ctx.sitIdx].series[ctx.seriesIdx];
+          serie.completed = true;
+          saveData();
+          liveState = null;
+          if (liveTimerInterval) { clearInterval(liveTimerInterval); liveTimerInterval = null; }
+          if (navStack.length > 1) navStack.pop();
+          render();
+        }); break;
+      case 'open-bilan':
+        navigate('bilan', { sessionId: ctx.sessionId }); break;
+      case 'open-class-bilan':
+        navigate('class-bilan', { classId: ctx.classId }); break;
+      case 'export-csv':
+        exportCSV(ctx.sessionId); break;
+      case 'export-pdf':
+        exportPDF(ctx.sessionId); break;
+    }
+  }
+
+  /* ----- INIT ----- */
+  function init() {
+    loadData();
+    document.getElementById('btn-menu').onclick = () => {
+      if (isCreatingClass()) cancelNewClass();
+      else if (isCreatingSituation()) cancelNewSituation();
+      else goHome();
+    };
+    document.getElementById('btn-back').onclick = () => {
+      if (isCreatingClass()) validateNewClass();
+      else if (isCreatingSituation()) validateNewSituation();
+      else goBack();
+    };
+    document.getElementById('modal-overlay').onclick = (e) => {
+      if (e.target.id === 'modal-overlay') closeModal();
+    };
+
+    document.getElementById('photo-input').onchange = async (e) => {
+      const file = e.target.files?.[0];
+      if (!file || !currentPhotoStudentId) return;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        await savePhoto(currentPhotoStudentId, reader.result);
+        photoCache[currentPhotoStudentId] = reader.result;
+        currentPhotoStudentId = null;
+        e.target.value = '';
+        render();
+      };
+      reader.readAsDataURL(file);
+    };
+
+    document.getElementById('backup-import-input').onchange = (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const backup = parseAppBackup(reader.result);
+          confirmAction(
+            'Importer ces données ? Les données actuelles seront remplacées.',
+            () => { importAppBackup(backup); }
+          );
+        } catch (err) {
+          showAlert('Impossible d\'importer le fichier : ' + (err.message || 'format invalide'));
+        }
+      };
+      reader.readAsText(file, 'UTF-8');
+      e.target.value = '';
+    };
+
+    document.getElementById('csv-import-input').onchange = (e) => {
+      const file = e.target.files?.[0];
+      const classId = e.target.dataset.classId;
+      if (!file || !classId) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = parseCSV(reader.result);
+        if (result.error) { showAlert(result.error); return; }
+        const cls = getClass(classId);
+        result.students.forEach(s => cls.students.push(s));
+        saveData();
+        let msg = `${result.students.length} élève(s) importé(s).`;
+        if (result.errors?.length) msg += '\n\nAvertissements:\n' + result.errors.join('\n');
+        showAlert(msg);
+        render();
+      };
+      reader.readAsText(file, 'UTF-8');
+      e.target.value = '';
+    };
+
+    render();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
