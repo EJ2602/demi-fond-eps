@@ -372,17 +372,8 @@
       flex-direction: column;
       animation: none;
     }
-    body.view-live .app-header {
-      padding: .4rem 1rem;
-      min-height: auto;
-      background: rgba(12, 16, 24, 0.92);
-    }
-    body.view-live .app-header h1 {
-      font-size: clamp(1rem, 2.2vw, 1.2rem);
-      -webkit-text-fill-color: var(--text);
-      background: none;
-    }
-    body.view-live .app-header .subtitle { font-size: .78rem; }
+    body.view-live .app-header { display: none; }
+    body.view-live .bottom-nav { display: none; }
     .bottom-nav .btn-nav {
       min-height: 52px;
       font-size: clamp(.9rem, 2vw, 1rem);
@@ -745,9 +736,10 @@
     .live-page {
       flex: 1;
       min-height: 0;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      gap: .35rem;
+      gap: .3rem;
     }
     .live-header {
       background: linear-gradient(180deg, rgba(19, 25, 34, 0.95) 0%, var(--bg-elevated) 100%);
@@ -767,6 +759,31 @@
       margin-bottom: 0;
       align-items: center;
       border-radius: var(--radius);
+      grid-template-columns: 1fr auto 1fr;
+    }
+    .live-title-block {
+      text-align: center;
+      justify-self: center;
+      min-width: 0;
+    }
+    .live-title-block .live-title {
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .live-title-block .live-subtitle {
+      font-size: .78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: .1rem;
+    }
+    .live-actions {
+      display: flex;
+      gap: .5rem;
+      align-items: center;
+      justify-content: flex-end;
+      justify-self: end;
     }
     .live-info { display: flex; flex-wrap: wrap; gap: 1.25rem 2.25rem; }
     body.view-live .live-info { flex-wrap: nowrap; gap: .5rem 1.15rem; align-items: center; }
@@ -809,7 +826,8 @@
       color: var(--danger);
       text-shadow: 0 0 30px rgba(248, 113, 113, 0.35);
     }
-    body.view-live .live-header .btn-danger { min-height: 38px; padding: .35rem .75rem; font-size: .82rem; }
+    body.view-live .live-header .btn-danger,
+    body.view-live .live-header .btn-secondary { min-height: 38px; padding: .35rem .75rem; font-size: .82rem; }
 
     .students-live-split {
       display: grid;
@@ -831,7 +849,12 @@
       flex-direction: column;
       box-shadow: var(--shadow-sm);
     }
-    body.view-live .live-gender-section { padding: .55rem .6rem .6rem; border-radius: var(--radius); }
+    body.view-live .live-gender-section {
+      padding: .4rem .45rem .45rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+      min-width: 0;
+    }
     .live-gender-section.girls {
       border-top: 3px solid var(--success);
       box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(52, 211, 153, 0.08);
@@ -850,6 +873,11 @@
       flex-shrink: 0;
     }
     body.view-live .live-group-title { font-size: .72rem; margin-bottom: .35rem; }
+    body.view-live .live-gender-section:has(.live-grid-dense) .live-group-title {
+      font-size: .58rem;
+      margin-bottom: .2rem;
+      letter-spacing: 0.06em;
+    }
     .live-group-title.girls { color: var(--success); }
     .live-group-title.boys { color: color-mix(in srgb, var(--primary) 75%, white); }
     .students-live-grid {
@@ -859,15 +887,18 @@
       gap: var(--live-gap, 10px);
       flex: 1;
       min-height: 0;
+      min-width: 0;
       height: 100%;
       justify-content: center;
       align-content: center;
+      overflow: hidden;
     }
     .student-live-card {
       position: relative;
       width: var(--live-card-w, 100%);
       height: var(--live-card-h, auto);
-      aspect-ratio: 3 / 4;
+      max-width: 100%;
+      max-height: 100%;
       background: linear-gradient(160deg, color-mix(in srgb, var(--primary) 85%, white) 0%, var(--primary) 100%);
       border: 2px solid color-mix(in srgb, var(--primary) 30%, var(--border-strong));
       border-radius: var(--radius);
@@ -1256,10 +1287,20 @@
     @media (max-width: 768px) {
       .grid-classes { grid-template-columns: repeat(3, 1fr); }
       .config-actions { grid-template-columns: 1fr; }
-      .live-header { grid-template-columns: 1fr; }
-      .students-live-split { --live-split-cols: 1fr; }
+      body.view-live .live-header {
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "title title"
+          "info actions";
+      }
+      body.view-live .live-title-block { grid-area: title; }
+      body.view-live .live-actions { grid-area: actions; }
+      body.view-live .live-info { grid-area: info; }
       .session-stats { gap: 1rem 1.5rem; }
       .toolbar { padding: .75rem; }
+    }
+    @media (max-width: 580px) {
+      body.view-live .students-live-split { --live-split-cols: 1fr !important; }
     }
     @media (max-width: 480px) {
       .grid-classes { grid-template-columns: repeat(2, 1fr); }
@@ -1359,6 +1400,7 @@
   let liveTimerInterval = null;
   let liveState = null;
   let liveLayoutHandler = null;
+  let liveResizeObserver = null;
   let configLayoutHandler = null;
 
   /* ========== UTILITAIRES ========== */
@@ -2043,6 +2085,9 @@
         el.innerHTML = `<img src="${photo}" alt="">`;
       }
     }
+    if (document.body.classList.contains('view-live')) {
+      requestAnimationFrame(layoutLivePage);
+    }
   }
 
   /* ========== RENDU PRINCIPAL ========== */
@@ -2059,9 +2104,16 @@
     document.body.classList.toggle('view-config-situations', view === 'config-situations');
     document.body.classList.toggle('view-live', view === 'live');
     document.body.classList.toggle('view-app-settings', view === 'app-settings');
-    if (view !== 'live' && liveLayoutHandler) {
-      window.removeEventListener('resize', liveLayoutHandler);
-      liveLayoutHandler = null;
+    if (view !== 'live') {
+      if (liveLayoutHandler) {
+        window.removeEventListener('resize', liveLayoutHandler);
+        window.removeEventListener('orientationchange', liveLayoutHandler);
+        liveLayoutHandler = null;
+      }
+      if (liveResizeObserver) {
+        liveResizeObserver.disconnect();
+        liveResizeObserver = null;
+      }
     }
     if (view !== 'config-situations' && configLayoutHandler) {
       window.removeEventListener('resize', configLayoutHandler);
@@ -2427,69 +2479,181 @@
     window.addEventListener('resize', configLayoutHandler);
   }
 
-  /* ----- MISE EN PAGE LIVE (tout visible sans scroll) ----- */
+  /* ----- MISE EN PAGE LIVE (tout visible sans scroll, jusqu'à 34 cartes) ----- */
+  const LIVE_PORTRAIT_RATIO = 4 / 3;
+
+  function liveGapForCount(count) {
+    if (count >= 30) return 3;
+    if (count >= 22) return 4;
+    if (count >= 16) return 5;
+    if (count >= 10) return 6;
+    if (count >= 6) return 8;
+    return 10;
+  }
+
+  function getLiveSectionMetrics(section) {
+    const grid = section.querySelector('.students-live-grid');
+    const title = section.querySelector('.live-group-title');
+    const count = grid?.children.length || 0;
+    if (!grid || !count) return null;
+
+    const cs = getComputedStyle(section);
+    const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    const titleH = title
+      ? title.offsetHeight + parseFloat(getComputedStyle(title).marginBottom || 0)
+      : 0;
+
+    return {
+      grid,
+      count,
+      availW: Math.max(0, section.clientWidth - padX),
+      availH: Math.max(0, section.clientHeight - padY - titleH)
+    };
+  }
+
+  function layoutFits(count, cols, cardW, cardH, availW, availH, gap) {
+    const rows = Math.ceil(count / cols);
+    const totalW = cols * cardW + Math.max(0, cols - 1) * gap;
+    const totalH = rows * cardH + Math.max(0, rows - 1) * gap;
+    return totalW <= availW + 1 && totalH <= availH + 1;
+  }
+
+  function computeBestLiveLayout(count, availW, availH, gap, ratio = LIVE_PORTRAIT_RATIO) {
+    if (!count || availW <= 0 || availH <= 0) return null;
+
+    let best = { cols: 1, rows: count, cardW: 0, cardH: 0 };
+    for (let cols = 1; cols <= count; cols++) {
+      const rows = Math.ceil(count / cols);
+      const maxW = (availW - gap * (cols - 1)) / cols;
+      const maxH = (availH - gap * (rows - 1)) / rows;
+      if (maxW <= 0 || maxH <= 0) continue;
+      const cardW = Math.min(maxW, maxH / ratio);
+      if (cardW > best.cardW) best = { cols, rows, cardW, cardH: cardW * ratio };
+    }
+
+    let cardW = Math.floor(best.cardW);
+    let cardH = Math.floor(cardW * ratio);
+    if (cardW <= 0) return null;
+
+    while (cardW > 24 && !layoutFits(count, best.cols, cardW, cardH, availW, availH, gap)) {
+      cardW--;
+      cardH = Math.floor(cardW * ratio);
+    }
+
+    let cols = best.cols;
+    let rows = Math.ceil(count / cols);
+    for (let tryCols = count; tryCols >= 1; tryCols--) {
+      const tryRows = Math.ceil(count / tryCols);
+      if (layoutFits(count, tryCols, cardW, cardH, availW, availH, gap)) {
+        cols = tryCols;
+        rows = tryRows;
+        break;
+      }
+    }
+
+    return { cols, rows, cardW, cardH };
+  }
+
+  function findColsForCardSize(count, availW, availH, gap, cardW, cardH) {
+    let best = { cols: 1, rows: count };
+    for (let cols = 1; cols <= count; cols++) {
+      const rows = Math.ceil(count / cols);
+      if (layoutFits(count, cols, cardW, cardH, availW, availH, gap)) {
+        best = { cols, rows };
+      }
+    }
+    return best;
+  }
+
+  function applyLiveGridLayout(grid, layout, gap) {
+    if (!grid || !layout) return;
+    const { cols, rows, cardW, cardH } = layout;
+    const dist = Math.max(.45, Math.min(cardW * 0.15, 1));
+    const maxPlot = Math.floor((cardW - 4) / 2.3);
+    const plot = Math.max(16, Math.min(Math.round(cardW * 0.34), maxPlot, 52));
+    const avatarFont = Math.max(11, Math.min(Math.round(cardW * 0.24), 34));
+
+    grid.style.setProperty('--live-cols', cols);
+    grid.style.setProperty('--live-rows', rows);
+    grid.style.setProperty('--live-gap', gap + 'px');
+    grid.style.setProperty('--live-card-w', cardW + 'px');
+    grid.style.setProperty('--live-card-h', cardH + 'px');
+    grid.style.setProperty('--live-avatar-font', avatarFont + 'px');
+    grid.style.setProperty('--live-dist', dist + 'rem');
+    grid.style.setProperty('--live-plot', plot + 'px');
+    grid.style.setProperty('--live-plot-font', Math.max(12, Math.round(plot * 0.52)) + 'px');
+    grid.style.setProperty('--live-plot-gap', Math.max(3, Math.round(cardW * 0.06)) + 'px');
+    grid.style.setProperty('--live-overlay-pad', Math.max(2, Math.round(cardW * 0.04)) + 'px');
+    grid.style.setProperty('--live-overlay-gap', Math.max(2, Math.round(cardW * 0.025)) + 'px');
+    grid.style.setProperty('--live-init-top', Math.max(16, Math.min(30, Math.round(cardW * 0.14))) + '%');
+    grid.classList.toggle('live-grid-dense', cols * rows >= 20);
+  }
+
   function layoutLivePage() {
     const page = document.querySelector('.live-page');
     if (!page) return;
-    const gap = 10;
-    const portraitRatio = 4 / 3; // hauteur / largeur (format portrait 3:4)
 
-    page.querySelectorAll('.students-live-grid').forEach(grid => {
-      const count = grid.children.length;
-      if (!count) return;
+    const sections = [...page.querySelectorAll('.live-gender-section')];
+    const metrics = sections.map(getLiveSectionMetrics).filter(Boolean);
+    if (!metrics.length) return;
 
-      const section = grid.closest('.live-gender-section');
-      const title = section?.querySelector('.live-group-title');
-      const sectionH = section?.clientHeight || 200;
-      const sectionW = section?.clientWidth || 200;
-      const titleH = title?.offsetHeight || 20;
-      const pad = 16;
-      const availW = sectionW - pad * 2;
-      const availH = sectionH - titleH - pad * 2;
+    const maxCount = Math.max(...metrics.map(m => m.count));
+    const gap = liveGapForCount(maxCount);
+    const isSplit = metrics.length > 1;
 
-      let bestCols = 1;
-      let bestCardW = 0;
-      for (let cols = 1; cols <= count; cols++) {
-        const rows = Math.ceil(count / cols);
-        const maxW = (availW - gap * (cols - 1)) / cols;
-        const maxH = (availH - gap * (rows - 1)) / rows;
-        const cardW = Math.min(maxW, maxH / portraitRatio);
-        if (cardW > bestCardW) {
-          bestCardW = cardW;
-          bestCols = cols;
-        }
-      }
+    if (!isSplit) {
+      const m = metrics[0];
+      applyLiveGridLayout(m.grid, computeBestLiveLayout(m.count, m.availW, m.availH, gap), gap);
+      return;
+    }
 
-      const rows = Math.ceil(count / bestCols);
-      const cardH = bestCardW * portraitRatio;
-      const dist = Math.max(.65, Math.min(bestCardW * 0.18, 1.25));
-      const plot = Math.max(28, Math.min(Math.round(bestCardW * 0.34), 52));
-      const avatarFont = Math.max(14, Math.min(Math.round(bestCardW * 0.24), 34));
+    const candidates = metrics.map(m => computeBestLiveLayout(m.count, m.availW, m.availH, gap));
+    let sharedCardW = Math.min(...candidates.map(c => c?.cardW || 0).filter(Boolean));
+    if (!sharedCardW) return;
 
-      grid.style.setProperty('--live-cols', bestCols);
-      grid.style.setProperty('--live-rows', rows);
-      grid.style.setProperty('--live-gap', gap + 'px');
-      grid.style.setProperty('--live-card-w', Math.floor(bestCardW) + 'px');
-      grid.style.setProperty('--live-card-h', Math.floor(cardH) + 'px');
-      grid.style.setProperty('--live-avatar-font', avatarFont + 'px');
-      grid.style.setProperty('--live-dist', dist + 'rem');
-      grid.style.setProperty('--live-plot', plot + 'px');
-      grid.style.setProperty('--live-plot-font', Math.round(plot * 0.52) + 'px');
-      grid.style.setProperty('--live-plot-gap', Math.max(6, Math.round(bestCardW * 0.07)) + 'px');
-      grid.style.setProperty('--live-overlay-pad', Math.max(4, Math.round(bestCardW * 0.05)) + 'px');
-      grid.style.setProperty('--live-overlay-gap', Math.max(3, Math.round(bestCardW * 0.03)) + 'px');
-      grid.style.setProperty('--live-init-top', Math.max(18, Math.min(32, Math.round(bestCardW * 0.14))) + '%');
+    let sharedCardH = Math.floor(sharedCardW * LIVE_PORTRAIT_RATIO);
+    while (sharedCardW > 24) {
+      const allFit = metrics.every(m => {
+        const colsInfo = findColsForCardSize(m.count, m.availW, m.availH, gap, sharedCardW, sharedCardH);
+        return layoutFits(m.count, colsInfo.cols, sharedCardW, sharedCardH, m.availW, m.availH, gap);
+      });
+      if (allFit) break;
+      sharedCardW--;
+      sharedCardH = Math.floor(sharedCardW * LIVE_PORTRAIT_RATIO);
+    }
+
+    metrics.forEach(m => {
+      const colsInfo = findColsForCardSize(m.count, m.availW, m.availH, gap, sharedCardW, sharedCardH);
+      applyLiveGridLayout(m.grid, { ...colsInfo, cardW: sharedCardW, cardH: sharedCardH }, gap);
     });
   }
 
   function setupLiveLayout() {
-    if (liveLayoutHandler) window.removeEventListener('resize', liveLayoutHandler);
+    if (liveLayoutHandler) {
+      window.removeEventListener('resize', liveLayoutHandler);
+      window.removeEventListener('orientationchange', liveLayoutHandler);
+    }
+    if (liveResizeObserver) liveResizeObserver.disconnect();
+
     liveLayoutHandler = () => requestAnimationFrame(layoutLivePage);
-    requestAnimationFrame(() => {
-      layoutLivePage();
-      setTimeout(layoutLivePage, 50);
-    });
+    const scheduleLayout = () => {
+      requestAnimationFrame(layoutLivePage);
+      [50, 150, 350].forEach(ms => setTimeout(layoutLivePage, ms));
+    };
+
+    scheduleLayout();
     window.addEventListener('resize', liveLayoutHandler);
+    window.addEventListener('orientationchange', liveLayoutHandler);
+
+    const page = document.querySelector('.live-page');
+    if (page && typeof ResizeObserver !== 'undefined') {
+      liveResizeObserver = new ResizeObserver(liveLayoutHandler);
+      liveResizeObserver.observe(page);
+      page.querySelectorAll('.live-gender-section, .students-live-split').forEach(el => {
+        liveResizeObserver.observe(el);
+      });
+    }
   }
 
   /* ----- SUIVI LIVE ----- */
@@ -2502,8 +2666,6 @@
 
     const series = ss.series?.[params.seriesIdx];
     if (!series) { goBack(); return; }
-
-    setHeader(tpl.name, `Série ${params.seriesIdx + 1}`);
 
     const totalSec = (tpl.durationMinutes || 0) * 60 + (tpl.durationSeconds || 0);
     if (!liveState || liveState.key !== `${params.sessionId}-${params.sitIdx}-${params.seriesIdx}`) {
@@ -2580,7 +2742,14 @@
               <div class="timer-display" id="live-timer">${formatTimerDisplay(liveState.remaining)}</div>
             </div>
           </div>
-          <button class="btn btn-danger" data-action="finish-live">Terminer</button>
+          <div class="live-title-block">
+            <div class="live-title">${escapeHtml(tpl.name)}</div>
+            <div class="live-subtitle">Série ${params.seriesIdx + 1}</div>
+          </div>
+          <div class="live-actions">
+            <button class="btn btn-secondary" data-action="live-back" type="button">Retour</button>
+            <button class="btn btn-danger" data-action="finish-live" type="button">Terminer</button>
+          </div>
         </div>
         <div class="${splitClass}" style="--live-split-cols:${splitCols}">${liveSections}</div>
       </div>`;
@@ -3432,6 +3601,8 @@
         document.querySelector(`[data-dist="${sid}"]`).textContent = dist;
         saveData();
       } break;
+      case 'live-back':
+        goBack(); break;
       case 'finish-live':
         confirmAction('Terminer et enregistrer les résultats de cette situation ?', () => {
           const session = getSession(ctx.sessionId);
