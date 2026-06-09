@@ -159,7 +159,8 @@
       margin: 0 auto;
       animation: fadeSlideIn var(--transition-slow) ease-out;
     }
-    body.view-home .main-content {
+    body.view-home .main-content,
+    body.view-class-sessions .main-content {
       display: flex;
       flex-direction: column;
       min-height: 0;
@@ -192,6 +193,11 @@
       flex: 1;
       min-width: 0;
     }
+    .home-header-actions {
+      display: flex;
+      gap: .55rem;
+      flex-shrink: 0;
+    }
     body.view-home .home-class-prompt {
       font-size: clamp(1.2rem, 3.5vw, 1.85rem);
     }
@@ -202,22 +208,77 @@
       min-height: 0;
       padding: 0;
       border-radius: var(--radius);
-      background: var(--surface);
-      border: 1px solid var(--border-strong);
-      color: var(--text-muted);
+      background: color-mix(in srgb, var(--primary) 16%, var(--surface-active));
+      border: 1px solid color-mix(in srgb, var(--primary) 50%, rgba(255, 255, 255, 0.35));
+      color: #fff;
       font-size: clamp(1.25rem, 3vh, 1.5rem);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: var(--shadow-sm), var(--shadow-inset);
-      transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition-fast);
+      box-shadow: var(--shadow-sm), 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 20px color-mix(in srgb, var(--primary) 18%, transparent);
+      transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition-fast), box-shadow var(--transition);
     }
     .btn-settings:hover {
-      background: var(--surface-hover);
-      border-color: color-mix(in srgb, var(--primary) 40%, var(--border-strong));
-      color: var(--primary);
+      background: color-mix(in srgb, var(--primary) 28%, var(--surface-active));
+      border-color: color-mix(in srgb, var(--primary) 65%, rgba(255, 255, 255, 0.4));
+      color: #fff;
+      box-shadow: var(--shadow), 0 0 28px color-mix(in srgb, var(--primary) 28%, transparent);
       transform: translateY(-1px);
     }
+    .tutorial-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding-bottom: 1rem;
+    }
+    .tutorial-intro {
+      margin-bottom: 1.25rem;
+      color: var(--text-muted);
+      font-size: clamp(.92rem, 2vw, 1rem);
+      line-height: 1.6;
+    }
+    .tutorial-section {
+      background: linear-gradient(165deg, var(--surface-hover) 0%, var(--surface) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: clamp(1rem, 2.5vw, 1.35rem);
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+    }
+    .tutorial-section h2 {
+      font-size: clamp(1rem, 2.2vw, 1.12rem);
+      font-weight: 800;
+      margin-bottom: .65rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .tutorial-section h3 {
+      font-size: clamp(.9rem, 2vw, .98rem);
+      font-weight: 700;
+      margin: .85rem 0 .4rem;
+      color: color-mix(in srgb, var(--primary) 30%, var(--text));
+    }
+    .tutorial-section p,
+    .tutorial-section li {
+      font-size: clamp(.86rem, 1.9vw, .94rem);
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .tutorial-section ul,
+    .tutorial-section ol {
+      margin: .45rem 0 .2rem 1.15rem;
+    }
+    .tutorial-section li + li { margin-top: .3rem; }
+    .tutorial-tip {
+      margin-top: .75rem;
+      padding: .65rem .8rem;
+      border-radius: var(--radius-sm);
+      background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--primary) 22%, var(--border-strong));
+      font-size: .84rem;
+      color: var(--text-muted);
+    }
+    .tutorial-tip strong { color: var(--text); }
+
     body.view-app-settings .main-content {
       display: flex;
       flex-direction: column;
@@ -478,6 +539,28 @@
       border-color: color-mix(in srgb, var(--primary) 40%, var(--border-strong));
       transform: translateY(-1px);
     }
+    .btn-icon-danger {
+      background: color-mix(in srgb, var(--danger) 18%, var(--surface));
+      border-color: color-mix(in srgb, var(--danger) 55%, var(--border-strong));
+      color: var(--danger);
+    }
+    .btn-icon-danger:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--danger) 30%, var(--surface-hover));
+      border-color: var(--danger);
+      color: #fff;
+    }
+    .btn-icon-reset {
+      background: color-mix(in srgb, var(--warning) 18%, var(--surface));
+      border-color: color-mix(in srgb, var(--warning) 55%, var(--border-strong));
+      color: var(--warning);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .btn-icon-reset:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--warning) 32%, var(--surface-hover));
+      border-color: var(--warning);
+      color: #1a1205;
+    }
 
     .card {
       background: linear-gradient(165deg, color-mix(in srgb, var(--surface) 95%, white) 0%, var(--surface) 100%);
@@ -688,6 +771,42 @@
       border-radius: var(--radius);
     }
     .toolbar .btn { flex-shrink: 0; }
+    .toolbar-exports {
+      margin-left: auto;
+      display: flex;
+      gap: .8rem;
+      flex-shrink: 0;
+    }
+    .session-add-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .8rem;
+      align-items: center;
+      margin-bottom: 1.15rem;
+    }
+    .class-sessions-page {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    }
+    .class-sessions-page .grid-classes {
+      flex-shrink: 0;
+    }
+    .class-bilan-footer {
+      display: flex;
+      justify-content: center;
+      margin-top: auto;
+      flex-shrink: 0;
+      padding-top: 1rem;
+      padding-bottom: .25rem;
+    }
+    .class-bilan-btn {
+      min-height: 56px;
+      padding: 1rem 2.75rem;
+      font-size: clamp(1.05rem, 2.8vw, 1.3rem);
+      font-weight: 800;
+    }
 
     .situation-block {
       background: linear-gradient(165deg, var(--surface-hover) 0%, var(--surface) 100%);
@@ -698,19 +817,60 @@
       box-shadow: var(--shadow-sm), var(--shadow-inset);
       transition: border-color var(--transition), box-shadow var(--transition), opacity var(--transition);
     }
-    .situation-header {
-      display: flex; flex-wrap: wrap; gap: .85rem; align-items: center;
-      margin-bottom: .85rem;
-      padding-bottom: .75rem;
-      border-bottom: 1px solid var(--border);
+    .situation-block--libre {
+      background: linear-gradient(165deg, color-mix(in srgb, var(--accent-cyan) 13%, var(--surface-hover)) 0%, color-mix(in srgb, var(--accent-cyan) 7%, var(--surface)) 100%);
+      border-color: color-mix(in srgb, var(--accent-cyan) 26%, var(--border-strong));
     }
-    .situation-header h3 {
-      flex: 1; min-width: 150px;
+    .situation-block--fractionne {
+      background: linear-gradient(165deg, color-mix(in srgb, var(--accent-violet) 13%, var(--surface-hover)) 0%, color-mix(in srgb, var(--accent-violet) 7%, var(--surface)) 100%);
+      border-color: color-mix(in srgb, var(--accent-violet) 26%, var(--border-strong));
+    }
+    .situation-block--normal {
+      background: linear-gradient(165deg, color-mix(in srgb, var(--primary) 17%, var(--surface-hover)) 0%, color-mix(in srgb, var(--primary) 10%, var(--surface)) 100%);
+      border-color: color-mix(in srgb, var(--primary) 32%, var(--border-strong));
+    }
+    .situation-block--libre .situation-title { border-bottom-color: color-mix(in srgb, var(--accent-cyan) 22%, rgba(255, 255, 255, 0.22)); }
+    .situation-block--fractionne .situation-title { border-bottom-color: color-mix(in srgb, var(--accent-violet) 22%, rgba(255, 255, 255, 0.22)); }
+    .situation-block--normal .situation-title { border-bottom-color: color-mix(in srgb, var(--primary) 30%, rgba(255, 255, 255, 0.22)); }
+    .situation-title {
+      padding-bottom: .75rem;
+      margin-bottom: .85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+    }
+    .situation-title h3 {
       font-size: clamp(.95rem, 2vw, 1.05rem);
       font-weight: 700;
       letter-spacing: -0.01em;
+      text-align: center;
     }
-    .situation-controls { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+    .situation-toolbar {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: .75rem;
+      align-items: center;
+    }
+    .situation-toolbar-left,
+    .situation-toolbar-right {
+      display: flex;
+      gap: .5rem;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .situation-toolbar-center {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+    .situation-status {
+      width: 100%;
+      text-align: center;
+      font-size: .82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
     .situation-block.dragging { opacity: .55; border-color: var(--primary); transform: scale(.99); }
     .situation-block.drag-over {
       border-color: var(--primary);
@@ -718,7 +878,10 @@
     }
 
     .session-header-bar {
-      display: flex; flex-wrap: wrap; gap: .85rem; align-items: center;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: .85rem;
+      align-items: center;
       margin-bottom: 1.15rem;
       padding: 1rem 1.15rem;
       background: var(--bg-elevated);
@@ -726,11 +889,53 @@
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-sm);
     }
+    .session-header-title { justify-self: start; min-width: 0; }
     .session-header-bar h2 {
-      flex: 1; min-width: 200px;
       font-size: clamp(1.1rem, 2.5vw, 1.35rem);
       font-weight: 800;
       letter-spacing: -0.02em;
+    }
+    .session-header-date {
+      display: block;
+      margin-top: .2rem;
+      font-size: clamp(.82rem, 1.8vw, .92rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .grid-item-btn.grid-item-session {
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      gap: .35rem;
+      padding: .7rem .65rem .55rem;
+    }
+    .grid-item-session-name {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+    .grid-item-session-date {
+      display: block;
+      flex-shrink: 0;
+      font-size: .78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+    .session-header-center { justify-self: center; }
+    .session-header-actions {
+      justify-self: end;
+      display: flex;
+      gap: .85rem;
+      flex-shrink: 0;
     }
 
     .live-page {
@@ -1033,7 +1238,8 @@
     }
     .student-select-card.participated { opacity: .88; }
     .student-select-card.attendance-absent,
-    .student-select-card.attendance-dispensed { opacity: .72; }
+    .student-select-card.attendance-dispensed,
+    .student-select-card.attendance-aff { opacity: .72; }
     .student-select-card .select-badge {
       position: absolute; top: 6px; right: 6px;
       font-size: .72rem; font-weight: 800; line-height: 1;
@@ -1049,6 +1255,11 @@
       background: color-mix(in srgb, var(--danger) 15%, transparent);
       color: var(--danger);
       border-color: color-mix(in srgb, var(--danger) 30%, transparent);
+    }
+    .student-select-card .select-badge.status-aff {
+      background: color-mix(in srgb, var(--warning) 18%, transparent);
+      color: var(--warning);
+      border-color: color-mix(in srgb, var(--warning) 35%, transparent);
     }
     .student-select-card .name { font-size: .82rem; margin-top: .45rem; word-break: break-word; font-weight: 600; }
 
@@ -1127,6 +1338,21 @@
       line-height: 1.55;
     }
 
+    .bilan-sort-header {
+      cursor: pointer;
+      user-select: none;
+      transition: color var(--transition-fast);
+    }
+    .bilan-sort-header:hover { color: var(--primary); }
+    .bilan-sort-icon {
+      display: inline-block;
+      font-size: .72em;
+      opacity: .55;
+      margin-left: .25rem;
+      vertical-align: middle;
+    }
+    .bilan-sort-header.active .bilan-sort-icon { opacity: 1; color: var(--primary); }
+
     .bilan-table th:first-child,
     .bilan-table td:first-child { text-align: left; }
     .bilan-table th:not(:first-child),
@@ -1148,6 +1374,8 @@
       font-variant-numeric: tabular-nums;
       font-size: clamp(.95rem, 2vw, 1.05rem);
     }
+    .bilan-table .total-status.status-d { color: var(--success); }
+    .bilan-table .total-status.status-aff { color: var(--warning); }
     .bilan-cell { min-width: 108px; }
     .bilan-cell .cell-speed {
       display: block;
@@ -1157,6 +1385,10 @@
       text-align: center;
       font-variant-numeric: tabular-nums;
       font-weight: 600;
+    }
+    .bilan-cell .cell-vma {
+      color: var(--accent-violet);
+      font-weight: 700;
     }
     .bilan-table .avg-row td {
       background: rgba(0, 0, 0, 0.3);
@@ -1185,12 +1417,84 @@
       font-variant-numeric: tabular-nums;
     }
     .bilan-table .student-status { margin-left: .45rem; }
+    .bilan-name-girls { color: var(--success); font-weight: 700; }
+    .bilan-name-boys { color: color-mix(in srgb, var(--primary) 75%, white); font-weight: 700; }
+    .frac-mode-toggle {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: .75rem 1rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+    }
+    .frac-mode-toggle label {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .frac-mode-toggle label:has(input:checked) { color: var(--text); }
+    .frac-mode-toggle input { width: auto; accent-color: var(--primary); }
+    .frac-perf-input,
+    .libre-perf-input {
+      width: 72px;
+      text-align: center;
+      padding: .4rem .35rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .libre-perf-table th:last-child,
+    .libre-perf-table td:last-child { text-align: center; }
+    .frac-cell-meta {
+      display: block;
+      font-size: clamp(.68rem, 1.4vw, .76rem);
+      color: var(--text-dim);
+      margin-top: .3rem;
+      line-height: 1.35;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+    .frac-cell-meta .cell-vma { color: var(--accent-violet); }
+    .frac-total-cell {
+      font-weight: 800;
+      color: var(--success);
+      font-variant-numeric: tabular-nums;
+    }
+    .situation-toolbar-center .series-label {
+      font-size: .85rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+    }
+    .situation-toolbar-center .series-label input {
+      width: 50px;
+      display: inline;
+      text-align: center;
+      padding: .25rem .35rem;
+    }
+    .form-check-label {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: .85rem;
+    }
+    .form-check-label input { width: auto; accent-color: var(--primary); }
     .status-d { color: var(--success); font-weight: 800; font-size: 1.1rem; }
     .status-a { color: var(--danger); font-weight: 800; font-size: 1.1rem; }
-    .row-absent td, .row-dispensed td { opacity: .82; }
+    .status-aff { color: var(--warning); font-weight: 800; font-size: 1.1rem; }
+    .row-absent td, .row-dispensed td, .row-aff td { opacity: .82; }
 
     .session-stats {
-      display: flex; flex-wrap: wrap; gap: clamp(1rem, 3vw, 2rem);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: clamp(1rem, 3vw, 2rem);
+      align-items: center;
       background: linear-gradient(165deg, var(--surface-hover) 0%, var(--surface) 100%);
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-lg);
@@ -1198,16 +1502,28 @@
       margin-bottom: 1.15rem;
       box-shadow: var(--shadow-sm), var(--shadow-inset);
     }
+    .session-stats .stat-item { justify-self: start; }
+    .session-stats-center { justify-self: center; flex-shrink: 0; }
+    .session-stats-center .btn {
+      background: color-mix(in srgb, var(--primary) 16%, var(--surface-active));
+      border-color: color-mix(in srgb, var(--primary) 50%, rgba(255, 255, 255, 0.35));
+      color: #fff;
+      font-weight: 700;
+      box-shadow: var(--shadow-sm);
+    }
+    .session-stats-center .btn::after { opacity: 0.12; }
+    .session-stats-center .btn:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--primary) 24%, var(--surface-active));
+      border-color: color-mix(in srgb, var(--primary) 60%, rgba(255, 255, 255, 0.38));
+      box-shadow: var(--shadow-sm);
+    }
     .session-stats .stat-item {
       position: relative;
       padding-right: clamp(1rem, 3vw, 2rem);
     }
-    .session-stats .stat-item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      right: 0; top: 10%; bottom: 10%;
-      width: 1px;
-      background: var(--border);
+    .session-stats .stat-item + .stat-item {
+      padding-left: clamp(1rem, 3vw, 2rem);
+      border-left: 1px solid var(--border);
     }
     .session-stats .stat-item label {
       display: block;
@@ -1232,7 +1548,7 @@
       scrollbar-width: thin;
     }
     .attendance-row {
-      display: grid; grid-template-columns: 1fr auto auto; gap: .65rem; align-items: center;
+      display: grid; grid-template-columns: 1fr auto auto auto; gap: .65rem; align-items: center;
       background: var(--surface);
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-sm);
@@ -1269,6 +1585,18 @@
       color: #1a0505;
       border-color: var(--danger);
     }
+    .status-btn.aff-btn {
+      background: color-mix(in srgb, var(--warning) 14%, var(--surface));
+      border-color: color-mix(in srgb, var(--warning) 45%, transparent);
+      color: var(--warning);
+      font-size: .82rem;
+      letter-spacing: 0.02em;
+    }
+    .status-btn.aff-btn.active {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--warning) 90%, white), var(--warning));
+      color: #1a1205;
+      border-color: var(--warning);
+    }
     .status-btn:hover:not(:disabled) { transform: scale(1.04); }
 
     .hidden-input { position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none; }
@@ -1282,7 +1610,7 @@
 
     @media (max-width: 1100px) {
       .grid-classes { grid-template-columns: repeat(4, 1fr); }
-      .session-stats .stat-item:not(:last-child)::after { display: none; }
+      .session-stats .stat-item + .stat-item { border-left: none; padding-left: 0; }
     }
     @media (max-width: 768px) {
       .grid-classes { grid-template-columns: repeat(3, 1fr); }
@@ -1296,7 +1624,21 @@
       body.view-live .live-title-block { grid-area: title; }
       body.view-live .live-actions { grid-area: actions; }
       body.view-live .live-info { grid-area: info; }
-      .session-stats { gap: 1rem 1.5rem; }
+      .session-stats {
+        grid-template-columns: 1fr;
+        justify-items: stretch;
+        gap: 1rem;
+      }
+      .session-stats .stat-item,
+      .session-stats-center { justify-self: stretch; }
+      .session-stats-center { display: flex; justify-content: center; }
+      .situation-toolbar {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: .65rem;
+      }
+      .situation-toolbar-left,
+      .situation-toolbar-right { justify-content: center; }
       .toolbar { padding: .75rem; }
     }
     @media (max-width: 580px) {
@@ -1389,7 +1731,14 @@
     '#60a5fa', '#2dd4bf', '#c084fc', '#f87171', '#4ade80', '#818cf8',
     '#22d3ee', '#10b981', '#e879f9', '#facc15'
   ];
-  const SEED_TEST_STUDENT_COUNT = 20;
+  const SEED_TEST_STUDENT_COUNT = 35;
+  const SEED_TEST_LAST_NAMES = [
+    'Martin', 'Bernard', 'Dubois', 'Thomas', 'Robert', 'Richard', 'Petit', 'Durand',
+    'Leroy', 'Moreau', 'Simon', 'Laurent', 'Lefebvre', 'Michel', 'Garcia', 'David',
+    'Bertrand', 'Roux', 'Vincent', 'Fournier', 'Morel', 'Girard', 'Andre', 'Mercier',
+    'Dupont', 'Lambert', 'Bonnet', 'Francois', 'Martinez', 'Legrand', 'Garnier', 'Faure',
+    'Rousseau', 'Blanc', 'Guerin', 'Muller', 'Henry', 'Roussel', 'Nicolas', 'Perrin'
+  ];
   const BACKUP_VERSION = 1;
 
   let appData = { classes: [], situations: [], sessions: [], settings: { primaryColor: '#3b82f6' } };
@@ -1397,6 +1746,8 @@
   let navStack = [{ view: 'home' }];
   let currentPhotoStudentId = null;
   let sortState = { column: 'lastName', asc: true };
+  let sessionBilanSort = { column: 'name', asc: true };
+  let classBilanSort = { column: 'name', asc: true };
   let liveTimerInterval = null;
   let liveState = null;
   let liveLayoutHandler = null;
@@ -1454,19 +1805,37 @@
     return num % 2 === 1 ? 'F' : 'M';
   }
 
+  function getSeedTestStudentVma(num) {
+    return Math.round((9 + ((num - 1) * 8) / (SEED_TEST_STUDENT_COUNT - 1)) * 10) / 10;
+  }
+
+  function getSeedTestStudentLastName(num) {
+    return SEED_TEST_LAST_NAMES[(num * 7 + 11) % SEED_TEST_LAST_NAMES.length];
+  }
+
   function createSeedTestStudent(num) {
     return {
       id: `seed-student-${num}`,
-      lastName: 'TEST',
-      firstName: String(num),
-      gender: getSeedTestStudentGender(num)
+      lastName: getSeedTestStudentLastName(num),
+      firstName: `test${num}`,
+      gender: getSeedTestStudentGender(num),
+      vma: getSeedTestStudentVma(num)
     };
+  }
+
+  function getSeedSessionSituations() {
+    return [
+      { templateId: 'seed-situation-test-6min', seriesCount: 1, series: [] },
+      { templateId: 'seed-situation-test-frac-30-30', seriesCount: 2, repetitions: 6, series: [] },
+      { isLibre: true, librePerf: { completed: false, values: {} } }
+    ];
   }
 
   function getSeedData() {
     const classId = 'seed-class-test';
     const situationId6 = 'seed-situation-test-6min';
     const situationId3 = 'seed-situation-test-3min';
+    const situationIdFrac = 'seed-situation-test-frac-30-30';
     const sessionId = 'seed-session-test';
     const students = Array.from({ length: SEED_TEST_STUDENT_COUNT }, (_, i) =>
       createSeedTestStudent(i + 1)
@@ -1475,24 +1844,31 @@
     return {
       classes: [{
         id: classId,
-        name: 'Test',
+        name: 'Classe TEST',
         colorIndex: 0,
         students
       }],
       situations: [
         { id: situationId6, name: 'Test 6min', colorIndex: 0, durationMinutes: 6, ...situationBase },
-        { id: situationId3, name: 'Test 3min', colorIndex: 1, durationMinutes: 3, ...situationBase }
+        { id: situationId3, name: 'Test 3min', colorIndex: 1, durationMinutes: 3, ...situationBase },
+        {
+          id: situationIdFrac,
+          name: 'Test fractionné 30/30',
+          colorIndex: 2,
+          durationMinutes: 0,
+          durationSeconds: 30,
+          lapSize: 200,
+          plotInterval: 10,
+          fractionne: true
+        }
       ],
       sessions: [{
         id: sessionId,
         classId,
         name: 'SÉANCE TEST',
+        date: getTodayIsoDate(),
         attendance: {},
-        situations: [{
-          templateId: situationId6,
-          seriesCount: 1,
-          series: []
-        }]
+        situations: getSeedSessionSituations()
       }],
       settings: { primaryColor: '#3b82f6' }
     };
@@ -1529,12 +1905,32 @@
     applyPrimaryColor();
   }
 
+  function getTodayIsoDate() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  function formatSessionDateDisplay(dateStr) {
+    if (!dateStr) return '';
+    const [y, m, d] = dateStr.split('-');
+    if (!y || !m || !d) return dateStr;
+    return `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+  }
+
+  function getSessionDateDisplay(session) {
+    return formatSessionDateDisplay(session?.date) || new Date().toLocaleDateString('fr-FR');
+  }
+
   function migrateSessionData() {
     (appData.sessions || []).forEach(session => {
       if (!session.attendance) session.attendance = {};
       if (session.absences?.length) {
         session.absences.forEach(id => { session.attendance[id] = 'absent'; });
         delete session.absences;
+      }
+      if (!session.date) {
+        const m = session.name?.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+        if (m) session.date = `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
       }
     });
   }
@@ -1564,20 +1960,53 @@
         ...situationBase
       });
     }
+    const sitFrac = appData.situations?.find(s => s.id === 'seed-situation-test-frac-30-30');
+    if (!sitFrac) {
+      if (!appData.situations) appData.situations = [];
+      appData.situations.push({
+        id: 'seed-situation-test-frac-30-30',
+        name: 'Test fractionné 30/30',
+        colorIndex: 2,
+        lapSize: 200,
+        durationMinutes: 0,
+        durationSeconds: 30,
+        plotInterval: 10,
+        fractionne: true
+      });
+    } else {
+      Object.assign(sitFrac, {
+        name: 'Test fractionné 30/30',
+        lapSize: 200,
+        durationMinutes: 0,
+        durationSeconds: 30,
+        plotInterval: 10,
+        fractionne: true
+      });
+    }
     const testClass = appData.classes?.find(c => c.id === 'seed-class-test');
     if (testClass) {
+      testClass.name = 'Classe TEST';
       if (!testClass.students) testClass.students = [];
+      testClass.students = testClass.students.filter(s => {
+        const m = s.id?.match(/^seed-student-(\d+)$/);
+        return !m || parseInt(m[1], 10) <= SEED_TEST_STUDENT_COUNT;
+      });
       for (let num = 1; num <= SEED_TEST_STUDENT_COUNT; num++) {
         const id = `seed-student-${num}`;
         let st = testClass.students.find(s => s.id === id);
         if (!st) {
           testClass.students.push(createSeedTestStudent(num));
         } else {
-          st.lastName = 'TEST';
-          st.firstName = String(num);
+          st.lastName = getSeedTestStudentLastName(num);
+          st.firstName = `test${num}`;
           st.gender = getSeedTestStudentGender(num);
+          st.vma = getSeedTestStudentVma(num);
         }
       }
+    }
+    const seedSession = appData.sessions?.find(s => s.id === 'seed-session-test');
+    if (seedSession) {
+      seedSession.situations = getSeedSessionSituations();
     }
     saveData();
   }
@@ -1830,6 +2259,7 @@
     sit.durationMinutes = parseInt(document.getElementById('sit-min')?.value.replace(/\s/g, '')) || 0;
     sit.durationSeconds = parseInt(document.getElementById('sit-sec')?.value.replace(/\s/g, '')) || 0;
     sit.plotInterval = parseInt(document.getElementById('sit-plot')?.value.replace(/\s/g, '')) || 0;
+    sit.fractionne = !!document.getElementById('sit-fractionne')?.checked;
     return !!sit.name.trim();
   }
 
@@ -1883,7 +2313,7 @@
     if (onMount) onMount();
   }
 
-  function confirmAction(message, onConfirm) {
+  function confirmAction(message, onConfirm, onCancel) {
     showModal(`
       <h3>Confirmation</h3>
       <p>${escapeHtml(message)}</p>
@@ -1892,8 +2322,59 @@
         <button class="btn btn-danger" id="modal-confirm">Confirmer</button>
       </div>
     `, () => {
+      const overlay = document.getElementById('modal-overlay');
+      const prevOverlayClick = overlay.onclick;
+      const cleanup = () => { overlay.onclick = prevOverlayClick; };
+      const handleCancel = () => {
+        cleanup();
+        closeModal();
+        if (onCancel) onCancel();
+      };
+      document.getElementById('modal-cancel').onclick = handleCancel;
+      document.getElementById('modal-confirm').onclick = () => {
+        cleanup();
+        closeModal();
+        onConfirm();
+      };
+      overlay.onclick = (e) => {
+        if (e.target.id === 'modal-overlay') handleCancel();
+      };
+    });
+  }
+
+  function promptSessionForm(title, defaults = {}, onSubmit) {
+    const today = getTodayIsoDate();
+    showModal(`
+      <h3>${escapeHtml(title)}</h3>
+      <div class="form-group">
+        <label>Nom de la séance</label>
+        <input type="text" id="session-name-input" value="${escapeHtml(defaults.name || '')}" autofocus>
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="session-date-input" value="${escapeHtml(defaults.date || today)}">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="modal-confirm">Valider</button>
+      </div>
+    `, () => {
+      const nameInput = document.getElementById('session-name-input');
+      const dateInput = document.getElementById('session-date-input');
+      nameInput.focus();
+      nameInput.select();
       document.getElementById('modal-cancel').onclick = closeModal;
-      document.getElementById('modal-confirm').onclick = () => { closeModal(); onConfirm(); };
+      document.getElementById('modal-confirm').onclick = () => {
+        const name = nameInput.value.trim();
+        const date = dateInput.value;
+        if (!name) { showAlert('Indiquez un nom de séance.'); return; }
+        if (!date) { showAlert('Indiquez une date.'); return; }
+        closeModal();
+        onSubmit(name, date);
+      };
+      nameInput.onkeydown = (e) => {
+        if (e.key === 'Enter') document.getElementById('modal-confirm').click();
+      };
     });
   }
 
@@ -2009,7 +2490,14 @@
   function getSession(id) { return appData.sessions.find(s => s.id === id); }
 
   function getClassSessions(classId) {
-    return appData.sessions.filter(s => s.classId === classId);
+    return appData.sessions
+      .filter(s => s.classId === classId)
+      .sort((a, b) => {
+        const dateA = a.date || '9999-12-31';
+        const dateB = b.date || '9999-12-31';
+        if (dateA !== dateB) return dateA.localeCompare(dateB);
+        return (a.name || '').localeCompare(b.name || '', 'fr');
+      });
   }
 
   function getStudentAttendance(session, studentId) {
@@ -2024,20 +2512,260 @@
     return Math.max(1, parseInt(ss.seriesCount, 10) || 1);
   }
 
+  function getRepetitions(ss) {
+    return Math.max(1, parseInt(ss.repetitions, 10) || 1);
+  }
+
+  function isFractionneSituation(tpl) {
+    return !!tpl?.fractionne;
+  }
+
+  const LIBRE_SITUATION_VALUE = '__libre__';
+
+  function isLibreSituation(ss) {
+    return !!ss?.isLibre;
+  }
+
+  function getSituationBlockName(ss, tpl) {
+    if (isLibreSituation(ss)) return 'Situation Libre';
+    return tpl?.name || 'Inconnue';
+  }
+
+  function ensureLibrePerf(ss) {
+    if (!ss.librePerf) ss.librePerf = { completed: false, values: {} };
+    return ss.librePerf;
+  }
+
+  function ensureFractionnePerf(ss) {
+    if (!ss.fractionnePerf) {
+      ss.fractionnePerf = { completed: false, inputMode: 'speed', values: {} };
+    }
+    return ss.fractionnePerf;
+  }
+
+  function hasFractionnePerfData(perf) {
+    if (!perf?.values) return false;
+    return Object.values(perf.values).some(v =>
+      (v.series || []).some(val => parseFloat(val) > 0)
+    );
+  }
+
+  function getFractionneTotalDurationSec(ss, tpl) {
+    return getSeriesCount(ss) * getRepetitions(ss) * getSituationDurationSec(tpl);
+  }
+
+  function calcDistFromSpeedKmh(speedKmh, durationSec) {
+    if (!speedKmh || !durationSec) return 0;
+    return Math.round((speedKmh / 3.6) * durationSec);
+  }
+
+  function formatSpeedWithVmaFromKmh(speedKmh, student = null) {
+    if (!speedKmh || speedKmh <= 0) return '—';
+    const speedStr = speedKmh.toFixed(1) + ' km/h';
+    const vma = student ? getStudentVma(student) : null;
+    if (!vma) return speedStr;
+    return speedStr + ` <span class="cell-vma">(${Math.round((speedKmh / vma) * 100)} % VMA)</span>`;
+  }
+
+  function getFractionneSeriesMetrics(value, inputMode, repetitions, durationSec, student) {
+    if (!value || value <= 0 || !durationSec) {
+      return { perRepDist: 0, seriesDist: 0, speedKmh: null };
+    }
+    const perRepDist = inputMode === 'speed'
+      ? calcDistFromSpeedKmh(value, durationSec)
+      : Math.round(value);
+    const speedKmh = inputMode === 'speed'
+      ? value
+      : calcSpeedKmhValue(perRepDist, durationSec);
+    return {
+      perRepDist,
+      seriesDist: perRepDist * repetitions,
+      speedKmh
+    };
+  }
+
+  function getFractionneStudentSeriesValues(ss, studentId) {
+    return ss.fractionnePerf?.values?.[studentId]?.series || [];
+  }
+
+  function getFractionneStudentTotalDist(ss, tpl, studentId) {
+    const perf = ss.fractionnePerf;
+    if (!perf?.values?.[studentId]) return 0;
+    const mode = perf.inputMode || 'speed';
+    const reps = getRepetitions(ss);
+    const dur = getSituationDurationSec(tpl);
+    const seriesCount = getSeriesCount(ss);
+    let total = 0;
+    for (let i = 0; i < seriesCount; i++) {
+      const value = parseFloat(perf.values[studentId].series?.[i]) || 0;
+      total += getFractionneSeriesMetrics(value, mode, reps, dur).seriesDist;
+    }
+    return total;
+  }
+
+  function studentNameClass(st) {
+    if (st.gender === 'F') return 'bilan-name-girls';
+    if (st.gender === 'M') return 'bilan-name-boys';
+    return '';
+  }
+
+  function sortStudentsByName(students) {
+    return [...(students || [])].sort((a, b) =>
+      a.lastName.localeCompare(b.lastName, 'fr') || a.firstName.localeCompare(b.firstName, 'fr')
+    );
+  }
+
+  function isBilanSortActive(sortState, key) {
+    if (key === 'name' || key === 'total') return sortState.column === key;
+    return sortState.column === parseInt(key, 10);
+  }
+
+  function bilanSortIcon(sortState, key) {
+    if (!isBilanSortActive(sortState, key)) return '⇅';
+    return sortState.asc ? '▲' : '▼';
+  }
+
+  function bilanSortHeaderClass(sortState, key) {
+    return isBilanSortActive(sortState, key) ? 'bilan-sort-header active' : 'bilan-sort-header';
+  }
+
+  function updateBilanSortState(sortState, key) {
+    if (key === 'name') {
+      if (sortState.column === 'name') sortState.asc = !sortState.asc;
+      else { sortState.column = 'name'; sortState.asc = true; }
+    } else if (key === 'total') {
+      if (sortState.column === 'total') sortState.asc = !sortState.asc;
+      else { sortState.column = 'total'; sortState.asc = false; }
+    } else {
+      const idx = parseInt(key, 10);
+      if (sortState.column === idx) sortState.asc = !sortState.asc;
+      else { sortState.column = idx; sortState.asc = false; }
+    }
+  }
+
+  function setupBilanSortHeaders(app, sortState, onSort) {
+    app.querySelectorAll('[data-bilan-sort]').forEach(th => {
+      th.onclick = () => {
+        updateBilanSortState(sortState, th.dataset.bilanSort);
+        onSort();
+      };
+    });
+  }
+
+  function applySessionBilanSort(students, session) {
+    const sorted = [...(students || [])];
+    const col = sessionBilanSort.column;
+    if (col === 'name') {
+      sorted.sort((a, b) => {
+        const cmp = a.lastName.localeCompare(b.lastName, 'fr') || a.firstName.localeCompare(b.firstName, 'fr');
+        return sessionBilanSort.asc ? cmp : -cmp;
+      });
+    } else if (col === 'total') {
+      sorted.sort((a, b) => {
+        const ta = getSessionStudentTotal(session, a.id);
+        const tb = getSessionStudentTotal(session, b.id);
+        return sessionBilanSort.asc ? ta - tb : tb - ta;
+      });
+    } else {
+      const idx = col;
+      sorted.sort((a, b) => {
+        const da = getStudentDistInSituation(session, a.id, idx);
+        const db = getStudentDistInSituation(session, b.id, idx);
+        return sessionBilanSort.asc ? da - db : db - da;
+      });
+    }
+    return sorted;
+  }
+
+  function getClassBilanStudentTotal(sessions, studentId) {
+    return sessions.reduce((sum, session) => {
+      const att = getStudentAttendance(session, studentId);
+      const total = getSessionStudentTotal(session, studentId);
+      if (att === 'absent') return sum;
+      if (isAttendanceWithBilanData(att) && total > 0) return sum + total;
+      if (att) return sum;
+      return sum + total;
+    }, 0);
+  }
+
+  function applyClassBilanSort(students, sessions) {
+    const sorted = [...(students || [])];
+    const col = classBilanSort.column;
+    if (col === 'name') {
+      sorted.sort((a, b) => {
+        const cmp = a.lastName.localeCompare(b.lastName, 'fr') || a.firstName.localeCompare(b.firstName, 'fr');
+        return classBilanSort.asc ? cmp : -cmp;
+      });
+    } else if (col === 'total') {
+      sorted.sort((a, b) => {
+        const ta = getClassBilanStudentTotal(sessions, a.id);
+        const tb = getClassBilanStudentTotal(sessions, b.id);
+        return classBilanSort.asc ? ta - tb : tb - ta;
+      });
+    } else {
+      const idx = col;
+      const session = sessions[idx];
+      if (!session) return sorted;
+      sorted.sort((a, b) => {
+        const da = getSessionStudentTotal(session, a.id);
+        const db = getSessionStudentTotal(session, b.id);
+        return classBilanSort.asc ? da - db : db - da;
+      });
+    }
+    return sorted;
+  }
+
   function getSituationDurationSec(tpl) {
     if (!tpl) return 0;
     return (tpl.durationMinutes || 0) * 60 + (tpl.durationSeconds || 0);
   }
 
+  function calcSpeedKmhValue(distance, durationSec) {
+    if (!durationSec || distance <= 0) return null;
+    return (distance / durationSec) * 3.6;
+  }
+
   function calcSpeedKmh(distance, durationSec) {
-    if (!durationSec || distance <= 0) return '—';
-    return ((distance / durationSec) * 3.6).toFixed(1) + ' km/h';
+    const speed = calcSpeedKmhValue(distance, durationSec);
+    return speed != null ? speed.toFixed(1) + ' km/h' : '—';
+  }
+
+  function getStudentVma(student) {
+    const vma = parseFloat(student?.vma);
+    return Number.isFinite(vma) && vma > 0 ? vma : null;
+  }
+
+  function parseVmaInput(value) {
+    const trimmed = String(value ?? '').trim().replace(',', '.');
+    if (!trimmed) return null;
+    const vma = parseFloat(trimmed);
+    return Number.isFinite(vma) && vma > 0 ? vma : null;
+  }
+
+  function formatVmaPercent(distance, durationSec, vma) {
+    const speed = calcSpeedKmhValue(distance, durationSec);
+    if (speed == null || !vma) return '';
+    return ` <span class="cell-vma">(${Math.round((speed / vma) * 100)} % VMA)</span>`;
+  }
+
+  function formatSpeedDisplay(distance, durationSec, student = null) {
+    const speed = calcSpeedKmh(distance, durationSec);
+    if (speed === '—') return speed;
+    const vma = student ? getStudentVma(student) : null;
+    return speed + (vma ? formatVmaPercent(distance, durationSec, vma) : '');
   }
 
   function getStudentDistInSituation(session, studentId, sitIdx) {
     const ss = session.situations?.[sitIdx];
-    if (!ss?.series) return 0;
+    if (!ss) return 0;
+    if (isLibreSituation(ss)) {
+      return Math.max(0, parseInt(ss.librePerf?.values?.[studentId]) || 0);
+    }
     const tpl = getSituation(ss.templateId);
+    if (isFractionneSituation(tpl)) {
+      return getFractionneStudentTotalDist(ss, tpl, studentId);
+    }
+    if (!ss.series) return 0;
     let total = 0;
     for (const serie of ss.series) {
       if (!serie.completed) continue;
@@ -2049,14 +2777,25 @@
     return total;
   }
 
+  function getSituationSpeedDuration(session, sitIdx) {
+    const ss = session.situations?.[sitIdx];
+    if (!ss || isLibreSituation(ss)) return 0;
+    const tpl = getSituation(ss?.templateId);
+    if (!tpl) return 0;
+    if (isFractionneSituation(tpl)) return getFractionneTotalDurationSec(ss, tpl);
+    return getSituationDurationSec(tpl);
+  }
+
   function getSessionStudentTotal(session, studentId) {
-    if (getStudentAttendance(session, studentId)) return 0;
+    const att = getStudentAttendance(session, studentId);
+    if (att && !isAttendanceWithBilanData(att)) return 0;
     return (session.situations || []).reduce((sum, _, i) => sum + getStudentDistInSituation(session, studentId, i), 0);
   }
 
   function getSessionGrandTotal(session, cls) {
     return (cls.students || []).reduce((sum, st) => {
-      if (getStudentAttendance(session, st.id)) return sum;
+      const att = getStudentAttendance(session, st.id);
+      if (att && !isAttendanceWithBilanData(att)) return sum;
       return sum + getSessionStudentTotal(session, st.id);
     }, 0);
   }
@@ -2064,7 +2803,44 @@
   function formatAttendanceStatus(status) {
     if (status === 'dispensed') return '<span class="status-d" title="Dispensé">D</span>';
     if (status === 'absent') return '<span class="status-a" title="Absent">A</span>';
+    if (status === 'aff') return '<span class="status-aff" title="Oubli d\'affaires">AFF</span>';
     return '';
+  }
+
+  function getAttendanceExportCode(status) {
+    if (status === 'dispensed') return 'D';
+    if (status === 'absent') return 'A';
+    if (status === 'aff') return 'AFF';
+    return '';
+  }
+
+  function isAttendanceWithBilanData(status) {
+    return status === 'dispensed' || status === 'aff';
+  }
+
+  function formatBilanTotalStatusSuffix(att) {
+    const code = getAttendanceExportCode(att);
+    const cls = att === 'dispensed' ? 'status-d' : att === 'aff' ? 'status-aff' : '';
+    return cls ? ` <span class="total-status ${cls}">(${code})</span>` : '';
+  }
+
+  function formatBilanTotalCell(total, att) {
+    if (att === 'absent') return formatAttendanceStatus(att);
+    if (isAttendanceWithBilanData(att)) {
+      return total > 0 ? `${total} m${formatBilanTotalStatusSuffix(att)}` : formatAttendanceStatus(att);
+    }
+    return `${total} m`;
+  }
+
+  function toggleAttendanceStatus(session, sid, status, row) {
+    const types = ['dispensed', 'absent', 'aff'];
+    if (session.attendance[sid] === status) {
+      delete session.attendance[sid];
+      types.forEach(t => row.querySelector(`.${t}-btn`)?.classList.remove('active'));
+    } else {
+      session.attendance[sid] = status;
+      types.forEach(t => row.querySelector(`.${t}-btn`)?.classList.toggle('active', t === status));
+    }
   }
 
   /* ========== RENDU AVATAR ========== */
@@ -2100,6 +2876,7 @@
     const { view, params } = getCurrentNav();
     const app = document.getElementById('app');
     document.body.classList.toggle('view-home', view === 'home');
+    document.body.classList.toggle('view-class-sessions', view === 'class-sessions');
     document.body.classList.toggle('view-config-classes', view === 'config-classes');
     document.body.classList.toggle('view-config-situations', view === 'config-situations');
     document.body.classList.toggle('view-live', view === 'live');
@@ -2130,9 +2907,12 @@
       case 'class-sessions': renderClassSessions(app, params.classId); break;
       case 'session': renderSession(app, params.sessionId); break;
       case 'live': renderLive(app, params); break;
+      case 'fractionne-perf': renderFractionnePerf(app, params); break;
+      case 'libre-perf': renderLibrePerf(app, params); break;
       case 'bilan': renderBilan(app, params.sessionId); break;
       case 'class-bilan': renderClassBilan(app, params.classId); break;
       case 'app-settings': renderAppSettings(app); break;
+      case 'tutorial': renderTutorial(app); break;
       default: renderHome(app);
     }
     updateBottomNav();
@@ -2155,12 +2935,144 @@
     app.innerHTML = `
       <div class="home-class-header">
         <p class="home-class-prompt">Choisissez une classe :</p>
-        <button type="button" class="btn-settings" data-action="app-settings" title="Paramètres" aria-label="Paramètres">⚙</button>
+        <div class="home-header-actions">
+          <button type="button" class="btn-settings" data-action="open-tutorial" title="Tutoriel" aria-label="Tutoriel">📄</button>
+          <button type="button" class="btn-settings" data-action="app-settings" title="Paramètres" aria-label="Paramètres">⚙</button>
+        </div>
       </div>
       <div class="grid-classes">${grid}</div>
       <div class="config-actions">
         <button class="btn btn-secondary" data-action="config-classes">Paramétrer les classes</button>
         <button class="btn btn-secondary" data-action="config-situations">Paramétrer les situations</button>
+      </div>`;
+    bindActions(app);
+  }
+
+  /* ----- TUTORIEL ----- */
+  function renderTutorial(app) {
+    setHeader('Tutoriel', 'Demi-fond EPS');
+    app.innerHTML = `
+      <div class="tutorial-page">
+        <p class="tutorial-intro">
+          Ce guide présente l’ensemble des fonctionnalités de l’application pour organiser vos séances de demi-fond en EPS,
+          suivre les performances en direct et produire des bilans exploitables.
+        </p>
+
+        <section class="tutorial-section">
+          <h2>1. Présentation générale</h2>
+          <p>L’application s’articule autour de trois piliers :</p>
+          <ul>
+            <li><strong>Les classes</strong> — vos groupes d’élèves.</li>
+            <li><strong>Les situations</strong> — les formats de course réutilisables (normale, fractionnée ou libre).</li>
+            <li><strong>Les séances</strong> — le déroulé d’un cours pour une classe, à une date donnée.</li>
+          </ul>
+          <p>Depuis l’accueil, choisissez une classe pour accéder à ses séances. Les boutons du bas permettent de paramétrer classes et situations.</p>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>2. Paramétrer les classes</h2>
+          <p>Menu <strong>Paramétrer les classes</strong> :</p>
+          <ul>
+            <li>Créez une classe avec le bouton <strong>+</strong>.</li>
+            <li>Cliquez sur une classe pour modifier son nom, ajouter ou supprimer des élèves.</li>
+            <li>Pour chaque élève, renseignez nom, prénom, sexe et éventuellement la <strong>VMA</strong> (vitesse maximale aérobie en km/h).</li>
+            <li>La VMA permet d’afficher le pourcentage de VMA dans les bilans et le suivi en direct.</li>
+            <li>Utilisez <strong>Importer CSV</strong> pour charger une liste d’élèves (colonnes : nom, prénom, sexe, VMA optionnelle).</li>
+            <li>Une photo peut être associée à chaque élève (utile pour le suivi en direct).</li>
+          </ul>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>3. Paramétrer les situations</h2>
+          <p>Menu <strong>Paramétrer les situations</strong> :</p>
+          <ul>
+            <li>Créez des situations réutilisables dans toutes vos séances.</li>
+            <li>Renseignez le <strong>nom</strong>, la <strong>taille du tour</strong> (m), la <strong>durée</strong> (min/s), l’<strong>intervalle de plots</strong> (m).</li>
+            <li>Cochez <strong>Fractionné</strong> pour une situation de type intervalles (efforts répétés avec récupération implicite dans la durée).</li>
+          </ul>
+          <h3>Les trois types en séance</h3>
+          <ul>
+            <li><strong>Normale</strong> — course chronométrée avec tours et plots, lancée en direct.</li>
+            <li><strong>Fractionnée</strong> — saisie des performances par série et par élève.</li>
+            <li><strong>Situation libre</strong> — distance totale libre, sans séries. Toujours disponible via le menu déroulant, même sans situation paramétrée.</li>
+          </ul>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>4. Gérer les séances</h2>
+          <p>En ouvrant une classe, vous accédez à la liste de ses séances (triées par date). Le bouton <strong>+</strong> crée une séance en renseignant un <strong>nom</strong> et une <strong>date</strong>.</p>
+          <p>Dans une séance :</p>
+          <ul>
+            <li><strong>Renommer</strong> et <strong>Supprimer</strong> modifient ou effacent la séance.</li>
+            <li><strong>Gérer absences / dispenses</strong> ouvre la liste des élèves pour marquer un statut.</li>
+            <li>La <strong>distance totale parcourue</strong> et le bouton <strong>Bilan de la séance</strong> sont affichés en haut.</li>
+            <li>Ajoutez des situations via le menu déroulant puis <strong>Ajouter une situation</strong>.</li>
+            <li>Réordonnez les situations avec les flèches ▲ ▼ à gauche de chaque case.</li>
+          </ul>
+          <p>Le <strong>Bilan de la classe</strong>, en bas de la liste des séances, regroupe toutes les séances de la classe.</p>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>5. Situation normale — suivi en direct</h2>
+          <p>Pour une situation normale :</p>
+          <ol>
+            <li>Indiquez le nombre de <strong>Séries</strong> si besoin.</li>
+            <li>Cliquez sur <strong>Lancer la situation</strong> (ou <strong>Lancer la série suivante</strong>).</li>
+            <li>Sélectionnez les élèves participants (cases filles / garçons, filtres par sexe).</li>
+            <li>La page <strong>live</strong> affiche le chronomètre, les cartes élèves et les distances en temps réel.</li>
+            <li>Utilisez <strong>+</strong> / <strong>−</strong> pour les tours et plots, ou saisissez la distance manuellement.</li>
+            <li><strong>Terminer</strong> enregistre les résultats ; <strong>Retour</strong> quitte sans terminer (confirmation demandée).</li>
+          </ol>
+          <p>Quand toutes les séries sont terminées, le bouton orange <strong>↻</strong> remet la situation à zéro.</p>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>6. Situation fractionnée — performances</h2>
+          <p>Pour une situation fractionnée :</p>
+          <ol>
+            <li>Renseignez <strong>Répétitions</strong> et <strong>Séries</strong>.</li>
+            <li>Cliquez sur <strong>Remplir les performances</strong>.</li>
+            <li>Choisissez le mode <strong>Vitesse</strong> (km/h) ou <strong>Distance</strong> (m) par série.</li>
+            <li>Saisissez les valeurs pour chaque élève et chaque série ; distance et vitesse sont calculées automatiquement.</li>
+            <li>Si des données existent déjà, changer de mode demande une confirmation (les données seront effacées).</li>
+          </ol>
+          <div class="tutorial-tip"><strong>Astuce :</strong> la VMA de l’élève permet d’afficher le % VMA à côté de la vitesse calculée.</div>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>7. Situation libre</h2>
+          <p>La <strong>Situation libre</strong> ne comporte pas de séries ni de chronomètre. Cliquez sur <strong>Remplir les performances</strong> pour saisir, par élève, la <strong>distance totale parcourue</strong> (en mètres). Les noms sont colorés selon le sexe (filles en vert, garçons en bleu).</p>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>8. Absences, dispenses et oubli d’affaires</h2>
+          <p>Via <strong>Gérer absences / dispenses</strong>, attribuez à chaque élève un statut :</p>
+          <ul>
+            <li><strong>D</strong> — Dispensé (vert)</li>
+            <li><strong>A</strong> — Absent (rouge)</li>
+            <li><strong>AFF</strong> — Oubli d’affaires (orange)</li>
+          </ul>
+          <p>Un élève dispensé ou en oubli d’affaires qui a tout de même couru verra ses données apparaître dans le bilan, avec le statut indiqué à côté du total.</p>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>9. Bilans et exports</h2>
+          <p><strong>Bilan de la séance</strong> : tableau par élève et par situation, avec distances, vitesses, totaux, moyennes et ligne de totaux. Les valeurs peuvent être corrigées manuellement pour les situations normales.</p>
+          <p>Depuis le bilan, exportez en <strong>CSV</strong> ou <strong>PDF</strong>.</p>
+          <p><strong>Bilan de la classe</strong> : synthèse de toutes les séances de la classe, avec les distances cumulées par élève.</p>
+        </section>
+
+        <section class="tutorial-section">
+          <h2>10. Paramètres et sauvegarde</h2>
+          <p>Le bouton <strong>⚙</strong> ouvre les paramètres :</p>
+          <ul>
+            <li><strong>Enregistrer les données</strong> — exporte une sauvegarde JSON de toute l’application.</li>
+            <li><strong>Importer des données</strong> — restaure une sauvegarde.</li>
+            <li><strong>Remettre à zéro</strong> — efface toutes les données (action irréversible, confirmation demandée).</li>
+          </ul>
+          <p>Les données sont aussi enregistrées automatiquement dans le navigateur (stockage local).</p>
+        </section>
+
       </div>`;
     bindActions(app);
   }
@@ -2211,18 +3123,24 @@
 
     const sortIcon = (col) => sortState.column === col ? (sortState.asc ? '▲' : '▼') : '⇅';
 
-    const rows = students.map(st => `
+    const rows = students.map(st => {
+      const vmaVal = getStudentVma(st);
+      const vmaLabel = vmaVal != null ? vmaVal.toFixed(1) + ' km/h' : '—';
+      return `
       <tr>
         <td>${escapeHtml(st.lastName)}</td>
         <td>${escapeHtml(st.firstName)}</td>
         <td>${escapeHtml(st.gender || '')}</td>
+        <td>${vmaLabel}</td>
         <td class="actions-cell">
           ${avatarHtml(st)}
           <button class="btn-icon" data-action="edit-student" data-id="${st.id}" title="Modifier">✏️</button>
           <button class="btn-icon" data-action="photo-student" data-id="${st.id}" title="Photo">📷</button>
-          <button class="btn-icon" data-action="delete-student" data-id="${st.id}" title="Supprimer">✕</button>
+          <button class="btn-icon btn-icon-danger" data-action="delete-photo-student" data-id="${st.id}" title="Supprimer la photo">🗑</button>
+          <button class="btn-icon" data-action="delete-student" data-id="${st.id}" title="Supprimer l'élève">✕</button>
         </td>
-      </tr>`).join('');
+      </tr>`;
+    }).join('');
 
     app.innerHTML = `
       <div class="card" style="margin-bottom:1rem">
@@ -2242,9 +3160,10 @@
             <th data-sort="lastName">Nom <span class="sort-icon">${sortIcon('lastName')}</span></th>
             <th data-sort="firstName">Prénom <span class="sort-icon">${sortIcon('firstName')}</span></th>
             <th data-sort="gender">Sexe <span class="sort-icon">${sortIcon('gender')}</span></th>
+            <th data-sort="vma">VMA <span class="sort-icon">${sortIcon('vma')}</span></th>
             <th>Actions</th>
           </tr></thead>
-          <tbody>${rows || '<tr><td colspan="4" class="empty-state">Aucun élève</td></tr>'}</tbody>
+          <tbody>${rows || '<tr><td colspan="5" class="empty-state">Aucun élève</td></tr>'}</tbody>
         </table>
       </div>
       <div class="card" style="margin-top:1rem" id="add-student-form" hidden>
@@ -2255,6 +3174,8 @@
           <div class="form-group"><label>Sexe</label>
             <select id="st-gender"><option value="">—</option><option value="M">M</option><option value="F">F</option></select>
           </div>
+          <div class="form-group"><label>VMA (km/h)</label>
+            <input id="st-vma" type="text" inputmode="decimal" placeholder="Optionnel"></div>
         </div>
         <button class="btn btn-primary btn-sm" data-action="save-new-student">Enregistrer</button>
       </div>`;
@@ -2316,6 +3237,10 @@
       <div class="card">
         <div class="form-group"><label>Nom de la situation</label>
           <input type="text" id="sit-name" value="${escapeHtml(sit.name)}"></div>
+        <label class="form-check-label">
+          <input type="checkbox" id="sit-fractionne" ${sit.fractionne ? 'checked' : ''}>
+          Fractionné
+        </label>
         <div class="form-group"><label>Taille du tour (m)</label>
           <input type="text" id="sit-lap" inputmode="numeric" pattern="[0-9]*" value="${sit.lapSize || ''}"></div>
         <div class="form-row">
@@ -2355,18 +3280,21 @@
   function renderClassSessions(app, classId) {
     const cls = getClass(classId);
     if (!cls) { goHome(); return; }
-    setHeader(cls.name, 'Séances');
+    setHeader(cls.name);
     const sessions = getClassSessions(classId);
-    const items = sessions.map(s =>
-      `<button class="grid-item-btn" data-action="open-session" data-id="${s.id}">${escapeHtml(s.name)}</button>`
-    ).join('');
+    const items = sessions.map(s => {
+      const dateLabel = s.date ? `<span class="grid-item-session-date">${formatSessionDateDisplay(s.date)}</span>` : '';
+      return `<button class="grid-item-btn grid-item-session" data-action="open-session" data-id="${s.id}"><span class="grid-item-session-name">${escapeHtml(s.name)}</span>${dateLabel}</button>`;
+    }).join('');
     app.innerHTML = `
-      <div class="toolbar" style="margin-bottom:1rem">
-        <button class="btn btn-primary" data-action="open-class-bilan">Bilan de la classe</button>
-      </div>
-      <div class="grid-classes" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))">
-        ${items}
-        <button class="grid-item-btn add-btn" data-action="add-session" data-class-id="${classId}">+</button>
+      <div class="class-sessions-page">
+        <div class="grid-classes" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))">
+          ${items}
+          <button class="grid-item-btn add-btn" data-action="add-session" data-class-id="${classId}">+</button>
+        </div>
+        <div class="class-bilan-footer">
+          <button class="btn btn-primary class-bilan-btn" data-action="open-class-bilan">Bilan de la classe</button>
+        </div>
       </div>`;
     bindActions(app, { classId });
   }
@@ -2376,36 +3304,77 @@
     const session = getSession(sessionId);
     if (!session) { goBack(); return; }
     const cls = getClass(session.classId);
-    setHeader(session.name, cls?.name || '');
+    setHeader(cls?.name || '');
 
     const sitBlocks = (session.situations || []).map((ss, idx) => {
       const tpl = getSituation(ss.templateId);
-      const completed = (ss.series || []).filter(s => s.completed);
+      const isLibre = isLibreSituation(ss);
+      const isFrac = !isLibre && isFractionneSituation(tpl);
       const seriesCount = getSeriesCount(ss);
-      const completedCount = completed.length;
-      const allDone = completedCount >= seriesCount;
-      const isNextSeries = seriesCount > 1 && completedCount > 0 && !allDone;
-      const launchLabel = isNextSeries ? 'Lancer la série suivante' : 'Lancer la situation';
-      const launchBtn = allDone ? '' : `<button class="btn btn-success btn-sm" data-action="launch-situation" data-idx="${idx}">${launchLabel}</button>`;
-      const statusBtns = allDone
-        ? `<button class="btn btn-secondary btn-sm" data-action="reset-situation" data-idx="${idx}">Remettre à zéro</button>`
-        : '';
+      const repetitions = getRepetitions(ss);
+      const blockName = getSituationBlockName(ss, tpl);
+
+      let statusLine = '';
+      let actionBtn = '';
+      let resetBtn = '';
+      let seriesControls = '';
+
+      if (isLibre) {
+        const done = !!ss.librePerf?.completed;
+        actionBtn = done
+          ? `<button class="btn btn-success btn-sm" data-action="fill-libre-perf" data-idx="${idx}">Modifier les performances</button>`
+          : `<button class="btn btn-success btn-sm" data-action="fill-libre-perf" data-idx="${idx}">Remplir les performances</button>`;
+        resetBtn = done ? `<button class="btn-icon btn-icon-reset" data-action="reset-situation" data-idx="${idx}" title="Remettre à zéro">↻</button>` : '';
+      } else if (isFrac) {
+        const done = !!ss.fractionnePerf?.completed;
+        actionBtn = done
+          ? `<button class="btn btn-success btn-sm" data-action="fill-fractionne-perf" data-idx="${idx}">Modifier les performances</button>`
+          : `<button class="btn btn-success btn-sm" data-action="fill-fractionne-perf" data-idx="${idx}">Remplir les performances</button>`;
+        resetBtn = done ? `<button class="btn-icon btn-icon-reset" data-action="reset-situation" data-idx="${idx}" title="Remettre à zéro">↻</button>` : '';
+        seriesControls = `
+          <label class="series-label">Répétitions :
+            <input type="text" inputmode="numeric" data-action="repetitions-count" data-idx="${idx}" value="${repetitions}">
+          </label>
+          <label class="series-label">Séries :
+            <input type="text" inputmode="numeric" data-action="series-count" data-idx="${idx}" value="${ss.seriesCount || 1}">
+          </label>`;
+      } else {
+        const completed = (ss.series || []).filter(s => s.completed);
+        const completedCount = completed.length;
+        const allDone = completedCount >= seriesCount;
+        const isNextSeries = seriesCount > 1 && completedCount > 0 && !allDone;
+        const launchLabel = isNextSeries ? 'Lancer la série suivante' : 'Lancer la situation';
+        actionBtn = allDone ? '' : `<button class="btn btn-success btn-sm" data-action="launch-situation" data-idx="${idx}">${launchLabel}</button>`;
+        statusLine = completedCount ? `<span class="situation-status">${completedCount} série(s) terminée(s) sur ${seriesCount}</span>` : '';
+        resetBtn = allDone ? `<button class="btn-icon btn-icon-reset" data-action="reset-situation" data-idx="${idx}" title="Remettre à zéro">↻</button>` : '';
+        seriesControls = `<label class="series-label">Séries :
+          <input type="text" inputmode="numeric" data-action="series-count" data-idx="${idx}" value="${ss.seriesCount || 1}">
+        </label>`;
+      }
+
+      const typeBadge = isFrac ? ' <small style="opacity:.7">(Fractionné)</small>' : '';
+      const typeClass = isLibre ? 'situation-block--libre' : isFrac ? 'situation-block--fractionne' : 'situation-block--normal';
+
       return `
-        <div class="situation-block" draggable="true" data-drag-idx="${idx}">
-          <div class="situation-header">
-            <h3>Situation ${idx + 1} — ${escapeHtml(tpl?.name || 'Inconnue')}</h3>
-            <div class="situation-controls">
+        <div class="situation-block ${typeClass}" draggable="true" data-drag-idx="${idx}">
+          <div class="situation-title">
+            <h3>Situation ${idx + 1} — ${escapeHtml(blockName)}${typeBadge}</h3>
+          </div>
+          <div class="situation-toolbar">
+            <div class="situation-toolbar-left">
               <button class="btn-icon" data-action="move-up" data-idx="${idx}" title="Monter">▲</button>
               <button class="btn-icon" data-action="move-down" data-idx="${idx}" title="Descendre">▼</button>
-              <label style="font-size:.85rem;color:var(--text-muted)">Séries :
-                <input type="text" inputmode="numeric" style="width:50px;display:inline" data-action="series-count" data-idx="${idx}" value="${ss.seriesCount || 1}">
-              </label>
-              ${launchBtn}
-              <button class="btn-icon" data-action="remove-situation" data-idx="${idx}" title="Supprimer">✕</button>
+            </div>
+            <div class="situation-toolbar-center">
+              ${statusLine}
+              ${seriesControls}
+              ${actionBtn}
+            </div>
+            <div class="situation-toolbar-right">
+              ${resetBtn}
+              <button class="btn-icon btn-icon-danger" data-action="remove-situation" data-idx="${idx}" title="Supprimer">✕</button>
             </div>
           </div>
-          ${completedCount ? `<p class="section-subtitle">${completedCount} série(s) terminée(s) sur ${seriesCount}</p>` : ''}
-          ${statusBtns}
         </div>`;
     }).join('');
 
@@ -2417,27 +3386,35 @@
 
     app.innerHTML = `
       <div class="session-header-bar">
-        <h2>${escapeHtml(session.name)}</h2>
-        <button class="btn btn-secondary btn-sm" data-action="rename-session">Renommer</button>
-        <button class="btn btn-danger btn-sm" data-action="delete-session">Supprimer</button>
-        <button class="btn btn-secondary btn-sm" data-action="manage-absences">Gérer absences / dispenses</button>
+        <div class="session-header-title">
+          <h2>${escapeHtml(session.name)}</h2>
+          ${session.date ? `<span class="session-header-date">${formatSessionDateDisplay(session.date)}</span>` : ''}
+        </div>
+        <div class="session-header-center">
+          <button class="btn btn-secondary btn-sm" data-action="manage-absences">Gérer absences / dispenses</button>
+        </div>
+        <div class="session-header-actions">
+          <button class="btn btn-secondary btn-sm" data-action="rename-session">Renommer</button>
+          <button class="btn btn-danger btn-sm" data-action="delete-session">Supprimer</button>
+        </div>
       </div>
       <div class="session-stats">
         <div class="stat-item">
           <label>Distance totale parcourue</label>
           <span>${grandTotal} m</span>
         </div>
+        <div class="session-stats-center">
+          <button class="btn btn-secondary btn-sm" data-action="open-bilan">Bilan de la séance</button>
+        </div>
       </div>
-      <div class="toolbar">
-        ${appData.situations.length ? `
-          <select id="add-situation-select" style="max-width:280px">
-            <option value="">— Choisir une situation —</option>${sitOptions}
-          </select>
-          <button class="btn btn-primary btn-sm" data-action="add-situation-to-session">Ajouter une situation</button>
-        ` : `<div class="alert alert-error">Aucune situation paramétrée. Allez dans « Paramétrer les situations ».</div>`}
-        <button class="btn btn-secondary btn-sm" data-action="open-bilan">Bilan de la séance</button>
-        <button class="btn btn-secondary btn-sm" data-action="export-csv">Export CSV</button>
-        <button class="btn btn-secondary btn-sm" data-action="export-pdf">Export PDF</button>
+      <div class="session-add-bar">
+        <select id="add-situation-select" style="max-width:280px">
+          <option value="">— Choisir une situation —</option>
+          <option value="${LIBRE_SITUATION_VALUE}">Situation Libre</option>
+          ${sitOptions}
+        </select>
+        <button class="btn btn-primary btn-sm" data-action="add-situation-to-session">Ajouter une situation</button>
+        ${!appData.situations.length ? `<span class="section-subtitle" style="margin:0">Aucune situation paramétrée — la situation libre reste disponible.</span>` : ''}
       </div>
       ${sitBlocks || '<div class="empty-state">Ajoutez une situation pour commencer.</div>'}`;
 
@@ -2787,16 +3764,254 @@
     }, 250);
   }
 
+  /* ----- PERFORMANCES FRACTIONNÉ ----- */
+  function renderFractionnePerf(app, params) {
+    const session = getSession(params.sessionId);
+    const cls = getClass(session?.classId);
+    const ss = session?.situations?.[params.sitIdx];
+    const tpl = getSituation(ss?.templateId);
+    if (!session || !cls || !ss || !tpl || !isFractionneSituation(tpl)) { goBack(); return; }
+    if (!getSituationDurationSec(tpl)) {
+      showAlert('Indiquez une durée pour cette situation fractionnée.');
+      goBack();
+      return;
+    }
+
+    const perf = ensureFractionnePerf(ss);
+    const seriesCount = getSeriesCount(ss);
+    const repetitions = getRepetitions(ss);
+    const durationSec = getSituationDurationSec(tpl);
+    const inputMode = perf.inputMode || 'speed';
+
+    setHeader(tpl.name, `Fractionné — ${session.name}`);
+
+    const students = [...(cls.students || [])].sort((a, b) =>
+      a.lastName.localeCompare(b.lastName, 'fr') || a.firstName.localeCompare(b.firstName, 'fr')
+    );
+
+    const seriesHeaders = Array.from({ length: seriesCount }, (_, i) =>
+      `<th>Série ${i + 1}</th>`
+    ).join('');
+
+    const rows = students.map(st => {
+      const stored = perf.values[st.id]?.series || [];
+      const nameClass = studentNameClass(st);
+
+      const seriesCells = Array.from({ length: seriesCount }, (_, i) => {
+        const raw = stored[i];
+        const value = raw != null && raw !== '' ? raw : '';
+        const metrics = getFractionneSeriesMetrics(parseFloat(value) || 0, inputMode, repetitions, durationSec, st);
+
+        return `<td class="bilan-cell">
+          <input type="text" inputmode="decimal" class="frac-perf-input" data-frac-student="${st.id}" data-frac-series="${i}" value="${value !== '' ? value : ''}" placeholder="—">
+          <span class="frac-cell-meta" data-frac-meta="${st.id}-${i}">${value ? `${metrics.seriesDist} m<br>${formatSpeedWithVmaFromKmh(metrics.speedKmh, st)}` : ''}</span>
+        </td>`;
+      }).join('');
+
+      let totalDist = 0;
+      let totalTimeSec = 0;
+      for (let i = 0; i < seriesCount; i++) {
+        const value = parseFloat(stored[i]) || 0;
+        const m = getFractionneSeriesMetrics(value, inputMode, repetitions, durationSec, st);
+        totalDist += m.seriesDist;
+        if (value > 0) totalTimeSec += repetitions * durationSec;
+      }
+      const totalSpeed = totalTimeSec > 0 ? calcSpeedKmhValue(totalDist, totalTimeSec) : null;
+
+      return `<tr>
+        <td class="${nameClass}">${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}</td>
+        ${seriesCells}
+        <td class="bilan-cell frac-total-cell" data-frac-total="${st.id}">
+          ${totalDist > 0 ? `${totalDist} m` : '—'}
+          ${totalDist > 0 ? `<span class="frac-cell-meta">${formatSpeedWithVmaFromKmh(totalSpeed, st)}</span>` : ''}
+        </td>
+      </tr>`;
+    }).join('');
+
+    app.innerHTML = `
+      <div class="frac-mode-toggle">
+        <label><input type="checkbox" id="frac-mode-speed" ${inputMode === 'speed' ? 'checked' : ''}> Vitesse</label>
+        <label><input type="checkbox" id="frac-mode-distance" ${inputMode === 'distance' ? 'checked' : ''}> Distance</label>
+      </div>
+      <p class="section-subtitle" style="margin-bottom:.85rem">
+        Saisissez la ${inputMode === 'speed' ? 'vitesse moyenne (km/h)' : 'distance moyenne (m)'} par série.
+        Durée d'un effort : ${formatDuration(tpl.durationMinutes, tpl.durationSeconds)} — ${repetitions} répétition(s) par série.
+      </p>
+      <div class="table-wrap">
+        <table class="data-table bilan-table" id="frac-perf-table">
+          <thead><tr>
+            <th>Élève</th>${seriesHeaders}<th>Total</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+
+    const speedCb = document.getElementById('frac-mode-speed');
+    const distCb = document.getElementById('frac-mode-distance');
+
+    const applyInputMode = (mode) => {
+      perf.inputMode = mode;
+      perf.values = {};
+      perf.completed = false;
+      saveData();
+      render();
+    };
+
+    const requestInputMode = (mode) => {
+      if (perf.inputMode === mode) return;
+      const targetLabel = mode === 'speed' ? 'Vitesse' : 'Distance';
+      const revertCheckboxes = () => {
+        speedCb.checked = mode === 'speed' ? false : true;
+        distCb.checked = mode === 'distance' ? false : true;
+      };
+      if (hasFractionnePerfData(perf)) {
+        confirmAction(
+          `Des données sont déjà renseignées. Passer en mode ${targetLabel} effacera toutes les performances saisies. Voulez-vous continuer ?`,
+          () => applyInputMode(mode),
+          revertCheckboxes
+        );
+      } else {
+        applyInputMode(mode);
+      }
+    };
+
+    speedCb.onchange = () => {
+      if (speedCb.checked) {
+        distCb.checked = false;
+        requestInputMode('speed');
+      } else if (!distCb.checked) {
+        speedCb.checked = true;
+      }
+    };
+    distCb.onchange = () => {
+      if (distCb.checked) {
+        speedCb.checked = false;
+        requestInputMode('distance');
+      } else if (!speedCb.checked) {
+        distCb.checked = true;
+      }
+    };
+
+    app.querySelectorAll('.frac-perf-input').forEach(input => {
+      input.oninput = () => {
+        input.value = input.value.replace(/[^\d.,]/g, '').replace(',', '.');
+      };
+      input.onchange = () => {
+        const sid = input.dataset.fracStudent;
+        const seriesIdx = parseInt(input.dataset.fracSeries);
+        const raw = input.value.trim();
+        const num = raw ? parseFloat(raw.replace(',', '.')) : 0;
+
+        if (!perf.values[sid]) perf.values[sid] = { series: [] };
+        if (num > 0) perf.values[sid].series[seriesIdx] = num;
+        else delete perf.values[sid].series[seriesIdx];
+
+        if (!perf.values[sid].series.some(v => v > 0)) delete perf.values[sid];
+        perf.completed = Object.keys(perf.values).some(id =>
+          (perf.values[id].series || []).some(v => v > 0)
+        );
+
+        const metrics = getFractionneSeriesMetrics(num, perf.inputMode, repetitions, durationSec, cls.students.find(s => s.id === sid));
+        const metaEl = app.querySelector(`[data-frac-meta="${sid}-${seriesIdx}"]`);
+        if (metaEl) {
+          metaEl.innerHTML = num > 0
+            ? `${metrics.seriesDist} m<br>${formatSpeedWithVmaFromKmh(metrics.speedKmh, cls.students.find(s => s.id === sid))}`
+            : '';
+        }
+
+        updateFractionneRowTotal(app, ss, tpl, sid, cls.students.find(s => s.id === sid));
+        saveData();
+      };
+    });
+  }
+
+  function updateFractionneRowTotal(app, ss, tpl, studentId, student) {
+    const perf = ss.fractionnePerf;
+    if (!perf) return;
+    const seriesCount = getSeriesCount(ss);
+    const repetitions = getRepetitions(ss);
+    const durationSec = getSituationDurationSec(tpl);
+    const mode = perf.inputMode || 'speed';
+    const stored = perf.values[studentId]?.series || [];
+
+    let totalDist = 0;
+    let totalTimeSec = 0;
+    for (let i = 0; i < seriesCount; i++) {
+      const value = parseFloat(stored[i]) || 0;
+      const m = getFractionneSeriesMetrics(value, mode, repetitions, durationSec, student);
+      totalDist += m.seriesDist;
+      if (value > 0) totalTimeSec += repetitions * durationSec;
+    }
+    const totalSpeed = totalTimeSec > 0 ? calcSpeedKmhValue(totalDist, totalTimeSec) : null;
+    const cell = app.querySelector(`[data-frac-total="${studentId}"]`);
+    if (cell) {
+      cell.innerHTML = totalDist > 0
+        ? `${totalDist} m<span class="frac-cell-meta">${formatSpeedWithVmaFromKmh(totalSpeed, student)}</span>`
+        : '—';
+    }
+  }
+
+  /* ----- PERFORMANCES SITUATION LIBRE ----- */
+  function renderLibrePerf(app, params) {
+    const session = getSession(params.sessionId);
+    const cls = getClass(session?.classId);
+    const ss = session?.situations?.[params.sitIdx];
+    if (!session || !cls || !ss || !isLibreSituation(ss)) { goBack(); return; }
+
+    const perf = ensureLibrePerf(ss);
+    setHeader('Situation Libre', session.name);
+
+    const students = [...(cls.students || [])].sort((a, b) =>
+      a.lastName.localeCompare(b.lastName, 'fr') || a.firstName.localeCompare(b.firstName, 'fr')
+    );
+
+    const rows = students.map(st => {
+      const dist = perf.values[st.id];
+      const nameClass = studentNameClass(st);
+      return `<tr>
+        <td class="${nameClass}">${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}</td>
+        <td class="bilan-cell">
+          <input type="text" inputmode="numeric" class="libre-perf-input" data-libre-student="${st.id}" value="${dist != null ? dist : ''}" placeholder="—">
+        </td>
+      </tr>`;
+    }).join('');
+
+    app.innerHTML = `
+      <p class="section-subtitle" style="margin-bottom:.85rem">Saisissez la distance totale parcourue par chaque élève.</p>
+      <div class="table-wrap">
+        <table class="data-table bilan-table libre-perf-table">
+          <thead><tr><th>Élève</th><th>Distance (m)</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+
+    app.querySelectorAll('.libre-perf-input').forEach(input => {
+      input.oninput = () => { input.value = input.value.replace(/\D/g, ''); };
+      input.onchange = () => {
+        const sid = input.dataset.libreStudent;
+        const val = Math.max(0, parseInt(input.value) || 0);
+        input.value = val || '';
+        if (val > 0) perf.values[sid] = val;
+        else delete perf.values[sid];
+        perf.completed = Object.values(perf.values).some(v => v > 0);
+        saveData();
+      };
+    });
+  }
+
   /* ----- BILAN SÉANCE ----- */
   function renderBilanTableBody(session, cls, editable) {
     const situations = session.situations || [];
     const presentStudents = [];
 
-    const rows = (cls.students || []).map(st => {
+    const rows = applySessionBilanSort(cls.students, session).map(st => {
       const att = getStudentAttendance(session, st.id);
-      const rowClass = att === 'absent' ? 'row-absent' : att === 'dispensed' ? 'row-dispensed' : '';
+      const rowClass = att === 'absent' ? 'row-absent' : att === 'dispensed' ? 'row-dispensed' : att === 'aff' ? 'row-aff' : '';
+      const dists = situations.map((_, i) => getStudentDistInSituation(session, st.id, i));
+      const total = dists.reduce((a, b) => a + b, 0);
+      const showData = !att || (isAttendanceWithBilanData(att) && total > 0);
 
-      if (att) {
+      if (!showData) {
         const emptyCells = situations.map(() => '<td class="bilan-cell">—</td>').join('');
         return `<tr class="${rowClass}">
           <td>${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}</td>
@@ -2805,27 +4020,31 @@
         </tr>`;
       }
 
-      const dists = situations.map((_, i) => getStudentDistInSituation(session, st.id, i));
-      const total = dists.reduce((a, b) => a + b, 0);
-      presentStudents.push({ id: st.id, dists, total });
+      if (!att || (isAttendanceWithBilanData(att) && total > 0)) {
+        presentStudents.push({ id: st.id, dists, total });
+      }
 
       const cells = dists.map((d, i) => {
-        const tpl = getSituation(situations[i].templateId);
-        const dur = getSituationDurationSec(tpl);
-        const speed = calcSpeedKmh(d, dur);
-        if (editable) {
+        const ss = situations[i];
+        const tpl = getSituation(ss.templateId);
+        const dur = getSituationSpeedDuration(session, i);
+        const speed = formatSpeedDisplay(d, dur, st);
+        const isFrac = isFractionneSituation(tpl);
+        const isLibre = isLibreSituation(ss);
+        if (editable && !isFrac && !isLibre) {
           return `<td class="bilan-cell">
             <input type="number" min="0" class="bilan-input" data-student="${st.id}" data-sit="${i}" value="${d}">
             <span class="cell-speed" data-speed="${st.id}-${i}">${speed}</span>
           </td>`;
         }
-        return `<td class="bilan-cell">${d} m<span class="cell-speed">${speed}</span></td>`;
+        const speedHtml = isLibre ? '' : `<span class="cell-speed">${speed}</span>`;
+        return `<td class="bilan-cell">${d} m${speedHtml}</td>`;
       }).join('');
 
-      return `<tr>
+      return `<tr class="${rowClass}">
         <td>${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}</td>
         ${cells}
-        <td class="total-cell" data-total="${st.id}">${total} m</td>
+        <td class="total-cell" data-total="${st.id}">${formatBilanTotalCell(total, att)}</td>
       </tr>`;
     }).join('');
 
@@ -2842,8 +4061,7 @@
     const avgTotal = totalVals.length ? Math.round(totalVals.reduce((a, b) => a + b, 0) / totalVals.length) : 0;
 
     const avgCells = sitAvgs.map((avg, i) => {
-      const tpl = getSituation(situations[i]?.templateId);
-      const speed = calcSpeedKmh(avg, getSituationDurationSec(tpl));
+      const speed = calcSpeedKmh(avg, getSituationSpeedDuration(session, i));
       return `<td class="bilan-cell">${avg} m<span class="cell-speed">${speed}</span></td>`;
     }).join('');
 
@@ -2873,7 +4091,11 @@
     const situations = session.situations || [];
     const headers = situations.map((ss, i) => {
       const tpl = getSituation(ss.templateId);
-      return `<th>${escapeHtml(tpl?.name || 'Sit. ' + (i+1))}<br><small>${tpl ? formatDuration(tpl.durationMinutes, tpl.durationSeconds) : ''}</small></th>`;
+      const name = getSituationBlockName(ss, tpl);
+      const duration = tpl && !isLibreSituation(ss)
+        ? formatDuration(tpl.durationMinutes, tpl.durationSeconds)
+        : '';
+      return `<th class="${bilanSortHeaderClass(sessionBilanSort, String(i))}" data-bilan-sort="${i}">${escapeHtml(name)}${duration ? `<br><small>${escapeHtml(duration)}</small>` : ''}<span class="bilan-sort-icon">${bilanSortIcon(sessionBilanSort, i)}</span></th>`;
     }).join('');
 
     const { rows } = renderBilanTableBody(session, cls, true);
@@ -2886,11 +4108,15 @@
       <div class="table-wrap">
         <table class="data-table bilan-table">
           <thead><tr>
-            <th>Élève</th>${headers}<th>Total parcouru</th>
+            <th class="${bilanSortHeaderClass(sessionBilanSort, 'name')}" data-bilan-sort="name">Élève<span class="bilan-sort-icon">${bilanSortIcon(sessionBilanSort, 'name')}</span></th>
+            ${headers}
+            <th class="${bilanSortHeaderClass(sessionBilanSort, 'total')}" data-bilan-sort="total">Total parcouru<span class="bilan-sort-icon">${bilanSortIcon(sessionBilanSort, 'total')}</span></th>
           </tr></thead>
           <tbody>${rows}</tbody>
         </table>
       </div>`;
+
+    setupBilanSortHeaders(app, sessionBilanSort, () => renderBilan(app, sessionId));
 
     app.querySelectorAll('.bilan-input').forEach(input => {
       input.onchange = () => {
@@ -2914,24 +4140,27 @@
     setHeader('Bilan — ' + cls.name, 'Toutes les séances');
 
     const sessions = getClassSessions(classId);
-    const sessionHeaders = sessions.map(s =>
-      `<th>${escapeHtml(s.name)}</th>`
-    ).join('');
+    const sessionHeaders = sessions.map((s, i) => {
+      const dateLabel = s.date ? `<br><small>${formatSessionDateDisplay(s.date)}</small>` : '';
+      return `<th class="${bilanSortHeaderClass(classBilanSort, String(i))}" data-bilan-sort="${i}">${escapeHtml(s.name)}${dateLabel}<span class="bilan-sort-icon">${bilanSortIcon(classBilanSort, i)}</span></th>`;
+    }).join('');
 
     let classGrandTotal = 0;
-    const rows = (cls.students || []).map(st => {
+    const rows = applyClassBilanSort(cls.students, sessions).map(st => {
       const cells = sessions.map(session => {
         const att = getStudentAttendance(session, st.id);
-        if (att === 'dispensed') return '<td class="bilan-cell"><span class="status-d">D</span></td>';
-        if (att === 'absent') return '<td class="bilan-cell"><span class="status-a">A</span></td>';
         const total = getSessionStudentTotal(session, st.id);
+        if (att === 'absent') return '<td class="bilan-cell"><span class="status-a">A</span></td>';
+        if (isAttendanceWithBilanData(att) && total > 0) {
+          classGrandTotal += total;
+          return `<td class="bilan-cell">${formatBilanTotalCell(total, att)}</td>`;
+        }
+        if (att === 'dispensed') return '<td class="bilan-cell"><span class="status-d">D</span></td>';
+        if (att === 'aff') return '<td class="bilan-cell"><span class="status-aff">AFF</span></td>';
         classGrandTotal += total;
         return `<td class="bilan-cell">${total > 0 ? total + ' m' : '—'}</td>`;
       }).join('');
-      const studentTotal = sessions.reduce((sum, session) => {
-        if (getStudentAttendance(session, st.id)) return sum;
-        return sum + getSessionStudentTotal(session, st.id);
-      }, 0);
+      const studentTotal = getClassBilanStudentTotal(sessions, st.id);
       return `<tr>
         <td>${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}</td>
         ${cells}
@@ -2949,11 +4178,14 @@
       <div class="table-wrap">
         <table class="data-table bilan-table">
           <thead><tr>
-            <th>Élève</th>${sessionHeaders}<th>Total</th>
+            <th class="${bilanSortHeaderClass(classBilanSort, 'name')}" data-bilan-sort="name">Élève<span class="bilan-sort-icon">${bilanSortIcon(classBilanSort, 'name')}</span></th>
+            ${sessionHeaders}
+            <th class="${bilanSortHeaderClass(classBilanSort, 'total')}" data-bilan-sort="total">Total<span class="bilan-sort-icon">${bilanSortIcon(classBilanSort, 'total')}</span></th>
           </tr></thead>
           <tbody>${rows}</tbody>
         </table>
       </div>`;
+    setupBilanSortHeaders(app, classBilanSort, () => renderClassBilan(app, classId));
     bindActions(app, { classId });
   }
 
@@ -2984,12 +4216,13 @@
       if (!inp) return;
       const val = parseInt(inp.value) || 0;
       total += val;
-      const tpl = getSituation(ss.templateId);
+      const st = cls.students.find(s => s.id === studentId);
       const speedEl = app.querySelector(`[data-speed="${studentId}-${i}"]`);
-      if (speedEl) speedEl.textContent = calcSpeedKmh(val, getSituationDurationSec(tpl));
+      if (speedEl) speedEl.innerHTML = formatSpeedDisplay(val, getSituationSpeedDuration(session, i), st);
     });
+    const att = getStudentAttendance(session, studentId);
     const cell = app.querySelector(`[data-total="${studentId}"]`);
-    if (cell) cell.textContent = total + ' m';
+    if (cell) cell.innerHTML = formatBilanTotalCell(total, att);
     refreshBilanFooter(app, session, cls);
   }
 
@@ -3034,12 +4267,14 @@
 
     const cards = sorted.map(st => {
       const att = getStudentAttendance(session, st.id);
-      const attClass = att === 'absent' ? ' attendance-absent' : att === 'dispensed' ? ' attendance-dispensed' : '';
+      const attClass = att === 'absent' ? ' attendance-absent' : att === 'dispensed' ? ' attendance-dispensed' : att === 'aff' ? ' attendance-aff' : '';
       const badge = att === 'dispensed'
         ? '<span class="select-badge status-d">D</span>'
         : att === 'absent'
           ? '<span class="select-badge status-a">A</span>'
-          : '';
+          : att === 'aff'
+            ? '<span class="select-badge status-aff">AFF</span>'
+            : '';
       return `
       <div class="student-select-card${participated.has(st.id) ? ' participated' : ''}${attClass}${selected.has(st.id) ? ' selected' : ''}" data-sid="${st.id}">
         ${badge}
@@ -3165,6 +4400,7 @@
     const nomIdx = header.findIndex(h => h === 'nom');
     const prenomIdx = header.findIndex(h => h === 'prenom');
     const sexeIdx = header.findIndex(h => h === 'sexe');
+    const vmaIdx = header.findIndex(h => h === 'vma');
     if (nomIdx < 0 || prenomIdx < 0) return { error: 'Colonnes Nom et Prénom requises.' };
     const students = [];
     const errors = [];
@@ -3174,10 +4410,15 @@
       const firstName = cols[prenomIdx];
       if (!lastName && !firstName) continue;
       if (!lastName || !firstName) { errors.push(`Ligne ${i + 1}: nom ou prénom manquant`); continue; }
-      students.push({
+      const student = {
         id: uid(), lastName, firstName,
         gender: sexeIdx >= 0 ? (cols[sexeIdx] || '') : ''
-      });
+      };
+      if (vmaIdx >= 0) {
+        const vma = parseVmaInput(cols[vmaIdx]);
+        if (vma != null) student.vma = vma;
+      }
+      students.push(student);
     }
     return { students, errors };
   }
@@ -3189,27 +4430,46 @@
     const headers = situations.map((ss, i) => {
       const tpl = getSituation(ss.templateId);
       return {
-        name: tpl?.name || `Situation ${i + 1}`,
-        duration: tpl ? formatDuration(tpl.durationMinutes, tpl.durationSeconds) : '',
-        durationSec: getSituationDurationSec(tpl)
+        name: getSituationBlockName(ss, tpl) || `Situation ${i + 1}`,
+        duration: tpl && !isLibreSituation(ss) ? formatDuration(tpl.durationMinutes, tpl.durationSeconds) : '',
+        durationSec: getSituationSpeedDuration(session, i)
       };
     });
 
-    const rows = (cls?.students || []).map(st => {
+    const rows = sortStudentsByName(cls?.students).map(st => {
       const att = getStudentAttendance(session, st.id);
-      if (att) {
-        return { name: `${st.lastName} ${st.firstName}`, dists: situations.map(() => ''), total: att === 'dispensed' ? 'D' : 'A', status: att };
-      }
       const dists = situations.map((_, i) => getStudentDistInSituation(session, st.id, i));
-      const distLabels = dists.map((d, i) => {
-        const speed = calcSpeedKmh(d, headers[i].durationSec);
-        return d > 0 ? `${d} m (${speed})` : '0';
-      });
       const total = dists.reduce((a, b) => a + b, 0);
-      return { name: `${st.lastName} ${st.firstName}`, dists, distLabels, total, status: null };
+      const showData = !att || (isAttendanceWithBilanData(att) && total > 0);
+
+      if (!showData) {
+        return {
+          name: `${st.lastName} ${st.firstName}`,
+          studentId: st.id,
+          dists: situations.map(() => ''),
+          distLabels: situations.map(() => ''),
+          total: getAttendanceExportCode(att),
+          totalLabel: formatAttendanceStatus(att).replace(/<[^>]+>/g, ''),
+          status: att
+        };
+      }
+
+      const distLabels = dists.map((d, i) => {
+        const speedText = formatSpeedDisplay(d, headers[i].durationSec, st).replace(/<[^>]+>/g, '');
+        return d > 0 ? `${d} m (${speedText})` : '0';
+      });
+      return {
+        name: `${st.lastName} ${st.firstName}`,
+        studentId: st.id,
+        dists,
+        distLabels,
+        total,
+        totalLabel: formatBilanTotalCell(total, att).replace(/<[^>]+>/g, ''),
+        status: att || null
+      };
     });
 
-    const present = rows.filter(r => !r.status);
+    const present = rows.filter(r => !r.status || (isAttendanceWithBilanData(r.status) && r.total > 0));
     const sitAvgs = headers.map((_, i) => {
       const vals = present.map(r => r.dists[i]).filter(v => v > 0);
       return vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
@@ -3219,7 +4479,7 @@
     const withTotals = present.filter(r => r.total > 0);
     const avgTotal = withTotals.length ? Math.round(withTotals.reduce((s, r) => s + r.total, 0) / withTotals.length) : 0;
 
-    return { cls, headers, rows, sitAvgs, sitTotals, avgTotal, grandTotal, date: new Date().toLocaleDateString('fr-FR') };
+    return { cls, headers, rows, sitAvgs, sitTotals, avgTotal, grandTotal, date: getSessionDateDisplay(session) };
   }
 
   function exportCSV(sessionId) {
@@ -3235,8 +4495,11 @@
       `Élève;${sitHeaders.join(';')};Total parcouru`
     ];
     rows.forEach(r => {
-      const cols = r.status ? headers.map(() => '') : (r.distLabels || r.dists);
-      lines.push(`"${r.name}";${cols.join(';')};${r.status ? r.total : r.total + ' m'}`);
+      const cols = (r.status && !(isAttendanceWithBilanData(r.status) && r.total > 0))
+        ? headers.map(() => '')
+        : (r.distLabels || r.dists);
+      const totalCol = r.totalLabel || (r.total + ' m');
+      lines.push(`"${r.name}";${cols.join(';')};${totalCol}`);
     });
     const avgCols = sitAvgs.map((a, i) => {
       const speed = calcSpeedKmh(a, headers[i].durationSec);
@@ -3259,14 +4522,17 @@
     const printArea = document.getElementById('print-area');
     const sitCols = headers.map(h => `<th>${escapeHtml(h.name)}<br><small>${escapeHtml(h.duration)}</small></th>`).join('');
     const bodyRows = rows.map(r => {
-      if (r.status) {
-        return `<tr><td>${escapeHtml(r.name)}</td>${headers.map(() => '<td>—</td>').join('')}<td><strong>${r.total}</strong></td></tr>`;
+      const showData = !r.status || (isAttendanceWithBilanData(r.status) && r.total > 0);
+      if (!showData) {
+        return `<tr><td>${escapeHtml(r.name)}</td>${headers.map(() => '<td>—</td>').join('')}<td><strong>${r.totalLabel || r.total}</strong></td></tr>`;
       }
+      const st = cls.students.find(s => s.id === r.studentId);
       const cells = r.dists.map((d, i) => {
-        const speed = calcSpeedKmh(d, headers[i].durationSec);
+        const speed = formatSpeedDisplay(d, headers[i].durationSec, st);
         return `<td>${d} m<br><small>${speed}</small></td>`;
       }).join('');
-      return `<tr><td>${escapeHtml(r.name)}</td>${cells}<td><strong>${r.total} m</strong></td></tr>`;
+      const totalLabel = r.totalLabel || `${r.total} m`;
+      return `<tr><td>${escapeHtml(r.name)}</td>${cells}<td><strong>${totalLabel}</strong></td></tr>`;
     }).join('');
     const avgCells = sitAvgs.map((a, i) => {
       const speed = calcSpeedKmh(a, headers[i].durationSec);
@@ -3313,12 +4579,13 @@
           </div>
           <button type="button" class="status-btn dispensed-btn${att === 'dispensed' ? ' active' : ''}" data-type="dispensed" title="Dispensé">✚</button>
           <button type="button" class="status-btn absent-btn${att === 'absent' ? ' active' : ''}" data-type="absent" title="Absent">A</button>
+          <button type="button" class="status-btn aff-btn${att === 'aff' ? ' active' : ''}" data-type="aff" title="Oubli d'affaires">AFF</button>
         </div>`;
     }).join('');
 
     showModal(`
       <h3>Absences / dispenses</h3>
-      <p class="section-subtitle">Croix verte = dispensé · A rouge = absent · Recliquez pour annuler.</p>
+      <p class="section-subtitle">Croix verte = dispensé · A rouge = absent · AFF orange = oubli d'affaires · Recliquez pour annuler.</p>
       <div class="attendance-list" id="attendance-list">${rows}</div>
       <div class="modal-actions">
         <button class="btn btn-primary" id="modal-ok">Enregistrer</button>
@@ -3330,29 +4597,15 @@
         const sid = row.dataset.sid;
         row.querySelector('.dispensed-btn').onclick = (e) => {
           e.stopPropagation();
-          const btn = row.querySelector('.dispensed-btn');
-          const absBtn = row.querySelector('.absent-btn');
-          if (btn.classList.contains('active')) {
-            btn.classList.remove('active');
-            delete session.attendance[sid];
-          } else {
-            btn.classList.add('active');
-            absBtn.classList.remove('active');
-            session.attendance[sid] = 'dispensed';
-          }
+          toggleAttendanceStatus(session, sid, 'dispensed', row);
         };
         row.querySelector('.absent-btn').onclick = (e) => {
           e.stopPropagation();
-          const btn = row.querySelector('.absent-btn');
-          const dispBtn = row.querySelector('.dispensed-btn');
-          if (btn.classList.contains('active')) {
-            btn.classList.remove('active');
-            delete session.attendance[sid];
-          } else {
-            btn.classList.add('active');
-            dispBtn.classList.remove('active');
-            session.attendance[sid] = 'absent';
-          }
+          toggleAttendanceStatus(session, sid, 'absent', row);
+        };
+        row.querySelector('.aff-btn').onclick = (e) => {
+          e.stopPropagation();
+          toggleAttendanceStatus(session, sid, 'aff', row);
         };
       });
       document.getElementById('modal-ok').onclick = () => {
@@ -3375,6 +4628,9 @@
             <option value="M" ${student.gender==='M'?'selected':''}>M</option>
             <option value="F" ${student.gender==='F'?'selected':''}>F</option>
           </select></div>
+        <div class="form-group"><label>VMA (km/h)</label>
+          <input id="edit-vma" type="text" inputmode="decimal" placeholder="Optionnel"
+            value="${getStudentVma(student) != null ? getStudentVma(student) : ''}"></div>
       </div>
       <div class="modal-actions">
         <button class="btn btn-secondary" id="modal-cancel">Annuler</button>
@@ -3386,6 +4642,11 @@
         student.lastName = document.getElementById('edit-last').value.trim() || student.lastName;
         student.firstName = document.getElementById('edit-first').value.trim() || student.firstName;
         student.gender = document.getElementById('edit-gender').value;
+        const vmaRaw = document.getElementById('edit-vma').value;
+        const vma = parseVmaInput(vmaRaw);
+        if (vmaRaw.trim() && vma == null) { showAlert('VMA invalide (nombre positif en km/h).'); return; }
+        if (vma != null) student.vma = vma;
+        else delete student.vma;
         saveData();
         closeModal();
         render();
@@ -3411,6 +4672,16 @@
       };
       inp.oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, ''); };
     });
+    app.querySelectorAll('[data-action="repetitions-count"]').forEach(inp => {
+      inp.onchange = () => {
+        const session = getSession(ctx.sessionId);
+        const idx = parseInt(inp.dataset.idx);
+        session.situations[idx].repetitions = Math.max(1, parseInt(inp.value.replace(/\D/g, '')) || 1);
+        inp.value = session.situations[idx].repetitions;
+        saveData();
+      };
+      inp.oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, ''); };
+    });
   }
 
   function handleAction(action, el, ctx) {
@@ -3421,6 +4692,8 @@
         navigate('config-classes'); break;
       case 'config-situations':
         navigate('config-situations'); break;
+      case 'open-tutorial':
+        navigate('tutorial'); break;
       case 'app-settings':
         navigate('app-settings'); break;
       case 'export-app-data':
@@ -3456,7 +4729,12 @@
         const last = document.getElementById('st-last').value.trim();
         const first = document.getElementById('st-first').value.trim();
         if (!last || !first) { showAlert('Nom et prénom requis.'); return; }
-        cls.students.push({ id: uid(), lastName: last, firstName: first, gender: document.getElementById('st-gender').value });
+        const student = { id: uid(), lastName: last, firstName: first, gender: document.getElementById('st-gender').value };
+        const vmaRaw = document.getElementById('st-vma').value;
+        const vma = parseVmaInput(vmaRaw);
+        if (vmaRaw.trim() && vma == null) { showAlert('VMA invalide (nombre positif en km/h).'); return; }
+        if (vma != null) student.vma = vma;
+        cls.students.push(student);
         saveData();
         render();
       } break;
@@ -3478,6 +4756,13 @@
       case 'photo-student':
         currentPhotoStudentId = el.dataset.id;
         document.getElementById('photo-input').click(); break;
+      case 'delete-photo-student':
+        confirmAction('Supprimer la photo de cet élève ?', async () => {
+          const id = el.dataset.id;
+          await deletePhoto(id);
+          delete photoCache[id];
+          render();
+        }); break;
       case 'import-csv':
         document.getElementById('csv-import-input').dataset.classId = ctx.classId;
         document.getElementById('csv-import-input').click(); break;
@@ -3497,20 +4782,23 @@
           navigate('config-situations');
         }); break;
       case 'add-session':
-        promptInput('Nom de la séance', new Date().toLocaleDateString('fr-FR'), (name) => {
+        promptSessionForm('Nouvelle séance', {}, (name, date) => {
           const id = uid();
-          appData.sessions.push({ id, classId: el.dataset.classId || ctx.classId, name, attendance: {}, situations: [] });
+          appData.sessions.push({ id, classId: el.dataset.classId || ctx.classId, name, date, attendance: {}, situations: [] });
           saveData();
           navigate('session', { sessionId: id });
         }); break;
       case 'open-session':
         navigate('session', { sessionId: el.dataset.id }); break;
-      case 'rename-session':
-        promptInput('Nouveau nom de séance', getSession(ctx.sessionId)?.name, (name) => {
-          getSession(ctx.sessionId).name = name;
+      case 'rename-session': {
+        const session = getSession(ctx.sessionId);
+        promptSessionForm('Modifier la séance', { name: session?.name, date: session?.date || getTodayIsoDate() }, (name, date) => {
+          session.name = name;
+          session.date = date;
           saveData();
           render();
-        }); break;
+        });
+      } break;
       case 'delete-session':
         confirmAction('Supprimer cette séance et tous ses résultats ?', () => {
           appData.sessions = appData.sessions.filter(s => s.id !== ctx.sessionId);
@@ -3525,7 +4813,11 @@
         const sel = document.getElementById('add-situation-select');
         if (!sel?.value) { showAlert('Choisissez une situation.'); return; }
         const session = getSession(ctx.sessionId);
-        session.situations.push({ templateId: sel.value, seriesCount: 1, series: [] });
+        if (sel.value === LIBRE_SITUATION_VALUE) {
+          session.situations.push({ isLibre: true, librePerf: { completed: false, values: {} } });
+        } else {
+          session.situations.push({ templateId: sel.value, seriesCount: 1, repetitions: 1, series: [] });
+        }
         saveData();
         render();
       } break;
@@ -3569,10 +4861,19 @@
           launchSituation(ctx.sessionId, sitIdx, seriesIdx, ids);
         });
       } break;
+      case 'fill-fractionne-perf':
+        navigate('fractionne-perf', { sessionId: ctx.sessionId, sitIdx: parseInt(el.dataset.idx) });
+        break;
+      case 'fill-libre-perf':
+        navigate('libre-perf', { sessionId: ctx.sessionId, sitIdx: parseInt(el.dataset.idx) });
+        break;
       case 'reset-situation':
         confirmAction('Remettre cette situation à zéro ?', () => {
           const session = getSession(ctx.sessionId);
-          session.situations[parseInt(el.dataset.idx)].series = [];
+          const ss = session.situations[parseInt(el.dataset.idx)];
+          ss.series = [];
+          delete ss.fractionnePerf;
+          delete ss.librePerf;
           saveData(); render();
         }); break;
       case 'plot-plus': {
