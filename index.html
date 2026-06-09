@@ -126,10 +126,72 @@
       padding: calc(.85rem + var(--safe-t)) clamp(1rem, 3vw, 1.5rem) .85rem;
       display: flex; align-items: center; justify-content: center;
       min-height: var(--header-h);
-      text-align: center;
       box-shadow: var(--shadow-sm);
     }
-    .app-header > div { width: 100%; }
+    .app-header-inner {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .app-header-titles {
+      text-align: center;
+      min-width: 0;
+      max-width: 100%;
+    }
+    body:not(.view-home):not(.view-live) .app-header-titles {
+      padding-left: clamp(7.5rem, 18vw, 9.5rem);
+      padding-right: clamp(7.5rem, 18vw, 9.5rem);
+    }
+    .app-header-nav {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: .35rem;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    body.view-home .app-header-nav,
+    body.view-live .app-header-nav { display: none; }
+    .btn-header-nav {
+      min-height: 34px;
+      min-width: 4.25rem;
+      padding: .28rem .95rem;
+      font-size: clamp(.76rem, 1.5vw, .84rem);
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+      transition: background var(--transition), transform var(--transition-fast), border-color var(--transition), box-shadow var(--transition);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .btn-header-nav:hover:not(:disabled) {
+      background: var(--surface-hover);
+      border-color: color-mix(in srgb, var(--primary) 35%, var(--border-strong));
+      box-shadow: var(--shadow-sm), var(--shadow-glow);
+    }
+    .btn-header-nav:active:not(:disabled) { transform: scale(.98); }
+    .btn-header-nav.btn-header-nav-icon {
+      min-width: 3.25rem;
+      padding: .28rem .85rem;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+    .btn-header-nav.btn-header-nav-validate {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--success) 85%, white) 0%, var(--success) 100%);
+      border-color: color-mix(in srgb, var(--success) 50%, transparent);
+      color: #041810;
+      font-weight: 700;
+    }
+    .btn-header-nav.btn-header-nav-validate:hover:not(:disabled) {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--success-hover) 85%, white) 0%, var(--success-hover) 100%);
+      border-color: var(--success);
+    }
     .app-header h1 {
       font-size: clamp(1.15rem, 2.8vw, 1.45rem);
       font-weight: 700;
@@ -403,65 +465,25 @@
     body.view-config-situations .grid-item-btn.add-btn {
       font-size: clamp(1.2rem, 3.5vh, 2rem);
     }
-    body.view-config-classes .bottom-nav .btn-nav,
-    body.view-config-situations .bottom-nav .btn-nav {
-      min-height: clamp(44px, 7vh, 56px);
-      font-size: clamp(.88rem, 2vh, 1.05rem);
+    body.view-live {
+      min-height: 100svh;
+      max-height: 100svh;
+      min-height: 100dvh;
+      max-height: 100dvh;
     }
-
-    .bottom-nav {
-      flex-shrink: 0;
-      position: relative;
-      z-index: 200;
-      background: rgba(12, 16, 24, 0.88);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border-top: 1px solid var(--border);
-      padding: .7rem clamp(1rem, 3vw, 1.5rem) calc(.7rem + var(--safe-b));
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: .85rem;
-      box-shadow: 0 -8px 32px rgba(0,0,0,.45);
-    }
-    body.view-home .bottom-nav { display: none; }
-
     body.view-live .main-content {
       overflow: hidden;
-      padding: .35rem .5rem;
+      padding: .2rem .45rem .15rem;
+      padding-top: calc(.2rem + var(--safe-t));
+      padding-bottom: calc(.15rem + var(--safe-b));
       max-width: none;
       display: flex;
       flex-direction: column;
+      flex: 1;
+      min-height: 0;
       animation: none;
     }
     body.view-live .app-header { display: none; }
-    body.view-live .bottom-nav { display: none; }
-    .bottom-nav .btn-nav {
-      min-height: 52px;
-      font-size: clamp(.9rem, 2vw, 1rem);
-      font-weight: 600;
-      border-radius: var(--radius);
-      background: var(--surface);
-      border: 1px solid var(--border-strong);
-      box-shadow: var(--shadow-sm), var(--shadow-inset);
-      transition: background var(--transition), transform var(--transition-fast), border-color var(--transition), box-shadow var(--transition);
-      letter-spacing: 0.01em;
-    }
-    .bottom-nav .btn-nav:hover:not(:disabled) {
-      background: var(--surface-hover);
-      border-color: color-mix(in srgb, var(--primary) 35%, var(--border-strong));
-      box-shadow: var(--shadow-sm), var(--shadow-glow);
-    }
-    .bottom-nav .btn-nav:active:not(:disabled) { transform: scale(.98); }
-    .bottom-nav .btn-nav.btn-nav-validate {
-      background: linear-gradient(180deg, color-mix(in srgb, var(--success) 85%, white) 0%, var(--success) 100%);
-      border-color: color-mix(in srgb, var(--success) 50%, transparent);
-      color: #041810;
-      font-weight: 700;
-    }
-    .bottom-nav .btn-nav.btn-nav-validate:hover:not(:disabled) {
-      background: linear-gradient(180deg, color-mix(in srgb, var(--success-hover) 85%, white) 0%, var(--success-hover) 100%);
-      border-color: var(--success);
-    }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
@@ -521,6 +543,18 @@
     }
     .btn-danger:hover:not(:disabled) {
       background: linear-gradient(180deg, color-mix(in srgb, var(--danger-hover) 85%, white) 0%, var(--danger-hover) 100%);
+      transform: translateY(-1px);
+    }
+    .btn-warning {
+      background: color-mix(in srgb, var(--warning) 14%, var(--surface));
+      border-color: color-mix(in srgb, var(--warning) 42%, var(--border-strong));
+      color: color-mix(in srgb, var(--warning) 88%, white);
+      font-weight: 600;
+      box-shadow: var(--shadow-sm), var(--shadow-inset);
+    }
+    .btn-warning:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--warning) 22%, var(--surface-hover));
+      border-color: color-mix(in srgb, var(--warning) 55%, var(--border-strong));
       transform: translateY(-1px);
     }
     .btn-sm { min-height: 42px; padding: .45rem .95rem; font-size: clamp(.82rem, 1.8vw, .9rem); }
@@ -883,13 +917,20 @@
       gap: .85rem;
       align-items: center;
       margin-bottom: 1.15rem;
-      padding: 1rem 1.15rem;
+      padding: .75rem 1rem;
       background: var(--bg-elevated);
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-sm);
     }
     .session-header-title { justify-self: start; min-width: 0; }
+    .session-header-title-row {
+      display: flex;
+      align-items: center;
+      gap: clamp(1rem, 2.5vw, 2rem);
+      flex-wrap: wrap;
+    }
+    .session-header-name-block { min-width: 0; }
     .session-header-bar h2 {
       font-size: clamp(1.1rem, 2.5vw, 1.35rem);
       font-weight: 800;
@@ -902,6 +943,23 @@
       color: var(--text-muted);
       font-weight: 600;
       font-variant-numeric: tabular-nums;
+    }
+    .session-header-distance label {
+      display: block;
+      font-size: clamp(.68rem, 1.4vw, .74rem);
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-bottom: .15rem;
+      white-space: nowrap;
+    }
+    .session-header-distance span {
+      font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+      font-weight: 800;
+      color: var(--success);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
     }
     .grid-item-btn.grid-item-session {
       flex-direction: column;
@@ -930,12 +988,43 @@
       white-space: nowrap;
       line-height: 1.2;
     }
-    .session-header-center { justify-self: center; }
+    .session-header-center { justify-self: center; flex-shrink: 0; }
+    .session-header-center .btn {
+      background: color-mix(in srgb, var(--primary) 16%, var(--surface-active));
+      border-color: color-mix(in srgb, var(--primary) 50%, rgba(255, 255, 255, 0.35));
+      color: #fff;
+      font-weight: 700;
+      box-shadow: var(--shadow-sm);
+    }
+    .session-header-center .btn::after { opacity: 0.12; }
+    .session-header-center .btn:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--primary) 24%, var(--surface-active));
+      border-color: color-mix(in srgb, var(--primary) 60%, rgba(255, 255, 255, 0.38));
+      box-shadow: var(--shadow-sm);
+    }
     .session-header-actions {
       justify-self: end;
       display: flex;
-      gap: .85rem;
+      align-items: center;
+      gap: .8rem;
       flex-shrink: 0;
+    }
+    .session-header-actions-stack {
+      display: flex;
+      flex-direction: column;
+      gap: .2rem;
+    }
+    .session-header-abs-btn {
+      margin-right: .25rem;
+      transform: translateX(-5px);
+    }
+    .session-header-abs-btn:hover:not(:disabled) {
+      transform: translateX(-5px) translateY(-1px);
+    }
+    .session-header-actions-stack .btn {
+      min-height: 34px;
+      padding: .28rem .7rem;
+      font-size: clamp(.76rem, 1.5vw, .84rem);
     }
 
     .live-page {
@@ -944,7 +1033,8 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      gap: .3rem;
+      gap: .2rem;
+      overflow: hidden;
     }
     .live-header {
       background: linear-gradient(180deg, rgba(19, 25, 34, 0.95) 0%, var(--bg-elevated) 100%);
@@ -960,11 +1050,14 @@
       box-shadow: var(--shadow), var(--shadow-inset);
     }
     body.view-live .live-header {
-      padding: .5rem .75rem;
+      padding: .35rem .55rem;
       margin-bottom: 0;
       align-items: center;
       border-radius: var(--radius);
       grid-template-columns: 1fr auto 1fr;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 20;
     }
     .live-title-block {
       text-align: center;
@@ -1042,7 +1135,7 @@
       flex: 1;
       min-height: 0;
     }
-    body.view-live .students-live-split { gap: .75rem; }
+    body.view-live .students-live-split { gap: .45rem; min-height: 0; }
     .students-live-split.single { --live-split-cols: 1fr; }
     .live-gender-section {
       background: linear-gradient(180deg, rgba(19, 25, 34, 0.6) 0%, var(--bg-elevated) 100%);
@@ -1055,10 +1148,11 @@
       box-shadow: var(--shadow-sm);
     }
     body.view-live .live-gender-section {
-      padding: .4rem .45rem .45rem;
+      padding: .25rem .35rem .3rem;
       border-radius: var(--radius);
       overflow: hidden;
       min-width: 0;
+      min-height: 0;
     }
     .live-gender-section.girls {
       border-top: 3px solid var(--success);
@@ -1077,11 +1171,15 @@
       text-transform: uppercase;
       flex-shrink: 0;
     }
-    body.view-live .live-group-title { font-size: .72rem; margin-bottom: .35rem; }
+    body.view-live .live-group-title { font-size: .68rem; margin-bottom: .2rem; }
     body.view-live .live-gender-section:has(.live-grid-dense) .live-group-title {
-      font-size: .58rem;
-      margin-bottom: .2rem;
+      font-size: .55rem;
+      margin-bottom: .12rem;
       letter-spacing: 0.06em;
+    }
+    body.view-live .students-live-grid {
+      align-content: start;
+      justify-content: center;
     }
     .live-group-title.girls { color: var(--success); }
     .live-group-title.boys { color: color-mix(in srgb, var(--primary) 75%, white); }
@@ -1632,6 +1730,15 @@
       .session-stats .stat-item,
       .session-stats-center { justify-self: stretch; }
       .session-stats-center { display: flex; justify-content: center; }
+      .session-header-bar {
+        grid-template-columns: 1fr;
+        justify-items: stretch;
+        gap: .65rem;
+      }
+      .session-header-center,
+      .session-header-actions { justify-self: stretch; }
+      .session-header-center { display: flex; justify-content: center; }
+      .session-header-actions { justify-content: center; flex-wrap: wrap; }
       .situation-toolbar {
         grid-template-columns: 1fr;
         justify-items: center;
@@ -1656,10 +1763,6 @@
       .session-header-bar { padding: .85rem; }
       .modal { border-radius: var(--radius); }
     }
-    @media (orientation: portrait) and (max-height: 500px) {
-      .bottom-nav { padding: .45rem .75rem calc(.45rem + var(--safe-b)); }
-      .bottom-nav .btn-nav { min-height: 44px; font-size: .88rem; }
-    }
     @media (max-height: 700px) {
       body.view-home .app-header,
       body.view-config-classes .app-header,
@@ -1672,9 +1775,7 @@
       body.view-home .home-class-prompt,
       body.view-config-classes .section-subtitle,
       body.view-config-situations .section-subtitle { font-size: clamp(1rem, 2.8vh, 1.3rem); }
-      body.view-home .config-actions .btn,
-      body.view-config-classes .bottom-nav .btn-nav,
-      body.view-config-situations .bottom-nav .btn-nav { min-height: 40px; }
+      body.view-home .config-actions .btn { min-height: 40px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
@@ -1684,31 +1785,23 @@
       }
     }
 
-    @media print {
-      body * { visibility: hidden; }
-      #print-area, #print-area * { visibility: visible; }
-      #print-area {
-        position: absolute; left: 0; top: 0; width: 100%;
-        background: #fff; color: #000; padding: 1cm;
-      }
-      @page { size: A4 landscape; margin: 1cm; }
-    }
   </style>
 </head>
 <body>
   <header class="app-header" id="app-header">
-    <div>
-      <h1 id="header-title">Demi-fond EPS</h1>
-      <div class="subtitle" id="header-subtitle"></div>
+    <div class="app-header-inner">
+      <div class="app-header-titles">
+        <h1 id="header-title">Demi-fond EPS</h1>
+        <div class="subtitle" id="header-subtitle"></div>
+      </div>
+      <nav class="app-header-nav" aria-label="Navigation principale">
+        <button class="btn-header-nav" id="btn-menu" type="button">Menu</button>
+        <button class="btn-header-nav btn-header-nav-icon" id="btn-back" type="button" aria-label="Retour" title="Retour">←</button>
+      </nav>
     </div>
   </header>
 
   <main class="main-content" id="app" role="main"></main>
-
-  <nav class="bottom-nav" aria-label="Navigation principale">
-    <button class="btn-nav" id="btn-menu" type="button">Menu principal</button>
-    <button class="btn-nav" id="btn-back" type="button">Retour</button>
-  </nav>
 
   <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
     <div class="modal" id="modal-content"></div>
@@ -1717,8 +1810,6 @@
   <input type="file" id="csv-import-input" class="hidden-input" accept=".csv,text/csv">
   <input type="file" id="backup-import-input" class="hidden-input" accept=".json,application/json">
   <input type="file" id="photo-input" class="hidden-input" accept="image/*" capture="environment">
-
-  <div id="print-area" style="display:none"></div>
 
   <script>
   /* ========== CONSTANTES & ÉTAT ========== */
@@ -1752,6 +1843,7 @@
   let liveState = null;
   let liveLayoutHandler = null;
   let liveResizeObserver = null;
+  let liveViewportHandler = null;
   let configLayoutHandler = null;
 
   /* ========== UTILITAIRES ========== */
@@ -2274,30 +2366,44 @@
     render();
   }
 
+  function setHeaderNavLabel(btn, label) {
+    if (label === 'Retour') {
+      btn.textContent = '←';
+      btn.classList.add('btn-header-nav-icon');
+      btn.setAttribute('aria-label', 'Retour');
+      btn.title = 'Retour';
+    } else {
+      btn.textContent = label;
+      btn.classList.remove('btn-header-nav-icon');
+      btn.removeAttribute('aria-label');
+      btn.removeAttribute('title');
+    }
+  }
+
   function updateBottomNav() {
     const { view, params } = getCurrentNav();
     const btnMenu = document.getElementById('btn-menu');
     const btnBack = document.getElementById('btn-back');
     if (view === 'class-edit' && params.isNew) {
-      btnMenu.textContent = 'Retour';
-      btnBack.textContent = 'Valider la classe';
+      setHeaderNavLabel(btnMenu, 'Retour');
+      setHeaderNavLabel(btnBack, 'Valider la classe');
       btnMenu.disabled = false;
       btnBack.disabled = false;
-      btnMenu.classList.remove('btn-nav-validate');
-      btnBack.classList.add('btn-nav-validate');
+      btnMenu.classList.remove('btn-header-nav-validate');
+      btnBack.classList.add('btn-header-nav-validate');
     } else if (view === 'situation-edit' && params.isNew) {
-      btnMenu.textContent = 'Retour';
-      btnBack.textContent = 'Valider la situation';
+      setHeaderNavLabel(btnMenu, 'Retour');
+      setHeaderNavLabel(btnBack, 'Valider la situation');
       btnMenu.disabled = false;
       btnBack.disabled = false;
-      btnMenu.classList.remove('btn-nav-validate');
-      btnBack.classList.add('btn-nav-validate');
+      btnMenu.classList.remove('btn-header-nav-validate');
+      btnBack.classList.add('btn-header-nav-validate');
     } else {
-      btnMenu.textContent = 'Menu principal';
-      btnBack.textContent = 'Retour';
+      setHeaderNavLabel(btnMenu, 'Menu');
+      setHeaderNavLabel(btnBack, 'Retour');
       btnBack.disabled = navStack.length <= 1;
-      btnMenu.classList.remove('btn-nav-validate');
-      btnBack.classList.remove('btn-nav-validate');
+      btnMenu.classList.remove('btn-header-nav-validate');
+      btnBack.classList.remove('btn-header-nav-validate');
     }
   }
 
@@ -2891,6 +2997,7 @@
         liveResizeObserver.disconnect();
         liveResizeObserver = null;
       }
+      teardownLiveViewport();
     }
     if (view !== 'config-situations' && configLayoutHandler) {
       window.removeEventListener('resize', configLayoutHandler);
@@ -3387,24 +3494,26 @@
     app.innerHTML = `
       <div class="session-header-bar">
         <div class="session-header-title">
-          <h2>${escapeHtml(session.name)}</h2>
-          ${session.date ? `<span class="session-header-date">${formatSessionDateDisplay(session.date)}</span>` : ''}
+          <div class="session-header-title-row">
+            <div class="session-header-name-block">
+              <h2>${escapeHtml(session.name)}</h2>
+              ${session.date ? `<span class="session-header-date">${formatSessionDateDisplay(session.date)}</span>` : ''}
+            </div>
+            <div class="session-header-distance">
+              <label>Distance totale parcourue</label>
+              <span>${grandTotal} m</span>
+            </div>
+          </div>
         </div>
         <div class="session-header-center">
-          <button class="btn btn-secondary btn-sm" data-action="manage-absences">Gérer absences / dispenses</button>
+          <button class="btn btn-secondary btn-sm" data-action="open-bilan">Bilan de la séance</button>
         </div>
         <div class="session-header-actions">
-          <button class="btn btn-secondary btn-sm" data-action="rename-session">Renommer</button>
-          <button class="btn btn-danger btn-sm" data-action="delete-session">Supprimer</button>
-        </div>
-      </div>
-      <div class="session-stats">
-        <div class="stat-item">
-          <label>Distance totale parcourue</label>
-          <span>${grandTotal} m</span>
-        </div>
-        <div class="session-stats-center">
-          <button class="btn btn-secondary btn-sm" data-action="open-bilan">Bilan de la séance</button>
+          <button class="btn btn-warning btn-sm session-header-abs-btn" data-action="manage-absences">Gestion ABS/DISP</button>
+          <div class="session-header-actions-stack">
+            <button class="btn btn-secondary btn-sm" data-action="rename-session">Renommer</button>
+            <button class="btn btn-danger btn-sm" data-action="delete-session">Supprimer</button>
+          </div>
         </div>
       </div>
       <div class="session-add-bar">
@@ -3606,6 +3715,54 @@
     });
   }
 
+  function syncLiveViewport() {
+    if (!document.body.classList.contains('view-live')) return;
+    const main = document.querySelector('body.view-live .main-content');
+    if (!main) return;
+
+    if (window.visualViewport) {
+      const vv = window.visualViewport;
+      const topInset = Math.max(0, Math.round(vv.offsetTop));
+      main.style.paddingTop = `calc(${topInset}px + .2rem + var(--safe-t))`;
+      main.style.height = `${Math.round(vv.height)}px`;
+      main.style.maxHeight = `${Math.round(vv.height)}px`;
+    } else {
+      main.style.paddingTop = '';
+      main.style.height = '';
+      main.style.maxHeight = '';
+    }
+  }
+
+  function teardownLiveViewport() {
+    if (liveViewportHandler && window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', liveViewportHandler);
+      window.visualViewport.removeEventListener('scroll', liveViewportHandler);
+    }
+    liveViewportHandler = null;
+    const main = document.querySelector('.main-content');
+    if (main) {
+      main.style.paddingTop = '';
+      main.style.height = '';
+      main.style.maxHeight = '';
+    }
+  }
+
+  function setupLiveViewport() {
+    teardownLiveViewport();
+    syncLiveViewport();
+    window.scrollTo(0, 0);
+    if (!window.visualViewport) return;
+
+    liveViewportHandler = () => {
+      requestAnimationFrame(() => {
+        syncLiveViewport();
+        layoutLivePage();
+      });
+    };
+    window.visualViewport.addEventListener('resize', liveViewportHandler);
+    window.visualViewport.addEventListener('scroll', liveViewportHandler);
+  }
+
   function setupLiveLayout() {
     if (liveLayoutHandler) {
       window.removeEventListener('resize', liveLayoutHandler);
@@ -3615,8 +3772,12 @@
 
     liveLayoutHandler = () => requestAnimationFrame(layoutLivePage);
     const scheduleLayout = () => {
+      syncLiveViewport();
       requestAnimationFrame(layoutLivePage);
-      [50, 150, 350].forEach(ms => setTimeout(layoutLivePage, ms));
+      [50, 150, 350].forEach(ms => setTimeout(() => {
+        syncLiveViewport();
+        layoutLivePage();
+      }, ms));
     };
 
     scheduleLayout();
@@ -3732,6 +3893,7 @@
       </div>`;
 
     loadAvatarsInContainer(app);
+    setupLiveViewport();
     setupLiveLayout();
     startLiveTimer(session, params, tpl);
     bindActions(app, params);
@@ -4519,12 +4681,11 @@
     const session = getSession(sessionId);
     if (!session) return;
     const { cls, headers, rows, sitAvgs, sitTotals, avgTotal, grandTotal, date } = buildBilanData(session);
-    const printArea = document.getElementById('print-area');
     const sitCols = headers.map(h => `<th>${escapeHtml(h.name)}<br><small>${escapeHtml(h.duration)}</small></th>`).join('');
     const bodyRows = rows.map(r => {
       const showData = !r.status || (isAttendanceWithBilanData(r.status) && r.total > 0);
       if (!showData) {
-        return `<tr><td>${escapeHtml(r.name)}</td>${headers.map(() => '<td>—</td>').join('')}<td><strong>${r.totalLabel || r.total}</strong></td></tr>`;
+        return `<tr><td>${escapeHtml(r.name)}</td>${headers.map(() => '<td>—</td>').join('')}<td><strong>${escapeHtml(String(r.totalLabel || r.total))}</strong></td></tr>`;
       }
       const st = cls.students.find(s => s.id === r.studentId);
       const cells = r.dists.map((d, i) => {
@@ -4532,7 +4693,7 @@
         return `<td>${d} m<br><small>${speed}</small></td>`;
       }).join('');
       const totalLabel = r.totalLabel || `${r.total} m`;
-      return `<tr><td>${escapeHtml(r.name)}</td>${cells}<td><strong>${totalLabel}</strong></td></tr>`;
+      return `<tr><td>${escapeHtml(r.name)}</td>${cells}<td><strong>${escapeHtml(String(totalLabel))}</strong></td></tr>`;
     }).join('');
     const avgCells = sitAvgs.map((a, i) => {
       const speed = calcSpeedKmh(a, headers[i].durationSec);
@@ -4541,29 +4702,53 @@
     const totauxCells = sitTotals.map(t => `<td><strong>${t} m</strong></td>`).join('');
     const avgRow = `<tr style="background:#eee;font-weight:bold"><td>Moyenne</td>${avgCells}<td>${avgTotal} m</td></tr>`;
     const totauxRow = `<tr style="background:#e8f5e9;font-weight:bold"><td>Totaux</td>${totauxCells}<td>Séance : ${grandTotal} m</td></tr>`;
-    printArea.innerHTML = `
-      <style>
-        body { font-family: Arial, sans-serif; }
-        h1 { font-size: 18pt; margin-bottom: 4px; }
-        .meta { font-size: 11pt; color: #333; margin-bottom: 16px; }
-        table { width: 100%; border-collapse: collapse; font-size: 10pt; }
-        th, td { border: 1px solid #333; padding: 6px 8px; text-align: center; }
-        th { background: #eee; }
-        td:first-child { text-align: left; }
-      </style>
-      <h1>Bilan de séance — Demi-fond EPS</h1>
-      <div class="meta">
-        <div><strong>Classe :</strong> ${escapeHtml(cls.name)}</div>
-        <div><strong>Séance :</strong> ${escapeHtml(session.name)}</div>
-        <div><strong>Date :</strong> ${escapeHtml(date)}</div>
-      </div>
-      <table>
-        <thead><tr><th>Élève</th>${sitCols}<th>Total parcouru</th></tr></thead>
-        <tbody>${bodyRows}${avgRow}${totauxRow}</tbody>
-      </table>`;
-    printArea.style.display = 'block';
-    window.print();
-    printArea.style.display = 'none';
+    const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Bilan — ${escapeHtml(session.name)}</title>
+  <style>
+    @page { size: A4 landscape; margin: 1cm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; color: #000; background: #fff; }
+    h1 { font-size: 18pt; margin-bottom: 4px; }
+    .meta { font-size: 11pt; color: #333; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+    th, td { border: 1px solid #333; padding: 6px 8px; text-align: center; }
+    th { background: #eee; }
+    td:first-child { text-align: left; }
+    thead { display: table-header-group; }
+  </style>
+</head>
+<body>
+  <h1>Bilan de séance — Demi-fond EPS</h1>
+  <div class="meta">
+    <div><strong>Classe :</strong> ${escapeHtml(cls.name)}</div>
+    <div><strong>Séance :</strong> ${escapeHtml(session.name)}</div>
+    <div><strong>Date :</strong> ${escapeHtml(date)}</div>
+  </div>
+  <table>
+    <thead><tr><th>Élève</th>${sitCols}<th>Total parcouru</th></tr></thead>
+    <tbody>${bodyRows}${avgRow}${totauxRow}</tbody>
+  </table>
+</body>
+</html>`;
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+    document.body.appendChild(iframe);
+    const win = iframe.contentWindow;
+    const doc = win.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+    const cleanup = () => { iframe.remove(); };
+    win.addEventListener('afterprint', cleanup, { once: true });
+    setTimeout(() => {
+      win.focus();
+      win.print();
+      setTimeout(cleanup, 3000);
+    }, 50);
   }
 
   /* ----- GESTION ABSENCES / DISPENSES ----- */
