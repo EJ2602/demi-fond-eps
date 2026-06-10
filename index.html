@@ -1177,6 +1177,15 @@
       margin-bottom: .12rem;
       letter-spacing: 0.06em;
     }
+    .students-live-grid.live-grid-dense .live-card-controls-band {
+      flex-direction: column;
+      gap: 2px;
+      justify-content: center;
+    }
+    .students-live-grid.live-grid-dense .student-live-card .distance {
+      padding: .12em .4em;
+      line-height: 1;
+    }
     body.view-live .students-live-grid {
       align-content: start;
       justify-content: center;
@@ -1223,7 +1232,10 @@
     }
     .live-card-media {
       position: absolute;
-      inset: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: max(var(--live-band-pct, 22%), var(--live-band-min, 42px));
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1252,16 +1264,21 @@
       line-height: 1;
       text-shadow: 0 1px 4px rgba(0, 0, 0, .35);
     }
-    .live-card-overlay {
+    .live-card-controls-band {
       position: absolute;
-      inset: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 2;
+      height: max(var(--live-band-pct, 22%), var(--live-band-min, 42px));
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      flex-direction: row;
       align-items: center;
+      justify-content: center;
+      gap: var(--live-plot-gap, 6px);
       padding: var(--live-overlay-pad, 4px);
-      gap: var(--live-overlay-gap, 3px);
+      background: rgba(6, 8, 13, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       pointer-events: none;
     }
     .student-live-card .distance {
@@ -1270,15 +1287,13 @@
       font-variant-numeric: tabular-nums;
       color: #fff;
       line-height: 1.1;
-      background: rgba(0, 0, 0, .78);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      padding: .22em .6em;
+      background: rgba(0, 0, 0, .55);
+      padding: .18em .5em;
       border-radius: var(--radius-xs);
       border: 1px solid rgba(255,255,255,.1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, .45);
       pointer-events: none;
       letter-spacing: -0.02em;
+      flex-shrink: 0;
     }
     .student-live-card .distance::after { content: ' m'; font-size: .65em; font-weight: 600; opacity: .85; }
     .student-live-card .plot-controls {
@@ -1286,11 +1301,13 @@
       justify-content: center;
       gap: var(--live-plot-gap, 6px);
       pointer-events: auto;
-      width: 100%;
+      flex-shrink: 0;
     }
     .student-live-card .plot-btn {
       width: var(--live-plot, 48px);
       height: var(--live-plot, 48px);
+      min-width: var(--live-plot, 48px);
+      min-height: var(--live-plot, 48px);
       border-radius: 50%;
       font-size: var(--live-plot-font, 1.5rem);
       font-weight: 800;
@@ -1299,8 +1316,8 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255,255,255,.2);
-      border: 2px solid rgba(255, 255, 255, .22);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255,255,255,.18);
+      border: 2px solid rgba(255, 255, 255, .2);
       transition: transform var(--transition-fast), filter var(--transition-fast);
     }
     .plot-btn.plus { background: linear-gradient(180deg, color-mix(in srgb, var(--success) 90%, white), var(--success)); }
@@ -1810,6 +1827,7 @@
   <input type="file" id="csv-import-input" class="hidden-input" accept=".csv,text/csv">
   <input type="file" id="backup-import-input" class="hidden-input" accept=".json,application/json">
   <input type="file" id="photo-input" class="hidden-input" accept="image/*" capture="environment">
+  <input type="file" id="photo-gallery-input" class="hidden-input" accept="image/*">
 
   <script>
   /* ========== CONSTANTES & ÉTAT ========== */
@@ -3242,7 +3260,8 @@
         <td class="actions-cell">
           ${avatarHtml(st)}
           <button class="btn-icon" data-action="edit-student" data-id="${st.id}" title="Modifier">✏️</button>
-          <button class="btn-icon" data-action="photo-student" data-id="${st.id}" title="Photo">📷</button>
+          <button class="btn-icon" data-action="photo-student" data-id="${st.id}" title="Prendre une photo">📷</button>
+          <button class="btn-icon" data-action="pick-photo-student" data-id="${st.id}" title="Choisir dans la galerie">🖼️</button>
           <button class="btn-icon btn-icon-danger" data-action="delete-photo-student" data-id="${st.id}" title="Supprimer la photo">🗑</button>
           <button class="btn-icon" data-action="delete-student" data-id="${st.id}" title="Supprimer l'élève">✕</button>
         </td>
@@ -3655,9 +3674,18 @@
   function applyLiveGridLayout(grid, layout, gap) {
     if (!grid || !layout) return;
     const { cols, rows, cardW, cardH } = layout;
-    const dist = Math.max(.45, Math.min(cardW * 0.15, 1));
+    const dense = cols * rows >= 20;
+    const plotCoef = dense ? 0.22 : 0.24;
+    const plotMin = dense ? 28 : 14;
+    const plotCap = 36;
     const maxPlot = Math.floor((cardW - 4) / 2.3);
-    const plot = Math.max(16, Math.min(Math.round(cardW * 0.34), maxPlot, 52));
+    let plot = Math.min(Math.round(cardW * plotCoef), plotCap, maxPlot);
+    plot = Math.max(plot, dense ? Math.min(plotMin, maxPlot) : plotMin);
+    const dist = Math.max(
+      dense ? 0.38 : 0.42,
+      Math.min(cardW * (dense ? 0.1 : 0.11), dense ? 0.78 : 0.82)
+    );
+    const bandMinPx = dense ? 50 : 42;
     const avatarFont = Math.max(11, Math.min(Math.round(cardW * 0.24), 34));
 
     grid.style.setProperty('--live-cols', cols);
@@ -3669,11 +3697,12 @@
     grid.style.setProperty('--live-dist', dist + 'rem');
     grid.style.setProperty('--live-plot', plot + 'px');
     grid.style.setProperty('--live-plot-font', Math.max(12, Math.round(plot * 0.52)) + 'px');
-    grid.style.setProperty('--live-plot-gap', Math.max(3, Math.round(cardW * 0.06)) + 'px');
-    grid.style.setProperty('--live-overlay-pad', Math.max(2, Math.round(cardW * 0.04)) + 'px');
-    grid.style.setProperty('--live-overlay-gap', Math.max(2, Math.round(cardW * 0.025)) + 'px');
-    grid.style.setProperty('--live-init-top', Math.max(16, Math.min(30, Math.round(cardW * 0.14))) + '%');
-    grid.classList.toggle('live-grid-dense', cols * rows >= 20);
+    grid.style.setProperty('--live-plot-gap', Math.max(3, Math.round(cardW * (dense ? 0.04 : 0.06))) + 'px');
+    grid.style.setProperty('--live-overlay-pad', Math.max(2, Math.round(cardW * 0.03)) + 'px');
+    grid.style.setProperty('--live-band-pct', (dense ? 24 : 22) + '%');
+    grid.style.setProperty('--live-band-min', bandMinPx + 'px');
+    grid.style.setProperty('--live-init-top', Math.max(14, Math.min(26, Math.round(cardW * 0.12))) + '%');
+    grid.classList.toggle('live-grid-dense', dense);
   }
 
   function layoutLivePage() {
@@ -3825,7 +3854,7 @@
       return `
         <div class="student-live-card" data-student-id="${sid}">
           <div class="live-card-media">${avatarHtml(st, 'avatar-live')}</div>
-          <div class="live-card-overlay">
+          <div class="live-card-controls-band">
             <div class="distance" data-dist="${sid}">${dist}</div>
             <div class="plot-controls">
               <button class="plot-btn minus" data-action="plot-minus" data-sid="${sid}">−</button>
@@ -4941,6 +4970,9 @@
       case 'photo-student':
         currentPhotoStudentId = el.dataset.id;
         document.getElementById('photo-input').click(); break;
+      case 'pick-photo-student':
+        currentPhotoStudentId = el.dataset.id;
+        document.getElementById('photo-gallery-input').click(); break;
       case 'delete-photo-student':
         confirmAction('Supprimer la photo de cet élève ?', async () => {
           const id = el.dataset.id;
@@ -5128,7 +5160,7 @@
       if (e.target.id === 'modal-overlay') closeModal();
     };
 
-    document.getElementById('photo-input').onchange = async (e) => {
+    async function handlePhotoFileSelect(e) {
       const file = e.target.files?.[0];
       if (!file || !currentPhotoStudentId) return;
       const reader = new FileReader();
@@ -5140,7 +5172,9 @@
         render();
       };
       reader.readAsDataURL(file);
-    };
+    }
+    document.getElementById('photo-input').onchange = handlePhotoFileSelect;
+    document.getElementById('photo-gallery-input').onchange = handlePhotoFileSelect;
 
     document.getElementById('backup-import-input').onchange = (e) => {
       const file = e.target.files?.[0];
