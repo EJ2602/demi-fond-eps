@@ -1286,23 +1286,19 @@
       z-index: 1;
       display: inline-block;
       text-align: center;
-      font-size: var(--live-dist, .65rem);
+      font-size: var(--live-dist, 11px);
       font-weight: 800;
       font-variant-numeric: tabular-nums;
       color: #fff;
       line-height: 1;
       white-space: nowrap;
       background: rgba(0, 0, 0, .6);
-      padding: .22em .5em;
+      padding: .12em .28em;
       border-radius: var(--radius-xs);
       border: 1px solid rgba(255,255,255,.12);
       pointer-events: none;
-      letter-spacing: -0.02em;
-      max-width: calc(100% - var(--live-plot, 28px) - var(--live-plot, 28px) - 10px);
-      overflow: hidden;
-      text-overflow: ellipsis;
+      letter-spacing: -0.03em;
     }
-    .student-live-card .distance::after { content: ' m'; font-size: .75em; font-weight: 600; opacity: .85; }
     .student-live-card .plot-btn.minus,
     .student-live-card .plot-btn.plus {
       position: relative;
@@ -3688,10 +3684,9 @@
     const maxPlot = Math.floor((cardW - 4) / 2.3);
     let plot = Math.min(Math.round(cardW * plotCoef), plotCap, maxPlot);
     plot = Math.max(plot, dense ? Math.min(plotMin, maxPlot) : plotMin);
-    const dist = Math.max(
-      0.42,
-      Math.min(cardW * 0.085, dense ? 0.58 : 0.66)
-    );
+    const overlayPad = Math.max(4, Math.round(cardW * 0.05));
+    const distSlot = cardW - 2 * plot - 2 * overlayPad - 6;
+    const distFontPx = Math.max(9, Math.min(dense ? 12 : 14, Math.floor(distSlot / 4.5)));
     const bandH = plot + 6;
     const avatarFont = Math.max(11, Math.min(Math.round(cardW * 0.24), 34));
 
@@ -3701,10 +3696,10 @@
     grid.style.setProperty('--live-card-w', cardW + 'px');
     grid.style.setProperty('--live-card-h', cardH + 'px');
     grid.style.setProperty('--live-avatar-font', avatarFont + 'px');
-    grid.style.setProperty('--live-dist', dist + 'rem');
+    grid.style.setProperty('--live-dist', distFontPx + 'px');
     grid.style.setProperty('--live-plot', plot + 'px');
     grid.style.setProperty('--live-plot-font', Math.max(11, Math.round(plot * 0.5)) + 'px');
-    grid.style.setProperty('--live-overlay-pad', Math.max(4, Math.round(cardW * 0.05)) + 'px');
+    grid.style.setProperty('--live-overlay-pad', overlayPad + 'px');
     grid.style.setProperty('--live-band-h', bandH + 'px');
     grid.style.setProperty('--live-init-top', Math.max(14, Math.min(26, Math.round(cardW * 0.12))) + '%');
     grid.classList.toggle('live-grid-dense', dense);
