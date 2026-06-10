@@ -1135,7 +1135,12 @@
       flex: 1;
       min-height: 0;
     }
-    body.view-live .students-live-split { gap: .45rem; min-height: 0; }
+    body.view-live .students-live-split {
+      gap: .35rem;
+      min-height: 0;
+      flex: 1;
+      align-self: stretch;
+    }
     .students-live-split.single { --live-split-cols: 1fr; }
     .live-gender-section {
       background: linear-gradient(180deg, rgba(19, 25, 34, 0.6) 0%, var(--bg-elevated) 100%);
@@ -1148,11 +1153,12 @@
       box-shadow: var(--shadow-sm);
     }
     body.view-live .live-gender-section {
-      padding: .25rem .35rem .3rem;
+      padding: .18rem .28rem .2rem;
       border-radius: var(--radius);
       overflow: hidden;
       min-width: 0;
       min-height: 0;
+      height: 100%;
     }
     .live-gender-section.girls {
       border-top: 3px solid var(--success);
@@ -1177,17 +1183,8 @@
       margin-bottom: .12rem;
       letter-spacing: 0.06em;
     }
-    .students-live-grid.live-grid-dense .live-card-controls-band {
-      flex-direction: column;
-      gap: 2px;
-      justify-content: center;
-    }
-    .students-live-grid.live-grid-dense .student-live-card .distance {
-      padding: .12em .4em;
-      line-height: 1;
-    }
     body.view-live .students-live-grid {
-      align-content: start;
+      align-content: center;
       justify-content: center;
     }
     .live-group-title.girls { color: var(--success); }
@@ -1235,7 +1232,7 @@
       left: 0;
       right: 0;
       top: 0;
-      bottom: max(var(--live-band-pct, 22%), var(--live-band-min, 42px));
+      bottom: var(--live-band-h, 38px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1270,36 +1267,39 @@
       right: 0;
       bottom: 0;
       z-index: 2;
-      height: max(var(--live-band-pct, 22%), var(--live-band-min, 42px));
+      height: var(--live-band-h, 38px);
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: center;
-      gap: var(--live-plot-gap, 6px);
-      padding: var(--live-overlay-pad, 4px);
+      justify-content: space-between;
+      gap: 4px;
+      padding: 0 var(--live-overlay-pad, 5px);
       background: rgba(6, 8, 13, 0.9);
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       pointer-events: none;
+      overflow: visible;
     }
     .student-live-card .distance {
-      font-size: var(--live-dist, clamp(1.1rem, 3vw, 1.6rem));
+      flex: 1;
+      min-width: 0;
+      text-align: center;
+      font-size: var(--live-dist, .65rem);
       font-weight: 800;
       font-variant-numeric: tabular-nums;
       color: #fff;
-      line-height: 1.1;
-      background: rgba(0, 0, 0, .55);
-      padding: .18em .5em;
+      line-height: 1.15;
+      background: rgba(0, 0, 0, .6);
+      padding: .2em .45em;
       border-radius: var(--radius-xs);
-      border: 1px solid rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.12);
       pointer-events: none;
       letter-spacing: -0.02em;
-      flex-shrink: 0;
+      align-self: flex-end;
+      margin-bottom: 2px;
     }
-    .student-live-card .distance::after { content: ' m'; font-size: .65em; font-weight: 600; opacity: .85; }
-    .student-live-card .plot-controls {
-      display: flex;
-      justify-content: center;
-      gap: var(--live-plot-gap, 6px);
+    .student-live-card .distance::after { content: ' m'; font-size: .7em; font-weight: 600; opacity: .85; }
+    .student-live-card .plot-btn.minus,
+    .student-live-card .plot-btn.plus {
       pointer-events: auto;
       flex-shrink: 0;
     }
@@ -3633,42 +3633,42 @@
       const maxW = (availW - gap * (cols - 1)) / cols;
       const maxH = (availH - gap * (rows - 1)) / rows;
       if (maxW <= 0 || maxH <= 0) continue;
-      const cardW = Math.min(maxW, maxH / ratio);
-      if (cardW > best.cardW) best = { cols, rows, cardW, cardH: cardW * ratio };
+      const cardW = Math.floor(Math.min(maxW, maxH / ratio));
+      if (cardW > best.cardW) best = { cols, rows, cardW, cardH: Math.floor(cardW * ratio) };
     }
 
-    let cardW = Math.floor(best.cardW);
-    let cardH = Math.floor(cardW * ratio);
-    if (cardW <= 0) return null;
-
-    while (cardW > 24 && !layoutFits(count, best.cols, cardW, cardH, availW, availH, gap)) {
-      cardW--;
-      cardH = Math.floor(cardW * ratio);
-    }
-
-    let cols = best.cols;
-    let rows = Math.ceil(count / cols);
-    for (let tryCols = count; tryCols >= 1; tryCols--) {
-      const tryRows = Math.ceil(count / tryCols);
-      if (layoutFits(count, tryCols, cardW, cardH, availW, availH, gap)) {
-        cols = tryCols;
-        rows = tryRows;
-        break;
-      }
-    }
-
-    return { cols, rows, cardW, cardH };
+    return best.cardW > 0 ? best : null;
   }
 
-  function findColsForCardSize(count, availW, availH, gap, cardW, cardH) {
-    let best = { cols: 1, rows: count };
+  function computeLayoutForCardSize(count, availW, availH, gap, cardW, ratio = LIVE_PORTRAIT_RATIO) {
+    const cardH = Math.floor(cardW * ratio);
+    if (cardW <= 0 || cardH <= 0) return null;
+
+    let best = null;
+    let bestSlack = Infinity;
     for (let cols = 1; cols <= count; cols++) {
       const rows = Math.ceil(count / cols);
-      if (layoutFits(count, cols, cardW, cardH, availW, availH, gap)) {
-        best = { cols, rows };
+      if (!layoutFits(count, cols, cardW, cardH, availW, availH, gap)) continue;
+      const slack = availH - (rows * cardH + Math.max(0, rows - 1) * gap);
+      if (slack < bestSlack) {
+        bestSlack = slack;
+        best = { cols, rows, cardW, cardH };
       }
     }
     return best;
+  }
+
+  function growSharedCardWidth(metrics, gap, startCardW, ratio = LIVE_PORTRAIT_RATIO) {
+    let sharedCardW = startCardW;
+    while (sharedCardW < 400) {
+      const nextW = sharedCardW + 1;
+      const fitsAll = metrics.every(m =>
+        computeLayoutForCardSize(m.count, m.availW, m.availH, gap, nextW, ratio)
+      );
+      if (!fitsAll) break;
+      sharedCardW = nextW;
+    }
+    return sharedCardW;
   }
 
   function applyLiveGridLayout(grid, layout, gap) {
@@ -3682,10 +3682,10 @@
     let plot = Math.min(Math.round(cardW * plotCoef), plotCap, maxPlot);
     plot = Math.max(plot, dense ? Math.min(plotMin, maxPlot) : plotMin);
     const dist = Math.max(
-      dense ? 0.38 : 0.42,
-      Math.min(cardW * (dense ? 0.1 : 0.11), dense ? 0.78 : 0.82)
+      0.42,
+      Math.min(cardW * 0.085, dense ? 0.58 : 0.66)
     );
-    const bandMinPx = dense ? 50 : 42;
+    const bandH = plot + 6;
     const avatarFont = Math.max(11, Math.min(Math.round(cardW * 0.24), 34));
 
     grid.style.setProperty('--live-cols', cols);
@@ -3696,11 +3696,9 @@
     grid.style.setProperty('--live-avatar-font', avatarFont + 'px');
     grid.style.setProperty('--live-dist', dist + 'rem');
     grid.style.setProperty('--live-plot', plot + 'px');
-    grid.style.setProperty('--live-plot-font', Math.max(12, Math.round(plot * 0.52)) + 'px');
-    grid.style.setProperty('--live-plot-gap', Math.max(3, Math.round(cardW * (dense ? 0.04 : 0.06))) + 'px');
-    grid.style.setProperty('--live-overlay-pad', Math.max(2, Math.round(cardW * 0.03)) + 'px');
-    grid.style.setProperty('--live-band-pct', (dense ? 24 : 22) + '%');
-    grid.style.setProperty('--live-band-min', bandMinPx + 'px');
+    grid.style.setProperty('--live-plot-font', Math.max(11, Math.round(plot * 0.5)) + 'px');
+    grid.style.setProperty('--live-overlay-pad', Math.max(4, Math.round(cardW * 0.05)) + 'px');
+    grid.style.setProperty('--live-band-h', bandH + 'px');
     grid.style.setProperty('--live-init-top', Math.max(14, Math.min(26, Math.round(cardW * 0.12))) + '%');
     grid.classList.toggle('live-grid-dense', dense);
   }
@@ -3716,6 +3714,21 @@
     const maxCount = Math.max(...metrics.map(m => m.count));
     const gap = liveGapForCount(maxCount);
     const isSplit = metrics.length > 1;
+    const splitEl = page.querySelector('.students-live-split');
+
+    if (isSplit && splitEl?.clientHeight > 0) {
+      metrics.forEach(m => {
+        const section = m.grid.closest('.live-gender-section');
+        if (!section) return;
+        const cs = getComputedStyle(section);
+        const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+        const title = section.querySelector('.live-group-title');
+        const titleH = title
+          ? title.offsetHeight + parseFloat(getComputedStyle(title).marginBottom || 0)
+          : 0;
+        m.availH = Math.max(m.availH, splitEl.clientHeight - padY - titleH);
+      });
+    }
 
     if (!isSplit) {
       const m = metrics[0];
@@ -3724,23 +3737,13 @@
     }
 
     const candidates = metrics.map(m => computeBestLiveLayout(m.count, m.availW, m.availH, gap));
-    let sharedCardW = Math.min(...candidates.map(c => c?.cardW || 0).filter(Boolean));
-    if (!sharedCardW) return;
+    const baseCardW = Math.min(...candidates.map(c => c?.cardW || 0).filter(Boolean));
+    if (!baseCardW) return;
 
-    let sharedCardH = Math.floor(sharedCardW * LIVE_PORTRAIT_RATIO);
-    while (sharedCardW > 24) {
-      const allFit = metrics.every(m => {
-        const colsInfo = findColsForCardSize(m.count, m.availW, m.availH, gap, sharedCardW, sharedCardH);
-        return layoutFits(m.count, colsInfo.cols, sharedCardW, sharedCardH, m.availW, m.availH, gap);
-      });
-      if (allFit) break;
-      sharedCardW--;
-      sharedCardH = Math.floor(sharedCardW * LIVE_PORTRAIT_RATIO);
-    }
-
+    const sharedCardW = growSharedCardWidth(metrics, gap, baseCardW);
     metrics.forEach(m => {
-      const colsInfo = findColsForCardSize(m.count, m.availW, m.availH, gap, sharedCardW, sharedCardH);
-      applyLiveGridLayout(m.grid, { ...colsInfo, cardW: sharedCardW, cardH: sharedCardH }, gap);
+      const layout = computeLayoutForCardSize(m.count, m.availW, m.availH, gap, sharedCardW);
+      if (layout) applyLiveGridLayout(m.grid, layout, gap);
     });
   }
 
@@ -3855,11 +3858,9 @@
         <div class="student-live-card" data-student-id="${sid}">
           <div class="live-card-media">${avatarHtml(st, 'avatar-live')}</div>
           <div class="live-card-controls-band">
+            <button class="plot-btn minus" data-action="plot-minus" data-sid="${sid}">−</button>
             <div class="distance" data-dist="${sid}">${dist}</div>
-            <div class="plot-controls">
-              <button class="plot-btn minus" data-action="plot-minus" data-sid="${sid}">−</button>
-              <button class="plot-btn plus" data-action="plot-plus" data-sid="${sid}">+</button>
-            </div>
+            <button class="plot-btn plus" data-action="plot-plus" data-sid="${sid}">+</button>
           </div>
         </div>`;
     };
@@ -3929,7 +3930,7 @@
 
     app.querySelectorAll('.student-live-card').forEach(card => {
       card.onclick = (e) => {
-        if (e.target.closest('.plot-btn') || e.target.closest('.plot-controls')) return;
+        if (e.target.closest('.plot-btn')) return;
         const sid = card.dataset.studentId;
         const r = series.results[sid] || { laps: 0, extraPlots: 0 };
         r.laps = (r.laps || 0) + 1;
