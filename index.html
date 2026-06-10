@@ -1272,7 +1272,6 @@
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      gap: 4px;
       padding: 0 var(--live-overlay-pad, 5px);
       background: rgba(6, 8, 13, 0.9);
       border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -1280,26 +1279,34 @@
       overflow: visible;
     }
     .student-live-card .distance {
-      flex: 1;
-      min-width: 0;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      display: inline-block;
       text-align: center;
       font-size: var(--live-dist, .65rem);
       font-weight: 800;
       font-variant-numeric: tabular-nums;
       color: #fff;
-      line-height: 1.15;
+      line-height: 1;
+      white-space: nowrap;
       background: rgba(0, 0, 0, .6);
-      padding: .2em .45em;
+      padding: .22em .5em;
       border-radius: var(--radius-xs);
       border: 1px solid rgba(255,255,255,.12);
       pointer-events: none;
       letter-spacing: -0.02em;
-      align-self: flex-end;
-      margin-bottom: 2px;
+      max-width: calc(100% - var(--live-plot, 28px) - var(--live-plot, 28px) - 10px);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .student-live-card .distance::after { content: ' m'; font-size: .7em; font-weight: 600; opacity: .85; }
+    .student-live-card .distance::after { content: ' m'; font-size: .75em; font-weight: 600; opacity: .85; }
     .student-live-card .plot-btn.minus,
     .student-live-card .plot-btn.plus {
+      position: relative;
+      z-index: 2;
       pointer-events: auto;
       flex-shrink: 0;
     }
