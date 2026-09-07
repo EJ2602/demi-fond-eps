@@ -877,6 +877,30 @@
       letter-spacing: -0.01em;
       text-align: center;
     }
+    .situation-name-btn {
+      display: inline;
+      padding: 0;
+      margin: 0;
+      border: none;
+      background: none;
+      color: inherit;
+      font: inherit;
+      font-weight: inherit;
+      cursor: pointer;
+      border-radius: 4px;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+    }
+    .situation-name-btn:hover {
+      color: var(--primary);
+      text-decoration-color: color-mix(in srgb, var(--primary) 55%, transparent);
+    }
+    .situation-name-btn:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--primary) 65%, transparent);
+      outline-offset: 3px;
+    }
     .situation-toolbar {
       display: grid;
       grid-template-columns: auto 1fr auto;
@@ -2049,6 +2073,7 @@
   }
 
   function ensureSeedUpdates() {
+    let changed = false;
     const situationBase = { lapSize: 200, durationSeconds: 0, plotInterval: 50 };
     const legacy = appData.situations?.find(s => s.id === 'seed-situation-test');
     const sit6 = appData.situations?.find(s => s.id === 'seed-situation-test-6min');
@@ -2060,6 +2085,7 @@
           if (ss.templateId === 'seed-situation-test') ss.templateId = 'seed-situation-test-6min';
         });
       });
+      changed = true;
     } else if (sit6) {
       sit6.name = 'Test 6min';
       Object.assign(sit6, situationBase, { durationMinutes: 6 });
@@ -2072,6 +2098,7 @@
         durationMinutes: 3,
         ...situationBase
       });
+      changed = true;
     }
     const sitFrac = appData.situations?.find(s => s.id === 'seed-situation-test-frac-30-30');
     if (!sitFrac) {
@@ -2086,6 +2113,7 @@
         plotInterval: 10,
         fractionne: true
       });
+      changed = true;
     } else {
       Object.assign(sitFrac, {
         name: 'Test fractionné 30/30',
@@ -2109,6 +2137,7 @@
         let st = testClass.students.find(s => s.id === id);
         if (!st) {
           testClass.students.push(createSeedTestStudent(num));
+          changed = true;
         } else {
           st.lastName = getSeedTestStudentLastName(num);
           st.firstName = `test${num}`;
@@ -2119,9 +2148,21 @@
     }
     const seedSession = appData.sessions?.find(s => s.id === 'seed-session-test');
     if (seedSession) {
-      seedSession.situations = getSeedSessionSituations();
+      if (!seedSession.name) {
+        seedSession.name = 'SÉANCE TEST';
+        changed = true;
+      }
+      if (!seedSession.date) {
+        seedSession.date = getTodayIsoDate();
+        changed = true;
+      }
+      // Ne jamais écraser les situations existantes (noms, performances, séries).
+      if (!Array.isArray(seedSession.situations) || !seedSession.situations.length) {
+        seedSession.situations = getSeedSessionSituations();
+        changed = true;
+      }
     }
-    saveData();
+    if (changed) saveData();
   }
 
   /* ========== INDEXEDDB PHOTOS ========== */
@@ -2654,6 +2695,7 @@
   }
 
   function getSituationBlockName(ss, tpl) {
+    if (ss?.customName?.trim()) return ss.customName.trim();
     if (isLibreSituation(ss)) return 'Situation Libre';
     return tpl?.name || 'Inconnue';
   }
@@ -2661,6 +2703,40 @@
   function ensureLibrePerf(ss) {
     if (!ss.librePerf) ss.librePerf = { completed: false, values: {} };
     return ss.librePerf;
+  }
+
+  function studentResultHasDistance(r, tpl) {
+    if (!r) return false;
+    if (r.manualDistance != null && r.manualDistance > 0) return true;
+    return calcDistance(r.laps || 0, r.extraPlots || 0, tpl?.lapSize || 0, tpl?.plotInterval || 0) > 0;
+  }
+
+  function studentHasNormalPerf(session, sitIdx, studentId) {
+    if (getStudentDistInSituation(session, studentId, sitIdx) > 0) return true;
+    const ss = session.situations?.[sitIdx];
+    const tpl = getSituation(ss?.templateId);
+    return (ss?.series || []).some(s => studentResultHasDistance(s.results?.[studentId], tpl));
+  }
+
+  function hasNormalSituationPerf(session, sitIdx) {
+    const ss = session.situations?.[sitIdx];
+    const cls = getClass(session.classId);
+    if (!ss || !cls) return false;
+    return (cls.students || []).some(st => studentHasNormalPerf(session, sitIdx, st.id));
+  }
+
+  function clearStudentNormalPerf(ss, studentId) {
+    if (!ss?.series) return;
+    ss.series.forEach(serie => {
+      if (serie.results?.[studentId]) delete serie.results[studentId];
+      if (serie.studentIds) serie.studentIds = serie.studentIds.filter(id => id !== studentId);
+    });
+  }
+
+  function getNextNormalSeriesIdx(ss) {
+    if (!ss.series) ss.series = [];
+    const incompleteIdx = ss.series.findIndex(s => !s.completed);
+    return incompleteIdx >= 0 ? incompleteIdx : ss.series.length;
   }
 
   function ensureFractionnePerf(ss) {
@@ -3037,6 +3113,7 @@
       case 'live': renderLive(app, params); break;
       case 'fractionne-perf': renderFractionnePerf(app, params); break;
       case 'libre-perf': renderLibrePerf(app, params); break;
+      case 'normal-perf': renderNormalPerf(app, params); break;
       case 'bilan': renderBilan(app, params.sessionId); break;
       case 'class-bilan': renderClassBilan(app, params.classId); break;
       case 'app-settings': renderAppSettings(app); break;
@@ -3144,14 +3221,14 @@
           <h2>5. Situation normale — suivi en direct</h2>
           <p>Pour une situation normale :</p>
           <ol>
-            <li>Indiquez le nombre de <strong>Séries</strong> si besoin.</li>
-            <li>Cliquez sur <strong>Lancer la situation</strong> (ou <strong>Lancer la série suivante</strong>).</li>
+            <li>Cliquez sur <strong>Lancer une série</strong> (toujours disponible, même si des performances existent déjà).</li>
             <li>Sélectionnez les élèves participants (cases filles / garçons, filtres par sexe).</li>
+            <li>Si un élève a déjà une performance, une confirmation est demandée avant de la remplacer.</li>
             <li>La page <strong>live</strong> affiche le chronomètre, les cartes élèves et les distances en temps réel.</li>
             <li>Utilisez <strong>+</strong> / <strong>−</strong> pour les tours et plots, ou saisissez la distance manuellement.</li>
             <li><strong>Terminer</strong> enregistre les résultats ; <strong>Retour</strong> quitte sans terminer (confirmation demandée).</li>
           </ol>
-          <p>Quand toutes les séries sont terminées, le bouton orange <strong>↻</strong> remet la situation à zéro.</p>
+          <p>Vous pouvez aussi <strong>Rentrer les performances</strong> sans lancer le suivi live. Le bouton <strong>↻</strong> remet la situation à zéro.</p>
         </section>
 
         <section class="tutorial-section">
@@ -3468,17 +3545,14 @@
             <input type="text" inputmode="numeric" data-action="series-count" data-idx="${idx}" value="${ss.seriesCount || 1}">
           </label>`;
       } else {
-        const completed = (ss.series || []).filter(s => s.completed);
-        const completedCount = completed.length;
-        const allDone = completedCount >= seriesCount;
-        const isNextSeries = seriesCount > 1 && completedCount > 0 && !allDone;
-        const launchLabel = isNextSeries ? 'Lancer la série suivante' : 'Lancer la situation';
-        actionBtn = allDone ? '' : `<button class="btn btn-success btn-sm" data-action="launch-situation" data-idx="${idx}">${launchLabel}</button>`;
-        statusLine = completedCount ? `<span class="situation-status">${completedCount} série(s) terminée(s) sur ${seriesCount}</span>` : '';
-        resetBtn = allDone ? `<button class="btn-icon btn-icon-reset" data-action="reset-situation" data-idx="${idx}" title="Remettre à zéro">↻</button>` : '';
-        seriesControls = `<label class="series-label">Séries :
-          <input type="text" inputmode="numeric" data-action="series-count" data-idx="${idx}" value="${ss.seriesCount || 1}">
-        </label>`;
+        const completedCount = (ss.series || []).filter(s => s.completed).length;
+        const hasPerf = hasNormalSituationPerf(session, idx);
+        const launchBtn = `<button class="btn btn-success btn-sm" data-action="launch-situation" data-idx="${idx}">Lancer une série</button>`;
+        const fillLabel = hasPerf ? 'Modifier les performances' : 'Rentrer les performances';
+        const fillBtn = `<button class="btn btn-secondary btn-sm" data-action="fill-normal-perf" data-idx="${idx}">${fillLabel}</button>`;
+        actionBtn = `${launchBtn}${fillBtn}`;
+        statusLine = completedCount ? `<span class="situation-status">${completedCount} série(s) terminée(s)</span>` : '';
+        resetBtn = hasPerf || completedCount ? `<button class="btn-icon btn-icon-reset" data-action="reset-situation" data-idx="${idx}" title="Remettre à zéro">↻</button>` : '';
       }
 
       const typeBadge = isFrac ? ' <small style="opacity:.7">(Fractionné)</small>' : '';
@@ -3487,7 +3561,7 @@
       return `
         <div class="situation-block ${typeClass}" draggable="true" data-drag-idx="${idx}">
           <div class="situation-title">
-            <h3>Situation ${idx + 1} — ${escapeHtml(blockName)}${typeBadge}</h3>
+            <h3>Situation ${idx + 1} — <button type="button" class="situation-name-btn" data-action="rename-situation" data-idx="${idx}" title="Renommer cette situation">${escapeHtml(blockName)}</button>${typeBadge}</h3>
           </div>
           <div class="situation-toolbar">
             <div class="situation-toolbar-left">
@@ -4145,6 +4219,70 @@
     }
   }
 
+  /* ----- PERFORMANCES SITUATION NORMALE ----- */
+  function renderNormalPerf(app, params) {
+    const session = getSession(params.sessionId);
+    const cls = getClass(session?.classId);
+    const ss = session?.situations?.[params.sitIdx];
+    const tpl = getSituation(ss?.templateId);
+    if (!session || !cls || !ss || !tpl || isLibreSituation(ss) || isFractionneSituation(tpl)) {
+      goBack();
+      return;
+    }
+
+    setHeader(tpl.name, `Performances — ${session.name}`);
+
+    const students = [...(cls.students || [])].sort((a, b) =>
+      a.lastName.localeCompare(b.lastName, 'fr') || a.firstName.localeCompare(b.firstName, 'fr')
+    );
+    const dur = getSituationSpeedDuration(session, params.sitIdx);
+
+    const rows = students.map(st => {
+      const dist = getStudentDistInSituation(session, st.id, params.sitIdx);
+      const speed = formatSpeedDisplay(dist, dur, st);
+      const nameClass = studentNameClass(st);
+      const att = getStudentAttendance(session, st.id);
+      const attBadge = formatAttendanceStatus(att);
+      return `<tr>
+        <td class="${nameClass}">${escapeHtml(st.lastName)} ${escapeHtml(st.firstName)}${attBadge ? ` ${attBadge}` : ''}</td>
+        <td class="bilan-cell">
+          <input type="text" inputmode="numeric" class="libre-perf-input" data-normal-student="${st.id}" value="${dist > 0 ? dist : ''}" placeholder="—">
+          <span class="cell-speed" data-normal-speed="${st.id}">${speed}</span>
+        </td>
+      </tr>`;
+    }).join('');
+
+    app.innerHTML = `
+      <p class="section-subtitle" style="margin-bottom:.85rem">Saisissez la distance totale parcourue par chaque élève. Les performances déjà enregistrées (suivi live ou bilan) apparaissent ci-dessous.</p>
+      <div class="table-wrap">
+        <table class="data-table bilan-table libre-perf-table">
+          <thead><tr><th>Élève</th><th>Distance (m)</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+
+    app.querySelectorAll('.libre-perf-input[data-normal-student]').forEach(input => {
+      input.oninput = () => { input.value = input.value.replace(/\D/g, ''); };
+      input.onchange = () => {
+        const sid = input.dataset.normalStudent;
+        const val = Math.max(0, parseInt(input.value) || 0);
+        input.value = val || '';
+        overrideBilanValue(session, sid, params.sitIdx, val);
+        if (val <= 0) {
+          const serie = (ss.series || []).find(s => s.completed);
+          if (serie?.results?.[sid]) {
+            delete serie.results[sid];
+            serie.studentIds = (serie.studentIds || []).filter(id => id !== sid);
+          }
+        }
+        const st = cls.students.find(s => s.id === sid);
+        const speedEl = app.querySelector(`[data-normal-speed="${sid}"]`);
+        if (speedEl) speedEl.innerHTML = formatSpeedDisplay(val, dur, st);
+        saveData();
+      };
+    });
+  }
+
   /* ----- PERFORMANCES SITUATION LIBRE ----- */
   function renderLibrePerf(app, params) {
     const session = getSession(params.sessionId);
@@ -4440,6 +4578,9 @@
     (ss.series || []).forEach((s, i) => {
       if (i < seriesIdx && s.completed) (s.studentIds || []).forEach(id => participated.add(id));
     });
+    (classObj.students || []).forEach(st => {
+      if (studentHasNormalPerf(session, sitIdx, st.id)) participated.add(st.id);
+    });
 
     const sortRank = (st) => {
       const att = getStudentAttendance(session, st.id);
@@ -4477,7 +4618,7 @@
       </div>`;
     }).join('');
 
-    const situationTitle = `Situation ${sitIdx + 1} - ${tpl?.name || 'Sans nom'}`;
+    const situationTitle = `Situation ${sitIdx + 1} - ${getSituationBlockName(ss, tpl)}`;
 
     showModal(`
       <div class="modal-select-header">
@@ -4530,20 +4671,8 @@
       document.getElementById('modal-cancel').onclick = closeModal;
       document.getElementById('modal-confirm').onclick = () => {
         if (!selected.size) { showAlert('Sélectionnez au moins un élève.'); return; }
-        const reselected = [...selected].filter(id => participated.has(id));
-        if (reselected.length) {
-          const names = reselected.map(id => {
-            const st = classObj.students.find(s => s.id === id);
-            return st ? `${st.firstName} ${st.lastName}` : id;
-          }).join(', ');
-          confirmAction(
-            `${names} ont déjà participé à une série précédente. Leurs résultats seront remplacés. Continuer ?`,
-            () => { closeModal(); onConfirm([...selected]); }
-          );
-        } else {
-          closeModal();
-          onConfirm([...selected]);
-        }
+        closeModal();
+        onConfirm([...selected]);
       };
     });
   }
@@ -5019,6 +5148,26 @@
           render();
         });
       } break;
+      case 'rename-situation': {
+        const session = getSession(ctx.sessionId);
+        const sitIdx = parseInt(el.dataset.idx);
+        const ss = session?.situations?.[sitIdx];
+        if (!ss) break;
+        const tpl = getSituation(ss.templateId);
+        const currentName = getSituationBlockName(ss, tpl);
+        promptInput('Nom de cette situation dans la séance', currentName, (name) => {
+          const trimmed = name.trim();
+          if (!trimmed) {
+            showAlert('Indiquez un nom pour la situation.');
+            return;
+          }
+          const defaultName = isLibreSituation(ss) ? 'Situation Libre' : (tpl?.name || 'Inconnue');
+          if (trimmed === defaultName) delete ss.customName;
+          else ss.customName = trimmed;
+          saveData();
+          render();
+        });
+      } break;
       case 'delete-session':
         confirmAction('Supprimer cette séance et tous ses résultats ?', () => {
           appData.sessions = appData.sessions.filter(s => s.id !== ctx.sessionId);
@@ -5069,16 +5218,26 @@
         const cls = getClass(session.classId);
         const sitIdx = parseInt(el.dataset.idx);
         const ss = session.situations[sitIdx];
-        const seriesCount = getSeriesCount(ss);
-        const completed = (ss.series || []).filter(s => s.completed).length;
-        const seriesIdx = completed;
-        if (seriesIdx >= seriesCount) {
-          showAlert('Toutes les séries ont été réalisées. Remettez à zéro ou augmentez le nombre de séries.');
-          return;
-        }
         if (!(cls.students || []).length) { showAlert('Aucun élève dans cette classe.'); return; }
+        const seriesIdx = getNextNormalSeriesIdx(ss);
         showStudentSelection(session, cls, sitIdx, seriesIdx, (ids) => {
-          launchSituation(ctx.sessionId, sitIdx, seriesIdx, ids);
+          const withPerf = ids.filter(id => studentHasNormalPerf(session, sitIdx, id));
+          const startLive = () => {
+            withPerf.forEach(id => clearStudentNormalPerf(ss, id));
+            launchSituation(ctx.sessionId, sitIdx, seriesIdx, ids);
+          };
+          if (withPerf.length) {
+            const names = withPerf.map(id => {
+              const st = cls.students.find(s => s.id === id);
+              return st ? `${st.firstName} ${st.lastName}` : id;
+            }).join(', ');
+            const msg = withPerf.length === 1
+              ? `${names} a déjà une performance enregistrée pour cette situation. Elle sera remplacée. Continuer ?`
+              : `${names} ont déjà des performances enregistrées pour cette situation. Elles seront remplacées. Continuer ?`;
+            confirmAction(msg, startLive);
+          } else {
+            startLive();
+          }
         });
       } break;
       case 'fill-fractionne-perf':
@@ -5086,6 +5245,9 @@
         break;
       case 'fill-libre-perf':
         navigate('libre-perf', { sessionId: ctx.sessionId, sitIdx: parseInt(el.dataset.idx) });
+        break;
+      case 'fill-normal-perf':
+        navigate('normal-perf', { sessionId: ctx.sessionId, sitIdx: parseInt(el.dataset.idx) });
         break;
       case 'reset-situation':
         confirmAction('Remettre cette situation à zéro ?', () => {
